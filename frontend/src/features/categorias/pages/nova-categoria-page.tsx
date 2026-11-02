@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useCriarCategoria } from "@/features/categorias/hooks/useCriarCategoria";
 import type { CriarCategoriaRequest } from "@/features/categorias/types/categoria";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { FormRootError } from "@/components/form-root-error";
 import { aplicarErrosDaApi } from "@/lib/api-errors";
 
 export function NovaCategoriaPage() {
+  useEscParaVoltar("/categorias");
   const form = useForm<CriarCategoriaRequest>({
     defaultValues: { nome: "", descricao: "" },
   });
@@ -67,7 +69,7 @@ export function NovaCategoriaPage() {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Bebidas" {...field} />
+                      <Input autoFocus placeholder="Ex: Bebidas" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

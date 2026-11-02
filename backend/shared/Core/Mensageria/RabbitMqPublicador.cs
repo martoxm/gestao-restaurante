@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Text;
+using RestauranteEstoque.Core.Api;
 using RabbitMQ.Client;
 
 namespace RestauranteEstoque.Core.Mensageria;
@@ -15,8 +17,16 @@ public sealed class RabbitMqPublicador : IPublicadorMensagens, IAsyncDisposable
         _conexao = conexao;
     }
 
-    public async Task PublicarAsync(string fila, string tipo, string conteudoJson, Guid mensagemId, CancellationToken cancellationToken)
+    public async Task PublicarAsync(string fila, string tipo, string conteudoJson, Guid mensagemId,
+        string? correlationId, string? traceParent, CancellationToken cancellationToken)
     {
+        ActivityContext.TryParse(traceParent, null, out var pai);
+        using var atividade = ContextoCorrelacao.FonteTraces.StartActivity($"publicar {fila}", ActivityKind.Producer, pai);
+        atividade?.SetTag("messaging.system", "rabbitmq");
+        atividade?.SetTag("messaging.destination.name", fila);
+        atividade?.SetTag("messaging.message.id", mensagemId.ToString());
+        atividade?.SetTag("correlation.id", correlationId);
+
         await _trava.WaitAsync(cancellationToken);
         try
         {
@@ -38,7 +48,13 @@ public sealed class RabbitMqPublicador : IPublicadorMensagens, IAsyncDisposable
                 MessageId = mensagemId.ToString(),
                 Type = tipo,
                 ContentType = "application/json",
-                DeliveryMode = DeliveryModes.Persistent
+                DeliveryMode = DeliveryModes.Persistent,
+                CorrelationId = correlationId,
+                Headers = new Dictionary<string, object?>
+                {
+                    [CorrelationIdExtensions.NomeCabecalho] = correlationId,
+                    [CabecalhosMensagem.TraceParent] = atividade?.Id ?? traceParent
+                }
             };
 
             await _canal.BasicPublishAsync(exchange: string.Empty, routingKey: fila, mandatory: false,

@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Tempo;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +11,6 @@ using RestauranteEstoque.Identidade.Infrastructure.Identity;
 using RestauranteEstoque.Identidade.Infrastructure.Persistence;
 using RestauranteEstoque.Identidade.Infrastructure.Persistence.Repositories;
 using RestauranteEstoque.Identidade.Infrastructure.Security;
-using RestauranteEstoque.Identidade.Infrastructure.Time;
 
 namespace RestauranteEstoque.Identidade.Infrastructure;
 
@@ -20,9 +20,13 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>("banco", tags: ["ready"]);
+
         services.AddDbContext<AppDbContext>(options =>
             options.UseSqlServer(connectionString,
-                    sqlServer => sqlServer.MigrationsHistoryTable("__EFMigrationsHistory", "identidade"))
+                    sqlServer => sqlServer
+                        .MigrationsHistoryTable("__EFMigrationsHistory", "identidade")
+                        .EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
         services.AddScoped<IApplicationDbContext>(provider =>
@@ -33,6 +37,7 @@ public static class DependencyInjection
                 options.Password.RequireDigit = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireLowercase = false;
                 options.Password.RequiredLength = 6;
             })
             .AddRoles<ApplicationRole>()
@@ -52,8 +57,7 @@ public static class DependencyInjection
         services.AddHttpContextAccessor();
         services.AddScoped<IUsuarioAtualService, UsuarioAtualService>();
 
-        services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IRelogio, Relogio>();
+        services.AddRelogio();
 
         return services;
     }

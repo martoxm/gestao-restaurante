@@ -6,6 +6,8 @@ public static class Filas
 {
     public const string Email = "email-queue";
 
+    public const string AvisarAdmins = "avisar-admins-queue";
+
     public const string BaixarEstoque = "baixar-estoque-queue";
 
     public const string ResultadoBaixaEstoque = "resultado-baixa-estoque-queue";

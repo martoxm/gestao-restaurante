@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Core.Domain;
 using RestauranteEstoque.Domain.Events;
 using RestauranteEstoque.Core.Domain.ValueObjects;
@@ -18,6 +19,8 @@ public class Produto : Entity
     public Guid RestauranteId { get; private set; }
 
     public DateTime CriadoEm { get; private set; }
+
+    public byte[]? VersaoLinha { get; private set; }
 
     private Produto()
     {

@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { atualizarFornecedor } from "@/features/fornecedores/services/fornecedores";
@@ -11,6 +12,7 @@ export function useAtualizarFornecedor() {
     mutationFn: ({ id, data }: { id: string; data: AtualizarFornecedorRequest }) =>
       atualizarFornecedor(id, data),
     onSuccess: () => {
+      toast.success("Fornecedor atualizado");
       queryClient.invalidateQueries({ queryKey: ["fornecedores"] });
       router.push("/fornecedores");
     },

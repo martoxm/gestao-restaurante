@@ -1,3 +1,5 @@
+using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.OpenApi;
@@ -69,7 +71,8 @@ builder.Services.AddAutenticacaoJwt(builder.Configuration);
 
 builder.Services.AddHostedService<ProcessamentoPagamentosWorker>();
 builder.Services.AddHostedService<PedidoPagamentoConsumidor>();
-builder.Services.AddHostedService<PublicacaoOutboxWorker>();
+builder.Services.AddHostedService<PublicacaoOutboxWorker<AppDbContext>>();
+builder.Services.AddHostedService<LimpezaMensageriaWorker<AppDbContext>>();
 
 var app = builder.Build();
 

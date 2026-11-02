@@ -1,3 +1,5 @@
+using RestauranteEstoque.Vendas.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using RestauranteEstoque.Core.Domain.ValueObjects;
@@ -33,8 +35,8 @@ public class ProcessarResultadoPagamentoHandlerTests
         await using var context = TesteVendas.CriarContexto(usuario, nomeBanco);
         var handler = new ProcessarResultadoPagamentoHandler(
             new VendaRepository(context),
-            new MensagemProcessadaRepository(context),
-            new OutboxMensagemRepository(context),
+            new MensagemProcessadaRepository<AppDbContext>(context),
+            new OutboxMensagemRepository<AppDbContext>(context),
             usuario,
             context,
             new FakeRelogio(),
@@ -65,7 +67,9 @@ public class ProcessarResultadoPagamentoHandlerTests
         await ProcessarAsync(nomeBanco, Guid.NewGuid(), Resultado(vendaId, false, "Saldo insuficiente."));
 
         await using var context = TesteVendas.CriarContexto(nomeBanco: nomeBanco);
-        Assert.Equal(StatusVenda.Cancelada, (await context.Vendas.SingleAsync()).Status);
+        var cancelada = await context.Vendas.SingleAsync();
+        Assert.Equal(StatusVenda.Cancelada, cancelada.Status);
+        Assert.Equal(MotivoCancelamento.PagamentoRecusado, cancelada.MotivoCancelamento);
         var devolucao = await context.OutboxMensagens.SingleAsync();
         Assert.Equal(Filas.DevolverEstoque, devolucao.Fila);
         Assert.Contains(ProdutoId.ToString(), devolucao.Conteudo);

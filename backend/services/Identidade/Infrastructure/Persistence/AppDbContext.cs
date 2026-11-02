@@ -19,8 +19,19 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 
     private Guid? RestauranteIdAtual => _usuarioAtualService.RestauranteId;
 
-    public async Task<ITransacao> IniciarTransacaoAsync(CancellationToken cancellationToken) =>
-        new TransacaoEfCore(await Database.BeginTransactionAsync(cancellationToken));
+    public Task<T> ExecutarEmTransacaoAsync<T>(Func<CancellationToken, Task<T>> operacao, CancellationToken cancellationToken)
+    {
+        var estrategia = Database.CreateExecutionStrategy();
+
+        return estrategia.ExecuteAsync(async ct =>
+        {
+            ChangeTracker.Clear();
+            await using var transacao = await Database.BeginTransactionAsync(ct);
+            var resultado = await operacao(ct);
+            await transacao.CommitAsync(ct);
+            return resultado;
+        }, cancellationToken);
+    }
 
     public DbSet<Restaurante> Restaurantes => Set<Restaurante>();
 

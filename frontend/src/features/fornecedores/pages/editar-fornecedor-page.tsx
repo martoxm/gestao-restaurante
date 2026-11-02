@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useParams } from "next/navigation";
 import { useFornecedor } from "@/features/fornecedores/hooks/useFornecedor";
 import { useAtualizarFornecedor } from "@/features/fornecedores/hooks/useAtualizarFornecedor";
@@ -22,6 +23,7 @@ import { FormRootError } from "@/components/form-root-error";
 import { aplicarErrosDaApi } from "@/lib/api-errors";
 
 export function EditarFornecedorPage() {
+  useEscParaVoltar("/fornecedores");
   const params = useParams<{ id: string }>();
   const { id } = params;
 
@@ -105,6 +107,7 @@ export function EditarFornecedorPage() {
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
                         <Input
+                          autoFocus
                           placeholder="Ex: Distribuidora Central"
                           {...field}
                         />

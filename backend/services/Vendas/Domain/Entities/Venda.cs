@@ -12,7 +12,12 @@ public class Venda : Entity
     public StatusVenda Status { get; private set; }
     public DateTime CriadoEm { get; private set; }
 
+    public byte[]? VersaoLinha { get; private set; }
+
     public string? TokenCartao { get; private set; }
+
+    public MotivoCancelamento? MotivoCancelamento { get; private set; }
+    public string? DetalheCancelamento { get; private set; }
 
     public IReadOnlyCollection<ItemVenda> Itens => _itens.AsReadOnly();
 
@@ -63,10 +68,12 @@ public class Venda : Entity
         Status = StatusVenda.Confirmada;
     }
 
-    public void Cancelar()
+    public void Cancelar(MotivoCancelamento motivo, string? detalhe = null)
     {
         GarantirStatus(StatusVenda.Pendente, StatusVenda.AguardandoPagamento);
         Status = StatusVenda.Cancelada;
+        MotivoCancelamento = motivo;
+        DetalheCancelamento = string.IsNullOrWhiteSpace(detalhe) ? null : detalhe.Trim()[..Math.Min(detalhe.Trim().Length, 500)];
     }
 
     private void GarantirStatus(params StatusVenda[] permitidos)

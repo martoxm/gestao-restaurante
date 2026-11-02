@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Application.Abstractions.Services;
 
 namespace RestauranteEstoque.Tests.Common;

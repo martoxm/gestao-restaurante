@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Core.Domain;
 using RestauranteEstoque.Domain.Entities;
 using RestauranteEstoque.Domain.Events;

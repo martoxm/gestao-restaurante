@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useCategorias } from "@/features/categorias/hooks/useCategorias";
 import { useCriarProduto } from "@/features/produtos/hooks/useCriarProduto";
 import type { CriarProdutoRequest } from "@/features/produtos/types/produto";
@@ -40,6 +41,7 @@ type ProdutoFormValues = Omit<
 };
 
 export function NovoProdutoPage() {
+  useEscParaVoltar("/produtos");
   const form = useForm<ProdutoFormValues>({
     defaultValues: {
       nome: "",
@@ -99,7 +101,7 @@ export function NovoProdutoPage() {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Arroz branco 5kg" {...field} />
+                      <Input autoFocus placeholder="Ex: Arroz branco 5kg" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Core.Domain;
 
 namespace RestauranteEstoque.Identidade.Domain.Entities;

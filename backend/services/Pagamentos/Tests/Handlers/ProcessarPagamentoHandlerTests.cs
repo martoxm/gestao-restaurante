@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging.Abstractions;
 using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
@@ -16,7 +17,7 @@ public class ProcessarPagamentoHandlerTests
     {
         var fila = Channel.CreateUnbounded<CobrancaFalsa>();
         var handler = new ProcessarPagamentoHandler(
-            new PagamentoRepository(context), new OutboxMensagemRepository(context), context,
+            new PagamentoRepository(context), new OutboxMensagemRepository<AppDbContext>(context), context,
             new GatewayPagamentoFalso(fila), new FakeRelogio(), NullLogger<ProcessarPagamentoHandler>.Instance);
         return (handler, fila);
     }
@@ -96,7 +97,7 @@ public class ProcessarPagamentoHandlerTests
         using var context = TestePagamentos.CriarContexto();
         var pagamento = await SalvarAsync(context, "pm_que_nao_existe");
         var handler = new ProcessarPagamentoHandler(
-            new PagamentoRepository(context), new OutboxMensagemRepository(context), context,
+            new PagamentoRepository(context), new OutboxMensagemRepository<AppDbContext>(context), context,
             new GatewayQueRecusaNaHora(), new FakeRelogio(), NullLogger<ProcessarPagamentoHandler>.Instance);
 
         await handler.Handle(new ProcessarPagamentoCommand(pagamento.Id), CancellationToken.None);

@@ -1,3 +1,5 @@
+using RestauranteEstoque.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.OpenApi;
@@ -40,8 +42,9 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddApplication();
 builder.Services.AddInfrastructure(builder.Configuration);
 
-builder.Services.AddHostedService<PublicacaoOutboxWorker>();
-builder.Services.AddHostedService<EnvioEmailConsumidor>();
+builder.Services.AddHostedService<PublicacaoOutboxWorker<AppDbContext>>();
+builder.Services.AddHostedService<LimpezaMensageriaWorker<AppDbContext>>();
+builder.Services.AddHostedService<AvisoAdminsConsumidor>();
 builder.Services.AddHostedService<BaixaEstoqueConsumidor>();
 builder.Services.AddHostedService<DevolucaoEstoqueConsumidor>();
 

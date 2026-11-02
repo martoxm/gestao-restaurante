@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { criarCategoria } from "@/features/categorias/services/categorias";
@@ -9,6 +10,7 @@ export function useCriarCategoria() {
   return useMutation({
     mutationFn: criarCategoria,
     onSuccess: () => {
+      toast.success("Categoria criada");
       queryClient.invalidateQueries({ queryKey: ["categorias"] });
       router.push("/categorias");
     },

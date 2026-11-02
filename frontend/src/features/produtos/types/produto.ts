@@ -13,6 +13,7 @@ export interface ProdutoItemLista {
   quantidadeEmEstoque: number;
   categoriaId: string;
   nomeCategoria: string;
+  criadoEm: string;
 }
 
 export interface CriarProdutoRequest {
@@ -31,6 +32,7 @@ export interface ProdutoDetalhes {
   quantidadeEmEstoque: number;
   categoriaId: string;
   nomeCategoria: string;
+  criadoEm: string;
 }
 
 export interface AtualizarProdutoRequest {

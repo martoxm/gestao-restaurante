@@ -9,7 +9,7 @@ public class OutboxMensagemTests
 {
     private static readonly DateTime Agora = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
-    private static readonly EnviarEmailMensagem Email = new(Guid.NewGuid(), "Estoque baixo: Arroz", "<p>corpo</p>");
+    private static readonly EnviarEmailMensagem Email = new(["admin@teste.com"], "Estoque baixo: Arroz", "<p>corpo</p>");
 
     private static OutboxMensagem CriarMensagemValida() => OutboxMensagem.Criar(Filas.Email, Email, Agora);
 
@@ -30,7 +30,10 @@ public class OutboxMensagemTests
     {
         var mensagem = CriarMensagemValida();
 
-        Assert.Equal(Email, JsonSerializer.Deserialize<EnviarEmailMensagem>(mensagem.Conteudo));
+        var volta = JsonSerializer.Deserialize<EnviarEmailMensagem>(mensagem.Conteudo)!;
+        Assert.Equal(Email.Destinatarios, volta.Destinatarios);
+        Assert.Equal(Email.Assunto, volta.Assunto);
+        Assert.Equal(Email.CorpoHtml, volta.CorpoHtml);
     }
 
     [Theory]

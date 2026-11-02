@@ -44,6 +44,11 @@
       <BuildType Solution="Default|*" Project="Debug" />
     </Project>
   </Folder>
+  <Folder Name="/shared/">
+    <Project Path="../../shared/Core.Persistencia/RestauranteEstoque.Core.Persistencia.csproj">
+      <BuildType Solution="Default|*" Project="Debug" />
+    </Project>
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/RestauranteEstoque.Tests.csproj">
       <BuildType Solution="Default|*" Project="Release" />

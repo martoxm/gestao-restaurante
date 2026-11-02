@@ -3,6 +3,12 @@
     <Project Path="AppHost/RestauranteEstoque.AppHost.csproj" />
   </Folder>
   <Folder Name="/services/" />
+  <Folder Name="/services/Email/">
+    <Project Path="services/Email/Api/RestauranteEstoque.Email.Api.csproj" />
+    <Project Path="services/Email/Application/RestauranteEstoque.Email.Application.csproj" />
+    <Project Path="services/Email/Infrastructure/RestauranteEstoque.Email.Infrastructure.csproj" />
+    <Project Path="services/Email/Tests/RestauranteEstoque.Email.Tests.csproj" />
+  </Folder>
   <Folder Name="/services/Estoque/">
     <Project Path="services/Estoque/Api/RestauranteEstoque.Api.csproj" />
     <Project Path="services/Estoque/Application/RestauranteEstoque.Application.csproj" />
@@ -36,6 +42,7 @@
     <Project Path="services/Vendas/Tests/RestauranteEstoque.Vendas.Tests.csproj" />
   </Folder>
   <Folder Name="/shared/">
+    <Project Path="shared/Core.Persistencia/RestauranteEstoque.Core.Persistencia.csproj" />
     <Project Path="shared/Core/RestauranteEstoque.Core.csproj" />
     <Project Path="shared/ServiceDefaults/RestauranteEstoque.ServiceDefaults.csproj" />
   </Folder>

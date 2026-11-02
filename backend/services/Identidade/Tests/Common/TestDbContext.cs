@@ -23,10 +23,19 @@ public class TestDbContext : DbContext, IApplicationDbContext
 
     public FakeTransacao? UltimaTransacao { get; private set; }
 
-    public Task<ITransacao> IniciarTransacaoAsync(CancellationToken cancellationToken)
+    public async Task<T> ExecutarEmTransacaoAsync<T>(Func<CancellationToken, Task<T>> operacao, CancellationToken cancellationToken)
     {
         UltimaTransacao = new FakeTransacao();
-        return Task.FromResult<ITransacao>(UltimaTransacao);
+        try
+        {
+            var resultado = await operacao(cancellationToken);
+            UltimaTransacao.Confirmar();
+            return resultado;
+        }
+        finally
+        {
+            UltimaTransacao.Descartar();
+        }
     }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

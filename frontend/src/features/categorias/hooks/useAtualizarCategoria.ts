@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { atualizarCategoria } from "@/features/categorias/services/categorias";
@@ -11,6 +12,7 @@ export function useAtualizarCategoria() {
     mutationFn: ({ id, data }: { id: string; data: AtualizarCategoriaRequest }) =>
       atualizarCategoria(id, data),
     onSuccess: () => {
+      toast.success("Categoria atualizada");
       queryClient.invalidateQueries({ queryKey: ["categorias"] });
       router.push("/categorias");
     },

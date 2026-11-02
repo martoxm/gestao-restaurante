@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RestauranteEstoque.Domain.Entities;
@@ -32,6 +33,9 @@ public class ProdutoConfiguration : IEntityTypeConfiguration<Produto>
 
         builder.Property(p => p.CriadoEm)
             .IsRequired();
+
+        builder.Property(p => p.VersaoLinha)
+            .IsRowVersion();
 
         builder.HasOne(p => p.Categoria)
             .WithMany()

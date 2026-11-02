@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { excluirFornecedor } from "@/features/fornecedores/services/fornecedores";
 
@@ -7,6 +8,7 @@ export function useExcluirFornecedor() {
   return useMutation({
     mutationFn: excluirFornecedor,
     onSuccess: () => {
+      toast.success("Fornecedor excluído");
       queryClient.invalidateQueries({ queryKey: ["fornecedores"] });
     },
   });

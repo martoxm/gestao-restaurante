@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using RestauranteEstoque.Domain.Entities;

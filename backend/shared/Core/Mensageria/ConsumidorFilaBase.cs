@@ -1,4 +1,6 @@
+using System.Diagnostics;
 using System.Text.Json;
+using RestauranteEstoque.Core.Api;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
@@ -70,8 +72,23 @@ public abstract class ConsumidorFilaBase<TMensagem> : BackgroundService
 
                 Guid.TryParse(entrega.BasicProperties.MessageId, out var mensagemId);
 
+                var correlationId = CabecalhosMensagem.LerTexto(entrega.BasicProperties, CorrelationIdExtensions.NomeCabecalho)
+                    ?? entrega.BasicProperties.CorrelationId
+                    ?? Guid.NewGuid().ToString();
+                ContextoCorrelacao.Atual = correlationId;
+
+                ActivityContext.TryParse(CabecalhosMensagem.LerTexto(entrega.BasicProperties, CabecalhosMensagem.TraceParent), null, out var pai);
+                using var atividade = ContextoCorrelacao.FonteTraces.StartActivity($"consumir {Fila}", ActivityKind.Consumer, pai);
+                atividade?.SetTag("messaging.system", "rabbitmq");
+                atividade?.SetTag("messaging.destination.name", Fila);
+                atividade?.SetTag("messaging.message.id", entrega.BasicProperties.MessageId);
+                atividade?.SetTag("correlation.id", correlationId);
+
+                using var escopoLog = _logger.BeginScope(new Dictionary<string, object> { ["CorrelationId"] = correlationId });
                 using var scope = _scopeFactory.CreateScope();
                 tratada = await ProcessarAsync(mensagem, mensagemId, scope.ServiceProvider, stoppingToken);
+                if (!tratada)
+                    atividade?.SetStatus(ActivityStatusCode.Error);
             }
             catch (Exception ex)
             {

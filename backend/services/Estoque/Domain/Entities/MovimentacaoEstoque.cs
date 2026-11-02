@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Core.Domain;
 using RestauranteEstoque.Domain.Enums;
 using RestauranteEstoque.Core.Domain.ValueObjects;

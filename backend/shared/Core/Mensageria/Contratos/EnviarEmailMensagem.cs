@@ -1,3 +1,3 @@
 namespace RestauranteEstoque.Core.Mensageria.Contratos;
 
-public sealed record EnviarEmailMensagem(Guid RestauranteId, string Assunto, string CorpoHtml);
+public sealed record EnviarEmailMensagem(IReadOnlyList<string> Destinatarios, string Assunto, string CorpoHtml);

@@ -1,3 +1,5 @@
+using RestauranteEstoque.Core.Persistencia.Mensageria;
+using RestauranteEstoque.Core.Tempo;
 using RestauranteEstoque.Core.Mensageria;
 using RestauranteEstoque.Core.Seguranca;
 using RestauranteEstoque.Infrastructure.Integracoes.Identidade;
@@ -7,11 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using RestauranteEstoque.Application.Abstractions.Repositories;
 using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Infrastructure.EnvioEmail;
 using RestauranteEstoque.Infrastructure.Persistence;
 using RestauranteEstoque.Infrastructure.Persistence.Interceptors;
 using RestauranteEstoque.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Infrastructure.Time;
 
 namespace RestauranteEstoque.Infrastructure;
 
@@ -23,8 +23,10 @@ public static class DependencyInjection
 
         services.AddScoped<PublicarEventosDominioInterceptor>();
 
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>("banco", tags: ["ready"]);
+
         services.AddDbContext<AppDbContext>((serviceProvider, options) =>
-            options.UseSqlServer(connectionString)
+            options.UseSqlServer(connectionString, sqlServer => sqlServer.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
                 .AddInterceptors(serviceProvider.GetRequiredService<PublicarEventosDominioInterceptor>()));
 
@@ -41,13 +43,10 @@ public static class DependencyInjection
         services.AddScoped<IUsuarioAtualService>(provider => provider.GetRequiredService<UsuarioAtualService>());
         services.AddScoped<IDefinidorRestauranteAtual>(provider => provider.GetRequiredService<UsuarioAtualService>());
 
-        services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IRelogio, Relogio>();
+        services.AddRelogio();
 
-        services.AddScoped<IOutboxMensagemRepository, OutboxMensagemRepository>();
-        services.AddScoped<IMensagemProcessadaRepository, MensagemProcessadaRepository>();
-        services.Configure<EmailSettings>(configuration.GetSection(EmailSettings.SectionName));
-        services.AddScoped<IEmailService, SmtpEmailService>();
+        services.AddOutboxMensagens<AppDbContext>();
+        services.AddIdempotenciaMensagens<AppDbContext>();
 
         services.AddMensageriaRabbitMq(configuration);
 

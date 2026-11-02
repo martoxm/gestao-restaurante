@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useCriarFornecedor } from "@/features/fornecedores/hooks/useCriarFornecedor";
 import type { CriarFornecedorRequest } from "@/features/fornecedores/types/fornecedor";
 import { Button } from "@/components/ui/button";
@@ -19,6 +20,7 @@ import { FormRootError } from "@/components/form-root-error";
 import { aplicarErrosDaApi } from "@/lib/api-errors";
 
 export function NovoFornecedorPage() {
+  useEscParaVoltar("/fornecedores");
   const form = useForm<CriarFornecedorRequest>({
     defaultValues: { nome: "", telefone: "", email: "" },
   });
@@ -68,7 +70,7 @@ export function NovoFornecedorPage() {
                   <FormItem>
                     <FormLabel>Nome</FormLabel>
                     <FormControl>
-                      <Input placeholder="Ex: Distribuidora Central" {...field} />
+                      <Input autoFocus placeholder="Ex: Distribuidora Central" {...field} />
                     </FormControl>
                     <FormMessage />
                   </FormItem>

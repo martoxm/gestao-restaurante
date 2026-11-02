@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Models;
 using RestauranteEstoque.Core.Api;
 using Asp.Versioning;
 using MediatR;
@@ -27,6 +28,20 @@ public class MovimentacaoEstoqueEndpointsModule : IEndpointModule
             .Produces<MovimentacaoEstoqueCriadaResponse>(StatusCodes.Status201Created)
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status404NotFound);
+
+        group.MapGet("", ListarMovimentacoesEstoque)
+            .WithName("ListarMovimentacoesEstoque")
+            .WithSummary("Lista o histórico de movimentações com paginação")
+            .WithDescription("Lista as movimentações de estoque do restaurante, da mais nova pra mais antiga, com filtros opcionais por produto, tipo (Entrada/Saida) e período.")
+            .Produces<ResultadoPaginado<MovimentacaoEstoqueItemListaDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest);
+    }
+
+    private static async Task<IResult> ListarMovimentacoesEstoque([AsParameters] ListarMovimentacoesEstoqueRequest request, ISender sender, CancellationToken cancellationToken)
+    {
+        var query = new ListarMovimentacoesEstoqueQuery(request.Pagina, request.TamanhoPagina, request.ProdutoId, request.Tipo, request.DataInicio, request.DataFim);
+        var result = await sender.Send(query, cancellationToken);
+        return Results.Ok(result);
     }
 
     private static async Task<IResult> CriarMovimentacaoEstoque(CriarMovimentacaoEstoqueCommand command, ISender sender, CancellationToken cancellationToken)

@@ -1,3 +1,5 @@
+using RestauranteEstoque.Core.Persistencia.Mensageria;
+using RestauranteEstoque.Core.Tempo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,7 +10,6 @@ using RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
 using RestauranteEstoque.Vendas.Application.Abstractions.Services;
 using RestauranteEstoque.Vendas.Infrastructure.Persistence;
 using RestauranteEstoque.Vendas.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Vendas.Infrastructure.Time;
 
 namespace RestauranteEstoque.Vendas.Infrastructure;
 
@@ -18,15 +19,17 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>("banco", tags: ["ready"]);
+
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(connectionString)
+            options.UseSqlServer(connectionString, sqlServer => sqlServer.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
         services.AddScoped<IVendaRepository, VendaRepository>();
-        services.AddScoped<IOutboxMensagemRepository, OutboxMensagemRepository>();
-        services.AddScoped<IMensagemProcessadaRepository, MensagemProcessadaRepository>();
+        services.AddOutboxMensagens<AppDbContext>();
+        services.AddIdempotenciaMensagens<AppDbContext>();
         services.AddScoped<IProdutoCatalogoRepository, ProdutoCatalogoRepository>();
 
         services.AddMensageriaRabbitMq(configuration);
@@ -36,8 +39,7 @@ public static class DependencyInjection
         services.AddScoped<IUsuarioAtualService>(provider => provider.GetRequiredService<UsuarioAtualService>());
         services.AddScoped<IDefinidorRestauranteAtual>(provider => provider.GetRequiredService<UsuarioAtualService>());
 
-        services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IRelogio, Relogio>();
+        services.AddRelogio();
 
         return services;
     }

@@ -27,6 +27,7 @@ O repositório está se preparando para virar microserviços:
 - `backend/services/Identidade` — usuários, roles e restaurantes; é a única API que gera o token JWT
 - `backend/services/Estoque` — produtos, categorias, fornecedores e movimentações; só valida o token
 - `backend/services/Vendas` — vendas e itens de venda (nome e preço copiados do produto); só valida o token e conversa com o Estoque pelo RabbitMQ
+- `backend/services/Email` — só envia e-mails: escuta a fila `email-queue` do RabbitMQ e manda pelo SMTP, sem saber de restaurante ou estoque (quem pede já manda os destinatários)
 - `backend/services/Pagamentos` — cobrança das vendas num gateway de pagamento falso (só para testes, não mexe em dinheiro); recebe o pedido da Vendas pelo RabbitMQ e responde por lá
 - `backend/shared/Core` — código comum a todas as APIs: classe base `Entity`, Value Objects, validação, tratamento de erros, validação do JWT e CorrelationId
 - `frontend` — o app Next.js
@@ -86,19 +87,23 @@ E termine com os scripts que dependem delas:
 18. `22-criar-indices-estoque.sql` — índices de `RestauranteId` e das FKs nas tabelas do Estoque
 19. `23-criar-schema-pagamentos.sql` — cria o schema `pagamentos` com a tabela `Pagamentos` da API de Pagamentos
 20. `24-pagamento-na-saga-da-venda.sql` — liga o pagamento à venda: token do cartão na venda, contador de tentativas no pagamento e a caixa de saída da Pagamentos
+21. `25-motivo-cancelamento-venda.sql` — guarda na venda cancelada o motivo e o detalhe
+22. `26-rastreio-outbox-mensagens.sql` — CorrelationId e traceparent nas caixas de saída, para seguir a venda de ponta a ponta
+23. `27-criar-schema-email.sql` — cria o schema `email` com o controle de mensagens já enviadas da API de Email
+24. `28-concorrencia-otimista.sql` — adiciona a coluna `VersaoLinha` (rowversion) em `estoque.Produtos` e `vendas.Vendas`, pra uma gravação não sobrescrever a outra
 
 ### 2. Configuração
 
 Os `appsettings.json` das duas APIs (`backend/services/Identidade/Api` e `backend/services/Estoque/Api`) já vêm prontos para a máquina local (SQL Server em `localhost` com autenticação do Windows). As duas usam o mesmo *user-secrets*, então o que você guardar lá vale para as duas. Fora da sua máquina, nunca use os valores do arquivo: defina o segredo do JWT e a connection string por variável de ambiente (`Jwt__Secret` e `ConnectionStrings__DefaultConnection`) — o `Jwt` tem que ser igual nas duas APIs.
 
-**E-mail de estoque baixo (opcional).** Quando um produto fica abaixo de 10 unidades, a API manda um e-mail para os `Admin` daquele restaurante. Para ligar isso com uma conta Gmail, crie uma [senha de app](https://myaccount.google.com/apppasswords) (exige verificação em duas etapas) e guarde as credenciais no *user-secrets* da API, nunca no `appsettings.json`:
+**E-mail de estoque baixo (opcional).** Quando um produto fica abaixo de 10 unidades, o Estoque pede um e-mail para os `Admin` daquele restaurante. Para ligar isso com uma conta Gmail, crie uma [senha de app](https://myaccount.google.com/apppasswords) (exige verificação em duas etapas) e guarde as credenciais no *user-secrets* da API de Email, nunca no `appsettings.json`:
 
 ```bash
-dotnet user-secrets set "Email:Usuario" "seu.email@gmail.com" --project backend/services/Estoque/Api
+dotnet user-secrets set "Email:Usuario" "seu.email@gmail.com" --project backend/services/Email/Api
 ```
 
 ```bash
-dotnet user-secrets set "Email:Senha" "senha-de-app-de-16-letras" --project backend/services/Estoque/Api
+dotnet user-secrets set "Email:Senha" "senha-de-app-de-16-letras" --project backend/services/Email/Api
 ```
 
 Sem isso a API funciona normalmente; o log avisa que o SMTP não está configurado e a mensagem vai para a fila `email-queue.dlq`.
@@ -141,18 +146,25 @@ dotnet run --project backend/services/Pagamentos/Api --launch-profile https
 
 A API de Pagamentos sobe em `https://localhost:7014` (perfil `http`: `http://localhost:5268`). O gateway é falso e não mexe em dinheiro. A cobrança nasce da própria venda: o `POST /api/v1/vendas` recebe um `tokenCartao` de teste (`tok_aprovado`, `tok_saldo_insuficiente`, `tok_fraude` ou `tok_gateway_fora`) no lugar do cartão. A venda passa por `Pendente` → `AguardandoPagamento` (estoque baixado) → `Confirmada`; se faltar estoque ou o pagamento for recusado, vira `Cancelada` e o estoque baixado é devolvido. O `GET /api/v1/pagamentos/venda/{vendaId}` mostra a cobrança de uma venda. O resultado chega como no mundo real: o gateway falso chama o webhook `POST /api/v1/webhooks/gateway-falso` com o corpo assinado (HMAC-SHA256 no cabeçalho `X-Assinatura`), e a API recusa com 401 qualquer aviso sem a assinatura certa. O segredo fica em `GatewayFalso:SegredoWebhook`.
 
+```bash
+dotnet run --project backend/services/Email/Api --launch-profile https
+```
+
+A API de Email sobe em `https://localhost:7016` (perfil `http`: `http://localhost:5270`). Ela não tem Swagger nem tela: só escuta a fila `email-queue` e manda o e-mail. O `/health` mostra se o banco e o RabbitMQ respondem.
+
 A Identidade sobe em `https://localhost:7010` e o Estoque em `https://localhost:7008`, cada uma com o Swagger em `/swagger`. Login e cadastro ficam na Identidade; o token que ela devolve serve também no Estoque. Sem o `--launch-profile https`, o `dotnet run` usa o perfil `http` (Identidade em `http://localhost:5264`, Estoque em `http://localhost:5262`).
 
 ### 4. Frontend
 
-Crie `frontend/.env.local` com o endereço das duas APIs:
+Crie `frontend/.env.local` com o endereço de cada API que o front chama:
 
 ```
-NEXT_PUBLIC_API_URL=https://localhost:7008
+NEXT_PUBLIC_API_ESTOQUE_URL=https://localhost:7008
 NEXT_PUBLIC_API_IDENTIDADE_URL=https://localhost:7010
+NEXT_PUBLIC_API_VENDAS_URL=https://localhost:7012
 ```
 
-O `NEXT_PUBLIC_API_URL` é o Estoque; login, cadastro e o nome do restaurante vão para a Identidade.
+Login, cadastro e o nome do restaurante vão para a Identidade; produtos, categorias, fornecedores e movimentações, para o Estoque; a tela de Vendas, para a Vendas. A Pagamentos não é chamada pelo front: o cartão de teste vai junto com a venda.
 
 Depois:
 

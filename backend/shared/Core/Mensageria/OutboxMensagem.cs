@@ -1,4 +1,5 @@
 using System.Text.Json;
+using RestauranteEstoque.Core.Api;
 using RestauranteEstoque.Core.Domain;
 
 namespace RestauranteEstoque.Core.Mensageria;
@@ -17,6 +18,11 @@ public class OutboxMensagem : Entity
     public DateTime ProximaTentativaEm { get; private set; }
     public DateTime? ProcessadoEm { get; private set; }
     public string? UltimoErro { get; private set; }
+
+    public const int CorrelationIdMaxLength = 100;
+    public const int TraceParentMaxLength = 100;
+    public string? CorrelationId { get; private set; }
+    public string? TraceParent { get; private set; }
 
     private OutboxMensagem()
     {
@@ -37,9 +43,14 @@ public class OutboxMensagem : Entity
             Tipo = typeof(TMensagem).Name,
             Conteudo = JsonSerializer.Serialize(mensagem),
             CriadoEm = criadoEm,
-            ProximaTentativaEm = criadoEm
+            ProximaTentativaEm = criadoEm,
+            CorrelationId = Limitar(ContextoCorrelacao.Atual, CorrelationIdMaxLength),
+            TraceParent = Limitar(System.Diagnostics.Activity.Current?.Id, TraceParentMaxLength)
         };
     }
+
+    private static string? Limitar(string? valor, int maximo) =>
+        valor is null || valor.Length <= maximo ? valor : valor[..maximo];
 
     public void MarcarComoProcessado(DateTime agora)
     {

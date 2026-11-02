@@ -1,3 +1,4 @@
+import { toast } from "sonner";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/navigation";
 import { criarFornecedor } from "@/features/fornecedores/services/fornecedores";
@@ -9,6 +10,7 @@ export function useCriarFornecedor() {
   return useMutation({
     mutationFn: criarFornecedor,
     onSuccess: () => {
+      toast.success("Fornecedor criado");
       queryClient.invalidateQueries({ queryKey: ["fornecedores"] });
       router.push("/fornecedores");
     },

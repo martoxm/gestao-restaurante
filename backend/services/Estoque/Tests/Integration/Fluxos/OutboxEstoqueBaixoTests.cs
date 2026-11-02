@@ -35,7 +35,7 @@ public sealed class OutboxEstoqueBaixoTests(SqlServerFixture fixture)
         Assert.Equal(Quantidade.Criar(7), produtoAtualizado.QuantidadeEmEstoque);
         Assert.Equal(1, await contexto.MovimentacoesEstoque.CountAsync(m => m.ProdutoId == produto.Id));
         var aviso = Assert.Single(avisos);
-        Assert.Contains(produto.Nome, JsonSerializer.Deserialize<EnviarEmailMensagem>(aviso.Conteudo)!.Assunto);
+        Assert.Contains(produto.Nome, JsonSerializer.Deserialize<AvisarAdminsRestauranteMensagem>(aviso.Conteudo)!.Assunto);
         Assert.Null(aviso.ProcessadoEm);
     }
 

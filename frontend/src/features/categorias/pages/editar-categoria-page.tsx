@@ -3,6 +3,7 @@
 import { useEffect } from "react";
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useParams } from "next/navigation";
 import { useCategoria } from "@/features/categorias/hooks/useCategoria";
 import { useAtualizarCategoria } from "@/features/categorias/hooks/useAtualizarCategoria";
@@ -22,6 +23,7 @@ import { FormRootError } from "@/components/form-root-error";
 import { aplicarErrosDaApi } from "@/lib/api-errors";
 
 export function EditarCategoriaPage() {
+  useEscParaVoltar("/categorias");
   const params = useParams<{ id: string }>();
   const { id } = params;
 
@@ -98,7 +100,7 @@ export function EditarCategoriaPage() {
                     <FormItem>
                       <FormLabel>Nome</FormLabel>
                       <FormControl>
-                        <Input placeholder="Ex: Bebidas" {...field} />
+                        <Input autoFocus placeholder="Ex: Bebidas" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

@@ -18,6 +18,8 @@ public static class CorrelationIdExtensions
                 correlationId = Guid.NewGuid().ToString();
 
             context.TraceIdentifier = correlationId;
+            ContextoCorrelacao.Atual = correlationId;
+            System.Diagnostics.Activity.Current?.SetTag("correlation.id", correlationId);
             context.Response.OnStarting(() =>
             {
                 context.Response.Headers[NomeCabecalho] = correlationId;

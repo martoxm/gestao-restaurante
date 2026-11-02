@@ -22,8 +22,18 @@ public class VendaConfiguration : IEntityTypeConfiguration<Venda>
         builder.Property(venda => venda.CriadoEm)
             .IsRequired();
 
+        builder.Property(venda => venda.VersaoLinha)
+            .IsRowVersion();
+
         builder.Property(venda => venda.TokenCartao)
             .HasMaxLength(100);
+
+        builder.Property(venda => venda.MotivoCancelamento)
+            .HasConversion<string>()
+            .HasMaxLength(30);
+
+        builder.Property(venda => venda.DetalheCancelamento)
+            .HasMaxLength(500);
 
         builder.Ignore(venda => venda.Total);
 

@@ -75,9 +75,11 @@ public class VendaTests
         var venda = Venda.Criar(TesteVendas.RestauranteId, TesteVendas.Agora, [Item()], TesteVendas.Token);
         venda.AguardarPagamento();
 
-        venda.Cancelar();
+        venda.Cancelar(MotivoCancelamento.PagamentoRecusado, "Saldo insuficiente.");
 
         Assert.Equal(StatusVenda.Cancelada, venda.Status);
+        Assert.Equal(MotivoCancelamento.PagamentoRecusado, venda.MotivoCancelamento);
+        Assert.Equal("Saldo insuficiente.", venda.DetalheCancelamento);
     }
 
     [Fact]
@@ -87,7 +89,7 @@ public class VendaTests
         venda.AguardarPagamento();
         venda.Confirmar();
 
-        Assert.Throws<DomainException>(venda.Cancelar);
+        Assert.Throws<DomainException>(() => venda.Cancelar(MotivoCancelamento.PagamentoRecusado));
     }
 
     [Fact]

@@ -1,4 +1,6 @@
+using System.Text.Json;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
@@ -41,6 +43,7 @@ public static class Extensions
             .WithTracing(tracing =>
             {
                 tracing.AddSource(builder.Environment.ApplicationName)
+                    .AddSource("RestauranteEstoque.Mensageria")
                     .AddAspNetCoreInstrumentation(options =>
                         options.Filter = context =>
                             !context.Request.Path.StartsWithSegments(HealthEndpointPath)
@@ -77,14 +80,38 @@ public static class Extensions
     {
         if (app.Environment.IsDevelopment())
         {
-            app.MapHealthChecks(HealthEndpointPath);
+            app.MapHealthChecks(HealthEndpointPath, new HealthCheckOptions
+            {
+                ResponseWriter = EscreverRespostaJsonAsync
+            }).AllowAnonymous();
 
             app.MapHealthChecks(AlivenessEndpointPath, new HealthCheckOptions
             {
                 Predicate = r => r.Tags.Contains("live")
-            });
+            }).AllowAnonymous();
         }
 
         return app;
+    }
+
+    private static Task EscreverRespostaJsonAsync(HttpContext context, HealthReport relatorio)
+    {
+        context.Response.ContentType = "application/json; charset=utf-8";
+
+        var resposta = new
+        {
+            status = relatorio.Status.ToString(),
+            duracaoMs = relatorio.TotalDuration.TotalMilliseconds,
+            checks = relatorio.Entries.Select(e => new
+            {
+                nome = e.Key,
+                status = e.Value.Status.ToString(),
+                descricao = e.Value.Description,
+                duracaoMs = e.Value.Duration.TotalMilliseconds,
+                erro = e.Value.Exception?.Message
+            })
+        };
+
+        return context.Response.WriteAsync(JsonSerializer.Serialize(resposta));
     }
 }

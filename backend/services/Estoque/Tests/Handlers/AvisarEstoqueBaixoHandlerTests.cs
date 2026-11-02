@@ -22,7 +22,7 @@ public class AvisarEstoqueBaixoHandlerTests
         new(new EstoqueFicouBaixoEvent(Guid.NewGuid(), nomeProduto, 7, restauranteId));
 
     [Fact]
-    public async Task Handle_ProdutoComRestaurante_DeveGravarEmailNoOutbox()
+    public async Task Handle_ProdutoComRestaurante_DeveGravarAvisoAosAdminsNoOutbox()
     {
         var (handler, outbox, relogio) = CriarHandler();
         var restauranteId = Guid.NewGuid();
@@ -30,11 +30,11 @@ public class AvisarEstoqueBaixoHandlerTests
         await handler.Handle(Notificacao("Arroz", restauranteId), CancellationToken.None);
 
         var linha = Assert.Single(outbox.Mensagens);
-        Assert.Equal(Filas.Email, linha.Fila);
-        Assert.Equal(nameof(EnviarEmailMensagem), linha.Tipo);
+        Assert.Equal(Filas.AvisarAdmins, linha.Fila);
+        Assert.Equal(nameof(AvisarAdminsRestauranteMensagem), linha.Tipo);
         Assert.Equal(relogio.AgoraUtc, linha.CriadoEm);
 
-        var email = JsonSerializer.Deserialize<EnviarEmailMensagem>(linha.Conteudo)!;
+        var email = JsonSerializer.Deserialize<AvisarAdminsRestauranteMensagem>(linha.Conteudo)!;
         Assert.Equal(restauranteId, email.RestauranteId);
         Assert.Equal("Estoque baixo: Arroz", email.Assunto);
         Assert.Contains("<b>Arroz</b>", email.CorpoHtml);
@@ -48,7 +48,7 @@ public class AvisarEstoqueBaixoHandlerTests
 
         await handler.Handle(Notificacao("<a href=\"http://golpe\">clique</a>", Guid.NewGuid()), CancellationToken.None);
 
-        var corpo = JsonSerializer.Deserialize<EnviarEmailMensagem>(Assert.Single(outbox.Mensagens).Conteudo)!.CorpoHtml;
+        var corpo = JsonSerializer.Deserialize<AvisarAdminsRestauranteMensagem>(Assert.Single(outbox.Mensagens).Conteudo)!.CorpoHtml;
         Assert.DoesNotContain("<a href", corpo);
         Assert.Contains("&lt;a href=", corpo);
     }

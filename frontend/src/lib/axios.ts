@@ -90,6 +90,10 @@ function criarClienteApi(urlBase: string | undefined): AxiosInstance {
   return cliente;
 }
 
-export const api = criarClienteApi(process.env.NEXT_PUBLIC_API_URL);
+
+
+export const api = criarClienteApi(process.env.NEXT_PUBLIC_API_ESTOQUE_URL);
 
 export const apiIdentidade = criarClienteApi(URL_IDENTIDADE);
+
+export const apiVendas = criarClienteApi(process.env.NEXT_PUBLIC_API_VENDAS_URL);

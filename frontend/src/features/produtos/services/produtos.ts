@@ -7,11 +7,16 @@ import type {
   AtualizarProdutoRequest,
 } from "@/features/produtos/types/produto";
 
+export type OrdenacaoProduto = "Nome" | "Preco" | "QuantidadeEmEstoque";
+export type DirecaoOrdenacao = "Asc" | "Desc";
+
 export interface ListarProdutosParams {
   pagina?: number;
   tamanhoPagina?: number;
   nome?: string;
   categoriaId?: string;
+  ordenarPor?: OrdenacaoProduto;
+  direcaoOrdenacao?: DirecaoOrdenacao;
 }
 
 export async function listarProdutos(

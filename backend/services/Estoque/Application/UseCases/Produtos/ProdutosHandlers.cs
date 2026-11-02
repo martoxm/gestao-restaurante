@@ -11,6 +11,7 @@ using RestauranteEstoque.Domain.Events;
 using RestauranteEstoque.Core.Domain.ValueObjects;
 using RestauranteEstoque.Core.Mensageria;
 using RestauranteEstoque.Core.Mensageria.Contratos;
+using Microsoft.Extensions.Logging;
 using System.Net;
 
 namespace RestauranteEstoque.Application.UseCases.Produtos;
@@ -221,10 +222,58 @@ public class AvisarEstoqueBaixoHandler : INotificationHandler<DomainEventNotific
             <p style="color:#888">Aviso automático do Controle de Estoque.</p>
             """;
 
-        var mensagem = new EnviarEmailMensagem(evento.RestauranteId, assunto, corpoHtml);
-        _outboxMensagemRepository.Adicionar(OutboxMensagem.Criar(Filas.Email, mensagem, _relogio.AgoraUtc));
+        var mensagem = new AvisarAdminsRestauranteMensagem(evento.RestauranteId, assunto, corpoHtml);
+        _outboxMensagemRepository.Adicionar(OutboxMensagem.Criar(Filas.AvisarAdmins, mensagem, _relogio.AgoraUtc));
 
         return Task.CompletedTask;
+    }
+}
+
+public class EncaminharAvisoAdminsHandler : IRequestHandler<EncaminharAvisoAdminsCommand>
+{
+    private readonly IIdentidadeClient _identidade;
+    private readonly IOutboxMensagemRepository _outbox;
+    private readonly IMensagemProcessadaRepository _mensagensProcessadas;
+    private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
+    private readonly ILogger<EncaminharAvisoAdminsHandler> _logger;
+
+    public EncaminharAvisoAdminsHandler(
+        IIdentidadeClient identidade,
+        IOutboxMensagemRepository outbox,
+        IMensagemProcessadaRepository mensagensProcessadas,
+        IApplicationDbContext context,
+        IRelogio relogio,
+        ILogger<EncaminharAvisoAdminsHandler> logger)
+    {
+        _identidade = identidade;
+        _outbox = outbox;
+        _mensagensProcessadas = mensagensProcessadas;
+        _context = context;
+        _relogio = relogio;
+        _logger = logger;
+    }
+
+    public async Task Handle(EncaminharAvisoAdminsCommand request, CancellationToken cancellationToken)
+    {
+        if (await _mensagensProcessadas.ExisteAsync(request.MensagemId, cancellationToken))
+            return;
+
+        var destinatarios = await _identidade.ListarEmailsAdminsAsync(request.RestauranteId, cancellationToken);
+        var agora = _relogio.AgoraUtc;
+
+        if (destinatarios.Count == 0)
+        {
+            _logger.LogWarning("Restaurante {RestauranteId} não tem Admin com e-mail: aviso '{Assunto}' descartado.", request.RestauranteId, request.Assunto);
+        }
+        else
+        {
+            var email = new EnviarEmailMensagem(destinatarios, request.Assunto, request.CorpoHtml);
+            _outbox.Adicionar(OutboxMensagem.Criar(Filas.Email, email, agora));
+        }
+
+        _mensagensProcessadas.Adicionar(MensagemProcessada.Criar(request.MensagemId, Filas.AvisarAdmins, agora));
+        await _context.SaveChangesAsync(cancellationToken);
     }
 }
 

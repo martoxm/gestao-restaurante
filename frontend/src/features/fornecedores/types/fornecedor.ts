@@ -3,6 +3,7 @@ export interface FornecedorItemLista {
   nome: string;
   telefone?: string | null;
   email?: string | null;
+  criadoEm: string;
 }
 
 export interface FornecedorDetalhes {
@@ -10,6 +11,7 @@ export interface FornecedorDetalhes {
   nome: string;
   telefone?: string | null;
   email?: string | null;
+  criadoEm: string;
 }
 
 export interface CriarFornecedorRequest {

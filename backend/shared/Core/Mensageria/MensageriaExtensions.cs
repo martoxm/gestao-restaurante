@@ -11,6 +11,8 @@ public static class MensageriaExtensions
         services.AddSingleton<ConexaoRabbitMq>();
         services.AddSingleton<IPublicadorMensagens, RabbitMqPublicador>();
 
+        services.AddHealthChecks().AddCheck<RabbitMqHealthCheck>("rabbitmq", tags: ["ready"]);
+
         return services;
     }
 }

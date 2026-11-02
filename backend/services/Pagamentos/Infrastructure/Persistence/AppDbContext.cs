@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
 using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Core.Mensageria;
@@ -26,6 +27,8 @@ public class AppDbContext : DbContext, IApplicationDbContext
         modelBuilder.HasDefaultSchema("pagamentos");
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
+
+        modelBuilder.ApplyConfiguration(new OutboxMensagemConfiguration());
 
         modelBuilder.Entity<Pagamento>().HasQueryFilter(pagamento => pagamento.RestauranteId == RestauranteIdAtual);
     }

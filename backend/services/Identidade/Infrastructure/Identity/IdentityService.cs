@@ -2,6 +2,7 @@ using RestauranteEstoque.Core.Seguranca;
 using FluentValidation;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using RestauranteEstoque.Identidade.Application.Abstractions.Services;
 
 namespace RestauranteEstoque.Identidade.Infrastructure.Identity;
@@ -97,5 +98,38 @@ public class IdentityService : IIdentityService
             .Select(usuario => usuario.Email!)
             .Distinct(StringComparer.OrdinalIgnoreCase)
             .ToList();
+    }
+
+    public async Task<IReadOnlyList<UsuarioComRole>> ListarUsuariosDoRestauranteAsync(Guid restauranteId, CancellationToken cancellationToken)
+    {
+        var usuarios = await _userManager.Users
+            .Where(usuario => usuario.RestauranteId == restauranteId)
+            .ToListAsync(cancellationToken);
+
+        var idsAdmins = (await _userManager.GetUsersInRoleAsync(RoleNames.Admin))
+            .Select(usuario => usuario.Id)
+            .ToHashSet();
+
+        return usuarios
+            .Select(usuario => new UsuarioComRole(
+                usuario.Id,
+                usuario.Nome,
+                usuario.Email!,
+                idsAdmins.Contains(usuario.Id) ? RoleNames.Admin : RoleNames.Funcionario))
+            .ToList();
+    }
+
+    public async Task DefinirRoleAsync(Guid usuarioId, string role, CancellationToken cancellationToken)
+    {
+        var usuario = await _userManager.FindByIdAsync(usuarioId.ToString())
+            ?? throw new InvalidOperationException($"Usuário '{usuarioId}' não existe.");
+
+        var rolesAtuais = await _userManager.GetRolesAsync(usuario);
+        var remover = rolesAtuais.Where(atual => atual != role).ToList();
+        if (remover.Count > 0)
+            await _userManager.RemoveFromRolesAsync(usuario, remover);
+
+        if (!rolesAtuais.Contains(role))
+            await _userManager.AddToRoleAsync(usuario, role);
     }
 }

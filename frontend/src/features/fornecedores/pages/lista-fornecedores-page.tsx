@@ -1,12 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { toast } from "sonner";
+import { useAvisoSemPermissao } from "@/lib/use-aviso-sem-permissao";
 import Link from "next/link";
+import type { FornecedorItemLista } from "@/features/fornecedores/types/fornecedor";
 import { obterMensagemErro } from "@/lib/api-errors";
+import { formatarData } from "@/lib/datas";
 import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
 import { useFornecedores } from "@/features/fornecedores/hooks/useFornecedores";
 import { useExcluirFornecedor } from "@/features/fornecedores/hooks/useExcluirFornecedor";
+import { Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Skeleton } from "@/components/ui/skeleton";
+import { ConfirmarExclusao } from "@/components/confirmar-exclusao";
+import { TelaVazia } from "@/components/tela-vazia";
 import {
   Table,
   TableBody,
@@ -17,20 +24,39 @@ import {
 } from "@/components/ui/table";
 
 export function ListaFornecedoresPage() {
+  useAvisoSemPermissao("/fornecedores", "Você não tem permissão para editar fornecedores — essa ação é restrita a administradores.");
   const { data, isLoading, isError } = useFornecedores();
   const { isAdmin } = useUsuarioAtual();
   const excluirFornecedorMutation = useExcluirFornecedor();
 
-  const [erroExclusao, setErroExclusao] = useState<string | null>(null);
 
-  function handleExcluir(id: string, nome: string) {
-    if (!confirm(`Excluir o fornecedor "${nome}"?`)) return;
-
-    setErroExclusao(null);
+  function handleExcluir(id: string) {
     excluirFornecedorMutation.mutate(id, {
       onError: (error) =>
-        setErroExclusao(obterMensagemErro(error, "Não foi possível excluir o fornecedor.")),
+        toast.error(obterMensagemErro(error, "Não foi possível excluir o fornecedor.")),
     });
+  }
+
+  function renderizarAcoes(fornecedor: FornecedorItemLista) {
+    return isAdmin ? (
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/fornecedores/${fornecedor.id}/editar`}>
+              Editar
+            </Link>
+          </Button>
+          <ConfirmarExclusao
+            titulo={`Excluir o fornecedor "${fornecedor.nome}"?`}
+            descricao="Essa ação não pode ser desfeita."
+            disabled={excluirFornecedorMutation.isPending}
+            onConfirmar={() => handleExcluir(fornecedor.id)}
+          />
+        </div>
+      ) : (
+        <p className="text-right text-sm text-muted-foreground">
+          —
+        </p>
+      );
   }
 
   return (
@@ -43,9 +69,11 @@ export function ListaFornecedoresPage() {
       </div>
 
       {isLoading && (
-        <p className="text-sm text-muted-foreground">
-          Carregando fornecedores...
-        </p>
+        <div className="flex flex-col gap-2">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Skeleton key={i} className="h-10 w-full" />
+          ))}
+        </div>
       )}
 
       {isError && (
@@ -55,64 +83,53 @@ export function ListaFornecedoresPage() {
         </p>
       )}
 
-      {erroExclusao && <p className="text-sm text-destructive">{erroExclusao}</p>}
+      {data && data.itens.length === 0 && (
+        <TelaVazia
+          icone={Truck}
+          titulo="Nenhum fornecedor ainda"
+          descricao="Guarde aqui o contato de quem abastece o restaurante."
+          acao={{ href: "/fornecedores/novo", rotulo: "Novo fornecedor" }}
+        />
+      )}
 
-      {data && (
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Nome</TableHead>
-              <TableHead>Telefone</TableHead>
-              <TableHead>E-mail</TableHead>
-              <TableHead className="text-right">Ações</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {data.itens.length === 0 && (
-              <TableRow>
-                <TableCell
-                  colSpan={4}
-                  className="text-center text-muted-foreground"
-                >
-                  Nenhum fornecedor cadastrado.
-                </TableCell>
-              </TableRow>
-            )}
-
+      {data && data.itens.length > 0 && (
+        <>
+          <div className="hidden sm:block">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Nome</TableHead>
+                  <TableHead>Telefone</TableHead>
+                  <TableHead>E-mail</TableHead>
+                  <TableHead>Criado em</TableHead>
+                  <TableHead className="text-right">Ações</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {data.itens.map((fornecedor) => (
+                  <TableRow key={fornecedor.id}>
+                    <TableCell>{fornecedor.nome}</TableCell>
+                    <TableCell>{fornecedor.telefone || "—"}</TableCell>
+                    <TableCell>{fornecedor.email || "—"}</TableCell>
+                    <TableCell>{formatarData(fornecedor.criadoEm)}</TableCell>
+                    <TableCell>{renderizarAcoes(fornecedor)}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+          <div className="flex flex-col gap-3 sm:hidden">
             {data.itens.map((fornecedor) => (
-              <TableRow key={fornecedor.id}>
-                <TableCell>{fornecedor.nome}</TableCell>
-                <TableCell>{fornecedor.telefone || "—"}</TableCell>
-                <TableCell>{fornecedor.email || "—"}</TableCell>
-                <TableCell>
-                  {isAdmin ? (
-                    <div className="flex justify-end gap-2">
-                      <Button variant="outline" size="sm" asChild>
-                        <Link href={`/fornecedores/${fornecedor.id}/editar`}>
-                          Editar
-                        </Link>
-                      </Button>
-                      <Button
-                        variant="destructive"
-                        size="sm"
-                        disabled={excluirFornecedorMutation.isPending}
-                        onClick={() =>
-                          handleExcluir(fornecedor.id, fornecedor.nome)
-                        }
-                      >
-                        Excluir
-                      </Button>
-                    </div>
-                  ) : (
-                    <p className="text-right text-sm text-muted-foreground">
-                      —
-                    </p>
-                  )}
-                </TableCell>
-              </TableRow>
+              <div key={fornecedor.id} className="flex flex-col gap-1 rounded-lg border p-4">
+                <p className="font-medium">{fornecedor.nome}</p>
+                <p className="text-sm text-muted-foreground">{fornecedor.telefone || "Sem telefone"}</p>
+                <p className="text-sm text-muted-foreground">{fornecedor.email || "Sem e-mail"}</p>
+                <p className="text-sm text-muted-foreground">Criado em {formatarData(fornecedor.criadoEm)}</p>
+                <div className="mt-2">{renderizarAcoes(fornecedor)}</div>
+              </div>
             ))}
-          </TableBody>
-        </Table>
+          </div>
+        </>
       )}
     </div>
   );

@@ -1,3 +1,5 @@
+using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using Microsoft.Extensions.Logging.Abstractions;
 using RestauranteEstoque.Core.Mensageria;
 using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
@@ -26,7 +28,7 @@ public class ProcessarWebhookGatewayHandlerTests
         var semRestaurante = new FakeUsuarioAtualService();
         using var context = TestePagamentos.CriarContexto(semRestaurante, nomeBanco);
         var handler = new ProcessarWebhookGatewayHandler(
-            new PagamentoRepository(context), new OutboxMensagemRepository(context), semRestaurante,
+            new PagamentoRepository(context), new OutboxMensagemRepository<AppDbContext>(context), semRestaurante,
             context, new FakeRelogio(), NullLogger<ProcessarWebhookGatewayHandler>.Instance);
         await handler.Handle(command, CancellationToken.None);
     }

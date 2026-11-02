@@ -110,7 +110,8 @@ IEndpointModule[] endpointModules =
 [
     new AuthEndpointsModule(),
     new RestauranteEndpointsModule(),
-    new InternoEndpointsModule()
+    new InternoEndpointsModule(),
+    new UsuarioEndpointsModule()
 ];
 
 foreach (var module in endpointModules)

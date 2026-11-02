@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
 using RestauranteEstoque.Identidade.Application.Abstractions.Services;
 

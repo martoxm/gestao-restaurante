@@ -20,6 +20,9 @@
   <Folder Name="/ServiceDefaults/">
     <Project Path="../../shared/ServiceDefaults/RestauranteEstoque.ServiceDefaults.csproj" />
   </Folder>
+  <Folder Name="/shared/">
+    <Project Path="../../shared/Core.Persistencia/RestauranteEstoque.Core.Persistencia.csproj" />
+  </Folder>
   <Folder Name="/Tests/">
     <Project Path="Tests/RestauranteEstoque.Vendas.Tests.csproj" />
   </Folder>

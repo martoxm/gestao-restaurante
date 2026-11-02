@@ -1,3 +1,5 @@
+using RestauranteEstoque.Core.Application.Exceptions;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using RestauranteEstoque.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using RestauranteEstoque.Application.Abstractions.Services;
@@ -32,9 +34,24 @@ public class AppDbContext : DbContext, IApplicationDbContext
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+        modelBuilder.ApplyConfiguration(new OutboxMensagemConfiguration());
+        modelBuilder.ApplyConfiguration(new MensagemProcessadaConfiguration());
+
         modelBuilder.Entity<Produto>().HasQueryFilter(produto => produto.RestauranteId == RestauranteIdAtual);
         modelBuilder.Entity<Categoria>().HasQueryFilter(categoria => categoria.RestauranteId == RestauranteIdAtual);
         modelBuilder.Entity<Fornecedor>().HasQueryFilter(fornecedor => fornecedor.RestauranteId == RestauranteIdAtual);
         modelBuilder.Entity<MovimentacaoEstoque>().HasQueryFilter(movimentacao => movimentacao.RestauranteId == RestauranteIdAtual);
+    }
+
+    public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        try
+        {
+            return await base.SaveChangesAsync(cancellationToken);
+        }
+        catch (DbUpdateConcurrencyException ex)
+        {
+            throw new ConflitoConcorrenciaException(ex);
+        }
     }
 }

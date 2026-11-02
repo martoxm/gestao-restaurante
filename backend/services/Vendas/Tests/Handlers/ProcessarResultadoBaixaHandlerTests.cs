@@ -1,3 +1,5 @@
+using RestauranteEstoque.Vendas.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
 using RestauranteEstoque.Core.Domain.ValueObjects;
@@ -30,8 +32,8 @@ public class ProcessarResultadoBaixaHandlerTests
         await using var context = TesteVendas.CriarContexto(usuario, nomeBanco);
         var handler = new ProcessarResultadoBaixaHandler(
             new VendaRepository(context),
-            new MensagemProcessadaRepository(context),
-            new OutboxMensagemRepository(context),
+            new MensagemProcessadaRepository<AppDbContext>(context),
+            new OutboxMensagemRepository<AppDbContext>(context),
             usuario,
             context,
             new FakeRelogio(),

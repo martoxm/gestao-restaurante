@@ -10,6 +10,8 @@ using RestauranteEstoque.Domain.Entities;
 using RestauranteEstoque.Domain.Enums;
 using RestauranteEstoque.Domain.Services;
 using RestauranteEstoque.Core.Domain.ValueObjects;
+using RestauranteEstoque.Core.Application.Models;
+using RestauranteEstoque.Contracts.MovimentacoesEstoque;
 
 namespace RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
 
@@ -193,4 +195,48 @@ public class DevolverEstoqueVendaHandler : IRequestHandler<DevolverEstoqueVendaC
         _mensagensProcessadas.Adicionar(MensagemProcessada.Criar(request.MensagemId, Filas.DevolverEstoque, agora));
         await _context.SaveChangesAsync(cancellationToken);
     }
+}
+
+public class ListarMovimentacoesEstoqueHandler : IRequestHandler<ListarMovimentacoesEstoqueQuery, ResultadoPaginado<MovimentacaoEstoqueItemListaDto>>
+{
+    private readonly IMovimentacaoEstoqueRepository _movimentacaoEstoqueRepository;
+
+    public ListarMovimentacoesEstoqueHandler(IMovimentacaoEstoqueRepository movimentacaoEstoqueRepository)
+    {
+        _movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
+    }
+
+    public async Task<ResultadoPaginado<MovimentacaoEstoqueItemListaDto>> Handle(ListarMovimentacoesEstoqueQuery request, CancellationToken cancellationToken)
+    {
+        TipoMovimentacaoEstoque? tipo = string.IsNullOrWhiteSpace(request.Tipo)
+            ? null
+            : Enum.Parse<TipoMovimentacaoEstoque>(request.Tipo, ignoreCase: true);
+
+        var (movimentacoes, totalItens) = await _movimentacaoEstoqueRepository.ListarPaginadoAsync(
+            request.Pagina,
+            request.TamanhoPagina,
+            request.ProdutoId,
+            tipo,
+            request.DataInicio,
+            request.DataFim,
+            cancellationToken);
+
+        var itens = movimentacoes
+            .Select(movimentacao => movimentacao.ParaItemListaDto())
+            .ToList();
+
+        return new ResultadoPaginado<MovimentacaoEstoqueItemListaDto>(itens, request.Pagina, request.TamanhoPagina, totalItens);
+    }
+}
+
+file static class MovimentacaoEstoqueMapeamentos
+{
+    public static MovimentacaoEstoqueItemListaDto ParaItemListaDto(this MovimentacaoEstoque movimentacao) => new(
+        movimentacao.Id,
+        movimentacao.ProdutoId,
+        movimentacao.Produto?.Nome ?? string.Empty,
+        movimentacao.Tipo.ToString(),
+        movimentacao.Quantidade.Valor,
+        movimentacao.DataMovimentacao,
+        movimentacao.Observacoes);
 }

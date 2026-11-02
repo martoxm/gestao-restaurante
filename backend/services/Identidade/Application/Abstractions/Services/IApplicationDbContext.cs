@@ -4,5 +4,5 @@ public interface IApplicationDbContext
 {
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 
-    Task<ITransacao> IniciarTransacaoAsync(CancellationToken cancellationToken);
+    Task<T> ExecutarEmTransacaoAsync<T>(Func<CancellationToken, Task<T>> operacao, CancellationToken cancellationToken);
 }

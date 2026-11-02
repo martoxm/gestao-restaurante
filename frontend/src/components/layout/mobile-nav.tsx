@@ -14,9 +14,11 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { NAV_ITEMS } from "@/components/layout/nav-items";
+import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
 
 export function MobileNav() {
   const pathname = usePathname();
+  const { isAdmin } = useUsuarioAtual();
   const [open, setOpen] = useState(false);
 
   return (
@@ -32,7 +34,7 @@ export function MobileNav() {
           <SheetTitle>Controle de Estoque</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 px-4">
-          {NAV_ITEMS.map(({ href, label, icon: Icon }) => {
+          {NAV_ITEMS.filter((item) => !item.soAdmin || isAdmin).map(({ href, label, icon: Icon }) => {
             const isActive =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
 

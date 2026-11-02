@@ -23,6 +23,8 @@ public record VendaDetalhesDto(
     string Status,
     DateTime CriadoEm,
     decimal Total,
+    string? MotivoCancelamento,
+    string? DetalheCancelamento,
     IReadOnlyList<ItemVendaDto> Itens);
 
 public record VendaItemListaDto(
@@ -30,4 +32,5 @@ public record VendaItemListaDto(
     string Status,
     DateTime CriadoEm,
     int QuantidadeItens,
-    decimal Total);
+    decimal Total,
+    string? MotivoCancelamento);

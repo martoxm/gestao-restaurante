@@ -1,3 +1,5 @@
+using RestauranteEstoque.Vendas.Infrastructure.Persistence;
+using RestauranteEstoque.Core.Persistencia.Mensageria;
 using System.Text.Json;
 using RestauranteEstoque.Core.Mensageria;
 using RestauranteEstoque.Core.Mensageria.Contratos;
@@ -23,7 +25,7 @@ public class CriarVendaHandlerTests
 
         await using (var context = TesteVendas.CriarContexto(nomeBanco: nomeBanco))
         {
-            var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
+            var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
             await handler.Handle(new CriarVendaCommand([new ItemVendaRequest(coca.Id, 3)], TesteVendas.Token), CancellationToken.None);
         }
 
@@ -48,12 +50,12 @@ public class CriarVendaHandlerTests
 
         await using (var context = TesteVendas.CriarContexto(nomeBanco: nomeBanco))
         {
-            var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
+            var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
             vendaId = await handler.Handle(new CriarVendaCommand([new ItemVendaRequest(coca.Id, 3)], TesteVendas.Token), CancellationToken.None);
         }
 
         await using var leitura = TesteVendas.CriarContexto(nomeBanco: nomeBanco);
-        var pendentes = await new OutboxMensagemRepository(leitura).ListarPendentesAsync(10, TesteVendas.Agora, CancellationToken.None);
+        var pendentes = await new OutboxMensagemRepository<AppDbContext>(leitura).ListarPendentesAsync(10, TesteVendas.Agora, CancellationToken.None);
         var linha = Assert.Single(pendentes);
         Assert.Equal(Filas.BaixarEstoque, linha.Fila);
         Assert.Equal(nameof(BaixarEstoqueMensagem), linha.Tipo);
@@ -70,7 +72,7 @@ public class CriarVendaHandlerTests
     public async Task Handle_ProdutoForaDoCatalogo_LancaNaoEncontrado()
     {
         await using var context = TesteVendas.CriarContexto();
-        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
+        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
 
         await Assert.ThrowsAsync<NaoEncontradoException>(() =>
             handler.Handle(new CriarVendaCommand([new ItemVendaRequest(Guid.NewGuid(), 1)], TesteVendas.Token), CancellationToken.None));
@@ -80,7 +82,7 @@ public class CriarVendaHandlerTests
     public async Task Handle_TokenSemRestaurante_LancaSessaoInvalida()
     {
         await using var context = TesteVendas.CriarContexto();
-        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService(), new FakeRelogio());
+        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService(), new FakeRelogio());
 
         await Assert.ThrowsAsync<SessaoInvalidaException>(() =>
             handler.Handle(new CriarVendaCommand([new ItemVendaRequest(Guid.NewGuid(), 1)], TesteVendas.Token), CancellationToken.None));
@@ -91,7 +93,7 @@ public class CriarVendaHandlerTests
     {
         await using var context = TesteVendas.CriarContexto();
         var produto = await TesteVendas.AdicionarProdutoAsync(context, "Coca-Cola", 5m, excluido: true);
-        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
+        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
 
         await Assert.ThrowsAsync<NaoEncontradoException>(() =>
             handler.Handle(new CriarVendaCommand([new ItemVendaRequest(produto.Id, 1)], TesteVendas.Token), CancellationToken.None));
@@ -102,7 +104,7 @@ public class CriarVendaHandlerTests
     {
         await using var context = TesteVendas.CriarContexto();
         var produto = await TesteVendas.AdicionarProdutoAsync(context, "Coca-Cola", 5m, restauranteId: Guid.NewGuid());
-        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
+        var handler = new CriarVendaHandler(new VendaRepository(context), new OutboxMensagemRepository<AppDbContext>(context), new ProdutoCatalogoRepository(context), context, new FakeUsuarioAtualService { RestauranteId = TesteVendas.RestauranteId }, new FakeRelogio());
 
         await Assert.ThrowsAsync<NaoEncontradoException>(() =>
             handler.Handle(new CriarVendaCommand([new ItemVendaRequest(produto.Id, 1)], TesteVendas.Token), CancellationToken.None));

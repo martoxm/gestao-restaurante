@@ -17,3 +17,9 @@ public record AtualizarProdutoCommand(
     string? Descricao,
     decimal Preco,
     Guid CategoriaId) : IRequest;
+
+public record EncaminharAvisoAdminsCommand(
+    Guid MensagemId,
+    Guid RestauranteId,
+    string Assunto,
+    string CorpoHtml) : IRequest;

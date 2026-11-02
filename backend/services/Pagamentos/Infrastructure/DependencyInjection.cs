@@ -1,3 +1,5 @@
+using RestauranteEstoque.Core.Persistencia.Mensageria;
+using RestauranteEstoque.Core.Tempo;
 using System.Threading.Channels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +12,6 @@ using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
 using RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
 using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
 using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Pagamentos.Infrastructure.Time;
 using Stripe;
 
 namespace RestauranteEstoque.Pagamentos.Infrastructure;
@@ -21,14 +22,16 @@ public static class DependencyInjection
     {
         var connectionString = configuration.GetConnectionString("DefaultConnection");
 
+        services.AddHealthChecks().AddDbContextCheck<AppDbContext>("banco", tags: ["ready"]);
+
         services.AddDbContext<AppDbContext>(options =>
-            options.UseSqlServer(connectionString)
+            options.UseSqlServer(connectionString, sqlServer => sqlServer.EnableRetryOnFailure(maxRetryCount: 5, maxRetryDelay: TimeSpan.FromSeconds(10), errorNumbersToAdd: null))
                 .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking));
 
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
         services.AddScoped<IPagamentoRepository, PagamentoRepository>();
-        services.AddScoped<IOutboxMensagemRepository, OutboxMensagemRepository>();
+        services.AddOutboxMensagens<AppDbContext>();
         services.AddMensageriaRabbitMq(configuration);
 
         var gatewayFalso = configuration.GetSection("GatewayFalso").Get<GatewayFalsoSettings>() ?? new GatewayFalsoSettings();
@@ -59,8 +62,7 @@ public static class DependencyInjection
         services.AddScoped<IUsuarioAtualService>(provider => provider.GetRequiredService<UsuarioAtualService>());
         services.AddScoped<IDefinidorRestauranteAtual>(provider => provider.GetRequiredService<UsuarioAtualService>());
 
-        services.AddSingleton(TimeProvider.System);
-        services.AddSingleton<IRelogio, Relogio>();
+        services.AddRelogio();
 
         return services;
     }

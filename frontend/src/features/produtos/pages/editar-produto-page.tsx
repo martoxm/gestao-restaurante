@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useParams } from "next/navigation";
 import { useCategorias } from "@/features/categorias/hooks/useCategorias";
 import { useProduto } from "@/features/produtos/hooks/useProduto";
@@ -35,6 +36,7 @@ type ProdutoFormValues = Omit<AtualizarProdutoRequest, "preco"> & {
 };
 
 export function EditarProdutoPage() {
+  useEscParaVoltar("/produtos");
   const params = useParams<{ id: string }>();
   const { id } = params;
 
@@ -133,7 +135,7 @@ function EditarProdutoForm({
                 <FormItem>
                   <FormLabel>Nome</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ex: Arroz branco 5kg" {...field} />
+                    <Input autoFocus placeholder="Ex: Arroz branco 5kg" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>

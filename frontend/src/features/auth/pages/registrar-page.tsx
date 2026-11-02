@@ -101,7 +101,10 @@ export function RegistrarPage() {
               <FormField
                 control={form.control}
                 name="senha"
-                rules={{ required: "A senha é obrigatória." }}
+                rules={{
+                  required: "A senha é obrigatória.",
+                  minLength: { value: 6, message: "A senha precisa ter pelo menos 6 caracteres." },
+                }}
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Senha</FormLabel>

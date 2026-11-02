@@ -69,6 +69,15 @@ public static class ExceptionHandlingExtensions
                     return;
                 }
 
+                if (exception is ConflitoConcorrenciaException conflitoException)
+                {
+                    await Results.Problem(
+                        detail: conflitoException.Message,
+                        statusCode: StatusCodes.Status409Conflict)
+                        .ExecuteAsync(context);
+                    return;
+                }
+
                 await Results.Problem(
                     detail: "Ocorreu um erro inesperado. Tente novamente em instantes.",
                     statusCode: StatusCodes.Status500InternalServerError)

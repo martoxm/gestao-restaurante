@@ -1,3 +1,4 @@
+using RestauranteEstoque.Core.Application.Abstractions;
 using MediatR;
 using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
 using RestauranteEstoque.Identidade.Application.Abstractions.Services;
@@ -57,21 +58,20 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
 
     public async Task<LoginResponse> Handle(RegistrarCommand request, CancellationToken cancellationToken)
     {
-        await using var transacao = await _context.IniciarTransacaoAsync(cancellationToken);
+        return await _context.ExecutarEmTransacaoAsync(async ct =>
+        {
+            var restaurante = Restaurante.Criar(request.NomeRestaurante, _relogio.AgoraUtc);
+            _restauranteRepository.Adicionar(restaurante);
+            await _context.SaveChangesAsync(ct);
 
-        var restaurante = Restaurante.Criar(request.NomeRestaurante, _relogio.AgoraUtc);
-        _restauranteRepository.Adicionar(restaurante);
-        await _context.SaveChangesAsync(cancellationToken);
+            var usuarioId = await _identityService.CriarUsuarioAsync(request.Nome, request.Email, request.Senha, restaurante.Id, ct);
 
-        var usuarioId = await _identityService.CriarUsuarioAsync(request.Nome, request.Email, request.Senha, restaurante.Id, cancellationToken);
+            var usuario = new UsuarioAutenticado(usuarioId, request.Nome, request.Email, restaurante.Id);
+            var resposta = await _emissorSessao.EmitirAsync(usuario, ct);
+            await _context.SaveChangesAsync(ct);
 
-        var usuario = new UsuarioAutenticado(usuarioId, request.Nome, request.Email, restaurante.Id);
-        var resposta = await _emissorSessao.EmitirAsync(usuario, cancellationToken);
-        await _context.SaveChangesAsync(cancellationToken);
-
-        await transacao.ConfirmarAsync(cancellationToken);
-
-        return resposta;
+            return resposta;
+        }, cancellationToken);
     }
 }
 

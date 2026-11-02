@@ -156,12 +156,12 @@ public class ProcessarResultadoBaixaHandler : IRequestHandler<ProcessarResultado
         {
             if (!resultado.Baixado)
             {
-                venda.Cancelar();
+                venda.Cancelar(MotivoCancelamento.EstoqueInsuficiente, resultado.Motivo);
                 _logger.LogInformation("Venda {VendaId} cancelada: {Motivo}", venda.Id, resultado.Motivo);
             }
             else if (venda.TokenCartao is null)
             {
-                venda.Cancelar();
+                venda.Cancelar(MotivoCancelamento.SemPagamento, "Venda sem forma de pagamento.");
                 _outbox.Adicionar(OutboxMensagem.Criar(Filas.DevolverEstoque, VendaSaga.PedidoDevolucao(venda, "Venda sem token de pagamento."), _relogio.AgoraUtc));
                 _logger.LogWarning("Venda {VendaId} cancelada: não tem token de pagamento.", venda.Id);
             }
@@ -228,8 +228,8 @@ public class ProcessarResultadoPagamentoHandler : IRequestHandler<ProcessarResul
                 venda.Confirmar();
             else
             {
-                venda.Cancelar();
                 var motivo = resultado.Motivo ?? "Pagamento recusado.";
+                venda.Cancelar(MotivoCancelamento.PagamentoRecusado, motivo);
                 _outbox.Adicionar(OutboxMensagem.Criar(Filas.DevolverEstoque, VendaSaga.PedidoDevolucao(venda, motivo), _relogio.AgoraUtc));
                 _logger.LogInformation("Venda {VendaId} cancelada pelo pagamento: {Motivo}", venda.Id, motivo);
             }
@@ -258,6 +258,8 @@ file static class VendaMapeamentos
         venda.Status.ToString(),
         venda.CriadoEm,
         venda.Total.Valor,
+        venda.MotivoCancelamento?.ToString(),
+        venda.DetalheCancelamento,
         venda.Itens.Select(item => new ItemVendaDto(
             item.ProdutoId,
             item.NomeProduto,
@@ -270,5 +272,6 @@ file static class VendaMapeamentos
         venda.Status.ToString(),
         venda.CriadoEm,
         venda.Itens.Count,
-        venda.Total.Valor);
+        venda.Total.Valor,
+        venda.MotivoCancelamento?.ToString());
 }

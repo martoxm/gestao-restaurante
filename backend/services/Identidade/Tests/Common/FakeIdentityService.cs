@@ -32,6 +32,22 @@ public class FakeIdentityService : IIdentityService
 
     public Task<IReadOnlyList<string>> ListarEmailsAdminsAsync(Guid restauranteId, CancellationToken cancellationToken)
         => Task.FromResult(EmailsAdmins.TryGetValue(restauranteId, out var emails) ? emails : (IReadOnlyList<string>)[]);
+    public Dictionary<Guid, List<UsuarioComRole>> UsuariosPorRestaurante { get; } = [];
+
+    public Task<IReadOnlyList<UsuarioComRole>> ListarUsuariosDoRestauranteAsync(Guid restauranteId, CancellationToken cancellationToken)
+        => Task.FromResult<IReadOnlyList<UsuarioComRole>>(
+            UsuariosPorRestaurante.TryGetValue(restauranteId, out var lista) ? lista.ToList() : []);
+
+    public Task DefinirRoleAsync(Guid usuarioId, string role, CancellationToken cancellationToken)
+    {
+        foreach (var lista in UsuariosPorRestaurante.Values)
+        {
+            var indice = lista.FindIndex(u => u.Id == usuarioId);
+            if (indice >= 0)
+                lista[indice] = lista[indice] with { Role = role };
+        }
+        return Task.CompletedTask;
+    }
 }
 
 public class FakeJwtTokenGenerator : IJwtTokenGenerator

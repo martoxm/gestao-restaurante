@@ -3,6 +3,7 @@ export interface CategoriaItemLista {
   nome: string;
   descricao?: string | null;
   quantidadeProdutos: number;
+  criadoEm: string;
 }
 
 export interface CategoriaDetalhes {
@@ -10,6 +11,7 @@ export interface CategoriaDetalhes {
   nome: string;
   descricao?: string | null;
   quantidadeProdutos: number;
+  criadoEm: string;
 }
 
 export interface CriarCategoriaRequest {

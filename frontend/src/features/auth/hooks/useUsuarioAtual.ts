@@ -10,6 +10,7 @@ const ADMIN_ROLE = "Admin";
 export function useUsuarioAtual() {
   const [roles, setRoles] = useState<string[]>([]);
   const [restauranteId, setRestauranteId] = useState<string | undefined>();
+  const [usuarioId, setUsuarioId] = useState<string | undefined>();
 
   useEffect(() => {
     const token = obterToken();
@@ -18,11 +19,13 @@ export function useUsuarioAtual() {
 
     setRoles(!rawRoles ? [] : Array.isArray(rawRoles) ? rawRoles : [rawRoles]);
     setRestauranteId(decoded?.restauranteId);
+    setUsuarioId(decoded?.sub);
   }, []);
 
   return {
     roles,
     isAdmin: roles.includes(ADMIN_ROLE),
     restauranteId,
+    usuarioId,
   };
 }

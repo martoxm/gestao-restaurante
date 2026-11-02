@@ -2,6 +2,7 @@
 
 import { useForm } from "react-hook-form";
 import Link from "next/link";
+import { useEscParaVoltar } from "@/lib/use-esc-para-voltar";
 import { useProdutos } from "@/features/produtos/hooks/useProdutos";
 import { useCriarMovimentacaoEstoque } from "@/features/movimentacoes-estoque/hooks/useCriarMovimentacaoEstoque";
 import type { TipoMovimentacaoEstoque } from "@/features/movimentacoes-estoque/types/movimentacao-estoque";
@@ -39,6 +40,7 @@ type MovimentacaoEstoqueFormValues = {
 };
 
 export function NovaMovimentacaoEstoquePage() {
+  useEscParaVoltar("/produtos");
   const form = useForm<MovimentacaoEstoqueFormValues>({
     defaultValues: {
       produtoId: "",
