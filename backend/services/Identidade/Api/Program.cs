@@ -54,18 +54,6 @@ builder.Services.AddApiVersioning(options =>
     options.SubstituteApiVersionInUrl = true;
 });
 
-const string FrontendCorsPolicy = "FrontendCorsPolicy";
-var allowedOrigin = builder.Configuration["Cors:AllowedOrigin"]!;
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(FrontendCorsPolicy, policy =>
-    {
-        policy.WithOrigins(allowedOrigin)
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
 
 builder.Services.AddAutenticacaoJwt(builder.Configuration);
 
@@ -98,8 +86,6 @@ if (app.Environment.IsDevelopment())
 app.UseCorrelationId();
 
 app.UseValidationExceptionHandling();
-
-app.UseCors(FrontendCorsPolicy);
 
 app.UseAuthentication();
 app.UseAuthorization();

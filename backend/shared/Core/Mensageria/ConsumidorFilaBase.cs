@@ -38,7 +38,6 @@ public abstract class ConsumidorFilaBase<TMensagem> : BackgroundService
             try
             {
                 await ConsumirAsync(stoppingToken);
-                return;
             }
             catch (OperationCanceledException) when (stoppingToken.IsCancellationRequested)
             {
@@ -123,7 +122,18 @@ public abstract class ConsumidorFilaBase<TMensagem> : BackgroundService
         await canal.BasicConsumeAsync(Fila, autoAck: false, consumer: consumidor, cancellationToken: stoppingToken);
         _logger.LogInformation("Escutando a fila {Fila}.", Fila);
 
-        await Task.Delay(Timeout.Infinite, stoppingToken);
+        var canalFechou = new TaskCompletionSource(TaskCreationOptions.RunContinuationsAsynchronously);
+        canal.ChannelShutdownAsync += (_, motivo) =>
+        {
+            _logger.LogWarning("O canal da fila {Fila} fechou ({Motivo}). Reconectando.", Fila, motivo.ReplyText);
+            canalFechou.TrySetResult();
+            return Task.CompletedTask;
+        };
+        if (canal.IsClosed)
+            canalFechou.TrySetResult();
+
+        await canalFechou.Task.WaitAsync(stoppingToken);
+        await Task.Delay(TimeSpan.FromSeconds(2), stoppingToken);
     }
 
     private static int LerTentativas(IReadOnlyBasicProperties propriedades)

@@ -17,6 +17,7 @@
     <ProjectReference Include="..\services\Vendas\Api\RestauranteEstoque.Vendas.Api.csproj" />
     <ProjectReference Include="..\services\Pagamentos\Api\RestauranteEstoque.Pagamentos.Api.csproj" />
     <ProjectReference Include="..\services\Email\Api\RestauranteEstoque.Email.Api.csproj" />
+    <ProjectReference Include="..\services\Gateway\Api\RestauranteEstoque.Gateway.Api.csproj" />
   </ItemGroup>
 
 </Project>

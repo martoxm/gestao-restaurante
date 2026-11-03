@@ -4,7 +4,7 @@ import { limparSessao, obterRefreshToken, obterToken, salvarSessao } from "@/lib
 
 const AUTH_PUBLIC_PATHS = ["/auth/login", "/auth/registrar", "/auth/renovar"];
 
-const URL_IDENTIDADE = process.env.NEXT_PUBLIC_API_IDENTIDADE_URL;
+const URL_GATEWAY = process.env.NEXT_PUBLIC_API_URL;
 
 interface ConfigComRetentativa extends InternalAxiosRequestConfig {
   _jaRenovou?: boolean;
@@ -18,7 +18,7 @@ function renovarSessao(): Promise<string> {
       const refreshToken = obterRefreshToken();
       if (!refreshToken) throw new Error("Sem refresh token.");
 
-      const { data } = await axios.post<LoginResponse>(`${URL_IDENTIDADE}/api/v1/auth/renovar`, { refreshToken });
+      const { data } = await axios.post<LoginResponse>(`${URL_GATEWAY}/identidade/api/v1/auth/renovar`, { refreshToken });
       salvarSessao(data);
       return data.token;
     })().finally(() => {
@@ -34,9 +34,9 @@ function irParaLogin() {
   window.location.href = "/login";
 }
 
-function criarClienteApi(urlBase: string | undefined): AxiosInstance {
+function criarClienteApi(prefixoNoGateway: string): AxiosInstance {
   const cliente = axios.create({
-    baseURL: `${urlBase}/api/v1`,
+    baseURL: `${URL_GATEWAY}/${prefixoNoGateway}/api/v1`,
     headers: {
       "Content-Type": "application/json",
     },
@@ -91,9 +91,8 @@ function criarClienteApi(urlBase: string | undefined): AxiosInstance {
 }
 
 
+export const api = criarClienteApi("estoque");
 
-export const api = criarClienteApi(process.env.NEXT_PUBLIC_API_ESTOQUE_URL);
+export const apiIdentidade = criarClienteApi("identidade");
 
-export const apiIdentidade = criarClienteApi(URL_IDENTIDADE);
-
-export const apiVendas = criarClienteApi(process.env.NEXT_PUBLIC_API_VENDAS_URL);
+export const apiVendas = criarClienteApi("vendas");

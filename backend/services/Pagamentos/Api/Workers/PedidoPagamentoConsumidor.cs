@@ -7,7 +7,7 @@ using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
 namespace RestauranteEstoque.Pagamentos.Api.Workers;
 
 public sealed class PedidoPagamentoConsumidor : ConsumidorFilaBase<ProcessarPagamentoMensagem>
-{
+{   
     public PedidoPagamentoConsumidor(ConexaoRabbitMq conexao, IServiceScopeFactory scopeFactory, ILogger<PedidoPagamentoConsumidor> logger)
         : base(conexao, scopeFactory, logger)
     {

@@ -156,12 +156,18 @@ A Identidade sobe em `https://localhost:7010` e o Estoque em `https://localhost:
 
 ### 4. Frontend
 
-Crie `frontend/.env.local` com o endereço de cada API que o front chama:
+O front fala só com o API Gateway, que repassa cada chamada para a API certa. Suba ele também:
+
+```bash
+dotnet run --project backend/services/Gateway/Api --launch-profile https
+```
+
+O gateway sobe em `https://localhost:7018` (perfil `http`: `http://localhost:5272`) e repassa `/identidade/...` para a Identidade, `/estoque/...` para o Estoque e `/vendas/...` para a Vendas. Ele concentra o CORS, limita requisições por IP (429 quando passa do limite, mais apertado no login) e esconde os endpoints `/api/v1/interno`. O Swagger continua na porta de cada API.
+
+Crie `frontend/.env.local` com o endereço do gateway:
 
 ```
-NEXT_PUBLIC_API_ESTOQUE_URL=https://localhost:7008
-NEXT_PUBLIC_API_IDENTIDADE_URL=https://localhost:7010
-NEXT_PUBLIC_API_VENDAS_URL=https://localhost:7012
+NEXT_PUBLIC_API_URL=https://localhost:7018
 ```
 
 Login, cadastro e o nome do restaurante vão para a Identidade; produtos, categorias, fornecedores e movimentações, para o Estoque; a tela de Vendas, para a Vendas. A Pagamentos não é chamada pelo front: o cartão de teste vai junto com a venda.
