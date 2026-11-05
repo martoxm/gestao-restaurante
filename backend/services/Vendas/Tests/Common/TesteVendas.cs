@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Vendas.Application.Abstractions.Services;
-using RestauranteEstoque.Vendas.Domain.Entities;
-using RestauranteEstoque.Vendas.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Vendas.Application.Abstractions.Services;
+using GestaoRestaurante.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Infrastructure.Persistence;
 
-namespace RestauranteEstoque.Vendas.Tests.Common;
+namespace GestaoRestaurante.Vendas.Tests.Common;
 
 public static class TesteVendas
 {

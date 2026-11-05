@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Configurations;
 
 public class RestauranteConfiguration : IEntityTypeConfiguration<Restaurante>
 {
@@ -18,6 +18,22 @@ public class RestauranteConfiguration : IEntityTypeConfiguration<Restaurante>
             .IsRequired();
 
         builder.Property(r => r.CriadoEm)
+            .IsRequired();
+
+        builder.Property(r => r.Plano)
+            .HasConversion<string>()
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder.Property(r => r.TesteTerminaEm);
+
+        builder.Property(r => r.UltimoAvisoFimTesteDias);
+
+        builder.Property(r => r.PlanoValidoAte);
+        builder.Property(r => r.AssinadoEm);
+        builder.Property(r => r.UltimoPagamentoEm);
+
+        builder.Property(r => r.Ativo)
             .IsRequired();
     }
 }

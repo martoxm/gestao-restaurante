@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Events;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Events;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Domain;
+namespace GestaoRestaurante.Tests.Domain;
 
 public class ProdutoTests
 {

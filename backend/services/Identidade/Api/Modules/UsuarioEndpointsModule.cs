@@ -1,11 +1,11 @@
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Application.UseCases.Usuarios;
-using RestauranteEstoque.Identidade.Contracts.Usuarios;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Application.UseCases.Usuarios;
+using GestaoRestaurante.Identidade.Contracts.Usuarios;
 
-namespace RestauranteEstoque.Identidade.Api.Modules;
+namespace GestaoRestaurante.Identidade.Api.Modules;
 
 public class UsuarioEndpointsModule : IEndpointModule
 {
@@ -36,6 +36,21 @@ public class UsuarioEndpointsModule : IEndpointModule
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound);
+
+        group.MapPut("/{id:guid}/ativo", AlterarAtivo)
+            .WithName("AlterarAtivoUsuario")
+            .WithSummary("Desativa ou reativa um usuário")
+            .WithDescription("Desativado não consegue logar nem renovar a sessão (as sessões abertas caem em até 15 min) e não ocupa vaga do plano. Admin precisa ser rebaixado antes. Reativar respeita o limite do plano. Exige a role Admin.")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status404NotFound);
+    }
+
+    private static async Task<IResult> AlterarAtivo(Guid id, AlterarAtivoUsuarioRequest request, ISender sender, CancellationToken cancellationToken)
+    {
+        await sender.Send(new AlterarAtivoUsuarioCommand(id, request.Ativo), cancellationToken);
+        return Results.NoContent();
     }
 
     private static async Task<IResult> ListarUsuarios(ISender sender, CancellationToken cancellationToken)

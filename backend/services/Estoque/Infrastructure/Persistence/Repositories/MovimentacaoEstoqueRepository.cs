@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Infrastructure.Persistence.Repositories;
 
 public class MovimentacaoEstoqueRepository : IMovimentacaoEstoqueRepository
 {

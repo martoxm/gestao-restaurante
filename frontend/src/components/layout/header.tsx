@@ -21,7 +21,7 @@ export function Header() {
         <MobileNav />
         <Warehouse className="size-5 text-primary" />
         <span className="font-heading text-sm font-semibold">
-          Controle de Estoque
+          Gestão Restaurante
         </span>
       </div>
 

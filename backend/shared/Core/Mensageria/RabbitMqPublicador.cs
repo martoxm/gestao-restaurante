@@ -1,9 +1,9 @@
 using System.Diagnostics;
 using System.Text;
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Core.Api;
 using RabbitMQ.Client;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public sealed class RabbitMqPublicador : IPublicadorMensagens, IAsyncDisposable
 {

@@ -1,11 +1,11 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
-using RestauranteEstoque.Vendas.Application.Abstractions.Services;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
+using GestaoRestaurante.Vendas.Application.Abstractions.Services;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Application.UseCases.ProdutosCatalogo;
+namespace GestaoRestaurante.Vendas.Application.UseCases.ProdutosCatalogo;
 
 public class SincronizarProdutoCatalogoHandler : IRequestHandler<SincronizarProdutoCatalogoCommand>
 {

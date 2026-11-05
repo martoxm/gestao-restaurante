@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Domain.Enums;
+namespace GestaoRestaurante.Domain.Enums;
 
 public enum TipoMovimentacaoEstoque
 {

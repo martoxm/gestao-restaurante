@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public static class MensageriaExtensions
 {

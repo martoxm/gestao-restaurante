@@ -1,14 +1,14 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Core.Tempo;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Tempo;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Email.Application.Abstractions.Services;
-using RestauranteEstoque.Email.Infrastructure.EnvioEmail;
-using RestauranteEstoque.Email.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Email.Application.Abstractions.Services;
+using GestaoRestaurante.Email.Infrastructure.EnvioEmail;
+using GestaoRestaurante.Email.Infrastructure.Persistence;
 
-namespace RestauranteEstoque.Email.Infrastructure;
+namespace GestaoRestaurante.Email.Infrastructure;
 
 public static class DependencyInjection
 {

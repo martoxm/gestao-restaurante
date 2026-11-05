@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Tests.Integration.Fixtures;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Tests.Integration.Repositories;
+namespace GestaoRestaurante.Tests.Integration.Repositories;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class LimpezaMensageriaTests(SqlServerFixture fixture)

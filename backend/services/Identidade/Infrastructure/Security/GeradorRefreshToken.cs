@@ -1,10 +1,10 @@
 using System.Security.Cryptography;
 using System.Text;
 using Microsoft.Extensions.Options;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Security;
+namespace GestaoRestaurante.Identidade.Infrastructure.Security;
 
 public class GeradorRefreshToken : IGeradorRefreshToken
 {

@@ -1,7 +1,7 @@
 using Microsoft.Extensions.Options;
 using RabbitMQ.Client;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public sealed class ConexaoRabbitMq : IAsyncDisposable
 {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Vendas.Infrastructure.Persistence.Configurations;
 
 public class VendaConfiguration : IEntityTypeConfiguration<Venda>
 {
@@ -21,6 +21,11 @@ public class VendaConfiguration : IEntityTypeConfiguration<Venda>
 
         builder.Property(venda => venda.CriadoEm)
             .IsRequired();
+
+        builder.Property(venda => venda.Numero)
+            .IsRequired();
+        builder.HasIndex(venda => new { venda.RestauranteId, venda.Numero })
+            .IsUnique();
 
         builder.Property(venda => venda.VersaoLinha)
             .IsRowVersion();

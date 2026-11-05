@@ -3,11 +3,11 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     partial class AppDbContextModelSnapshot : ModelSnapshot
@@ -125,7 +125,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", "identidade");
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Identidade.Domain.Entities.Restaurante", b =>
+            modelBuilder.Entity("GestaoRestaurante.Identidade.Domain.Entities.Restaurante", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -144,7 +144,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("Restaurantes", "identidade");
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -172,7 +172,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetRoles", "identidade");
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -247,7 +247,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -256,7 +256,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -265,7 +265,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -274,13 +274,13 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -289,7 +289,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)

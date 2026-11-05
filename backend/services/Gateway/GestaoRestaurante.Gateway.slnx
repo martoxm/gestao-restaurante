@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Api/">
+    <Project Path="Api/GestaoRestaurante.Gateway.Api.csproj" />
+  </Folder>
+  <Project Path="../../shared/Core/GestaoRestaurante.Core.csproj" />
+  <Project Path="../../shared/ServiceDefaults/GestaoRestaurante.ServiceDefaults.csproj" />
+</Solution>

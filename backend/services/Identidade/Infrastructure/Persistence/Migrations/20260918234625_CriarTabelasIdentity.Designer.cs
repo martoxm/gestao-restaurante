@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
 
 #nullable disable
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(AppDbContext))]
     [Migration("20260918234625_CriarTabelasIdentity")]
@@ -126,7 +126,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.Category", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.Category", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -146,7 +146,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("Categories", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.Product", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.Product", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -178,7 +178,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("Products", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.StockMovement", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.StockMovement", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -207,7 +207,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("StockMovements", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.Supplier", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.Supplier", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -231,7 +231,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("Suppliers", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.User", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.User", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -260,7 +260,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", b =>
+            modelBuilder.Entity("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -288,7 +288,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.ToTable("AspNetRoles", (string)null);
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", b =>
+            modelBuilder.Entity("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -360,7 +360,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -369,7 +369,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserClaim<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -378,7 +378,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserLogin<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -387,13 +387,13 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserRole<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationRole", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationRole", null)
                         .WithMany()
                         .HasForeignKey("RoleId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -402,16 +402,16 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityUserToken<System.Guid>", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Identidade.Infrastructure.Identity.ApplicationUser", null)
+                    b.HasOne("GestaoRestaurante.Identidade.Infrastructure.Identity.ApplicationUser", null)
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.Product", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.Product", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Domain.Entities.Category", "Category")
+                    b.HasOne("GestaoRestaurante.Domain.Entities.Category", "Category")
                         .WithMany("Products")
                         .HasForeignKey("CategoryId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -420,9 +420,9 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.Navigation("Category");
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.StockMovement", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.StockMovement", b =>
                 {
-                    b.HasOne("RestauranteEstoque.Domain.Entities.Product", "Product")
+                    b.HasOne("GestaoRestaurante.Domain.Entities.Product", "Product")
                         .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -431,7 +431,7 @@ namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("RestauranteEstoque.Domain.Entities.Category", b =>
+            modelBuilder.Entity("GestaoRestaurante.Domain.Entities.Category", b =>
                 {
                     b.Navigation("Products");
                 });

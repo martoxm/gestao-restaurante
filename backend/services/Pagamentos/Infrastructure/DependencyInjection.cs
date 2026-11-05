@@ -1,20 +1,21 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Core.Tempo;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Tempo;
 using System.Threading.Channels;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Repositories;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
-using RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Repositories;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Infrastructure.Assinaturas;
+using GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
 using Stripe;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure;
+namespace GestaoRestaurante.Pagamentos.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -31,6 +32,10 @@ public static class DependencyInjection
         services.AddScoped<IApplicationDbContext>(provider => provider.GetRequiredService<AppDbContext>());
 
         services.AddScoped<IPagamentoRepository, PagamentoRepository>();
+        services.AddScoped<ICobrancaPlanoRepository, CobrancaPlanoRepository>();
+        var planos = configuration.GetSection(PlanosSettings.SectionName).Get<PlanosSettings>() ?? new PlanosSettings();
+        services.AddSingleton<ITabelaPlanos>(planos);
+        services.AddSingleton(configuration.GetSection(FrontSettings.SectionName).Get<FrontSettings>() ?? new FrontSettings());
         services.AddOutboxMensagens<AppDbContext>();
         services.AddMensageriaRabbitMq(configuration);
 
@@ -47,10 +52,12 @@ public static class DependencyInjection
 
             services.AddSingleton(new StripeClient(stripe.ChaveSecreta));
             services.AddSingleton<IGatewayPagamento, GatewayStripe>();
+            services.AddSingleton<ICheckoutPlano, CheckoutPlanoStripe>();
         }
         else
         {
             services.AddSingleton<IGatewayPagamento, GatewayPagamentoFalso>();
+            services.AddSingleton<ICheckoutPlano, CheckoutPlanoFalso>();
 
             services.AddSingleton(Channel.CreateUnbounded<CobrancaFalsa>());
             services.AddHttpClient(SimuladorWebhookGatewayFalso.NomeHttpClient);

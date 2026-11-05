@@ -5,4 +5,5 @@ export interface UsuarioItemLista {
   nome: string;
   email: string;
   role: RoleUsuario;
+  ativo: boolean;
 }

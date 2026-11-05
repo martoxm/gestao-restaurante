@@ -1,7 +1,9 @@
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Assinaturas;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using Stripe.Checkout;
 using Stripe;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
 public static class WebhookStripe
 {
@@ -20,6 +22,16 @@ public static class WebhookStripe
         catch (StripeException)
         {
             return ResultadoWebhookStripe.AssinaturaInvalida();
+        }
+
+        if (evento.Type == EventTypes.CheckoutSessionCompleted)
+        {
+            if (evento.Data.Object is Session sessao
+                && sessao.PaymentStatus == "paid"
+                && sessao.Metadata.ContainsKey("cobrancaId"))
+                return ResultadoWebhookStripe.ConfirmarPlano(new ConfirmarPagamentoPlanoCommand(sessao.Id));
+
+            return ResultadoWebhookStripe.Ignorado();
         }
 
         var aprovado = evento.Type switch
@@ -47,9 +59,10 @@ public static class WebhookStripe
     }
 }
 
-public record ResultadoWebhookStripe(bool AssinaturaValida, ProcessarWebhookGatewayCommand? Comando)
+public record ResultadoWebhookStripe(bool AssinaturaValida, ProcessarWebhookGatewayCommand? Comando, ConfirmarPagamentoPlanoCommand? ConfirmacaoPlano = null)
 {
     public static ResultadoWebhookStripe AssinaturaInvalida() => new(false, null);
     public static ResultadoWebhookStripe Ignorado() => new(true, null);
     public static ResultadoWebhookStripe Processar(ProcessarWebhookGatewayCommand comando) => new(true, comando);
+    public static ResultadoWebhookStripe ConfirmarPlano(ConfirmarPagamentoPlanoCommand comando) => new(true, null, comando);
 }

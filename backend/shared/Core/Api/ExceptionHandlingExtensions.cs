@@ -3,10 +3,10 @@ using Microsoft.AspNetCore.Http;
 using System.Text.Json;
 using FluentValidation;
 using Microsoft.AspNetCore.Diagnostics;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Core.Api;
+namespace GestaoRestaurante.Core.Api;
 
 public static class ExceptionHandlingExtensions
 {

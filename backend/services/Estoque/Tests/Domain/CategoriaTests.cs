@@ -1,7 +1,7 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Tests.Domain;
+namespace GestaoRestaurante.Tests.Domain;
 
 public class CategoriaTests
 {

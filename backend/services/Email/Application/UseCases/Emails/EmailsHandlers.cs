@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using MediatR;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Email.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Email.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Email.Application.UseCases.Emails;
+namespace GestaoRestaurante.Email.Application.UseCases.Emails;
 
 public class EnviarEmailHandler : IRequestHandler<EnviarEmailCommand, bool>
 {

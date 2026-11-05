@@ -1,15 +1,15 @@
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Contracts.Produtos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Domain.Services;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Infrastructure.Persistence;
-using RestauranteEstoque.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Tests.Integration.Fixtures;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Domain.Services;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Infrastructure.Persistence;
+using GestaoRestaurante.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Tests.Integration.Repositories;
+namespace GestaoRestaurante.Tests.Integration.Repositories;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class IsolamentoRestaurantesTests(SqlServerFixture fixture)

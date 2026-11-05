@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Infrastructure.Persistence.Configurations;
 
 public class FornecedorConfiguration : IEntityTypeConfiguration<Fornecedor>
 {

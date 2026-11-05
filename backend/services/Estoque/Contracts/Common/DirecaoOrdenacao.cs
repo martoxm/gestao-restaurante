@@ -1,6 +1,6 @@
 using System.Text.Json.Serialization;
 
-namespace RestauranteEstoque.Contracts.Common;
+namespace GestaoRestaurante.Contracts.Common;
 
 [JsonConverter(typeof(JsonStringEnumConverter))]
 public enum DirecaoOrdenacao

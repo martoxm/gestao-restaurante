@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <!-- Etapa Q5: a parte do Core que precisa do EF Core (Outbox e idempotência das
+       mensagens). Fica num projeto separado de propósito: o Domain de cada API
+       referencia o Core, e se o EF Core entrasse no Core ele chegaria no Domain
+       junto. Assim, só os projetos Infrastructure (e a Api) enxergam isso. -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\GestaoRestaurante.Core.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="10.0.13" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+</Project>

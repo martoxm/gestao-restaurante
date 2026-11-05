@@ -2,10 +2,10 @@ using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging.Abstractions;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Infrastructure.Integracoes.Identidade;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Infrastructure.Integracoes.Identidade;
 
-namespace RestauranteEstoque.Tests.Integracoes;
+namespace GestaoRestaurante.Tests.Integracoes;
 
 public class IdentidadeClientTests
 {

@@ -1,10 +1,10 @@
 using System.Net.Http.Json;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Api;
 
-namespace RestauranteEstoque.Infrastructure.Integracoes.Identidade;
+namespace GestaoRestaurante.Infrastructure.Integracoes.Identidade;
 
 public class IdentidadeClient : IIdentidadeClient
 {

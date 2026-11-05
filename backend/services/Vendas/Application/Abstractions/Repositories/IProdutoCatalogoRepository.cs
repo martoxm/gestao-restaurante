@@ -1,6 +1,6 @@
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
 
 public interface IProdutoCatalogoRepository
 {

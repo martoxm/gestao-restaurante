@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Controle de Estoque",
-  description: "Sistema de controle de estoque para restaurantes",
+  title: "Gestão Restaurante",
+  description: "Sistema de gestão para restaurantes: estoque, vendas e pagamentos",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

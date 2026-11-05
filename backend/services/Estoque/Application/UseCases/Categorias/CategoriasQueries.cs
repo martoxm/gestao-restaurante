@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.Categorias;
-using RestauranteEstoque.Contracts.Common;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.Categorias;
+using GestaoRestaurante.Contracts.Common;
 
-namespace RestauranteEstoque.Application.UseCases.Categorias;
+namespace GestaoRestaurante.Application.UseCases.Categorias;
 
 public record ListarCategoriasQuery(
     int Pagina = 1,

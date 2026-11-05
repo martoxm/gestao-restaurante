@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Pagamentos.Contracts.Pagamentos;
+namespace GestaoRestaurante.Pagamentos.Contracts.Pagamentos;
 
 public record PagamentoCriadoResponse(Guid Id, string Status);
 

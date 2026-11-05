@@ -1,7 +1,7 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Vendas.Domain.Entities;
+namespace GestaoRestaurante.Vendas.Domain.Entities;
 
 public class ProdutoCatalogo : Entity
 {

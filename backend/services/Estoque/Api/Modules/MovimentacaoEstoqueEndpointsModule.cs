@@ -1,11 +1,11 @@
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Core.Api;
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Contracts.MovimentacoesEstoque;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Contracts.MovimentacoesEstoque;
 
-namespace RestauranteEstoque.Api.Modules;
+namespace GestaoRestaurante.Api.Modules;
 
 public class MovimentacaoEstoqueEndpointsModule : IEndpointModule
 {

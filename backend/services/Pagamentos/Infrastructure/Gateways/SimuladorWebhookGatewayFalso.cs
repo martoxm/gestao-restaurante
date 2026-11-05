@@ -4,7 +4,7 @@ using System.Threading.Channels;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
 public sealed class SimuladorWebhookGatewayFalso : BackgroundService
 {

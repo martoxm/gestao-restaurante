@@ -1,8 +1,8 @@
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Contracts.Produtos;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Application.Abstractions.Repositories;
 
 public interface IProdutoRepository
 {

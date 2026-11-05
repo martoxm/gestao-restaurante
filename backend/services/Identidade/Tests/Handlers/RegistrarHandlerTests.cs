@@ -1,10 +1,10 @@
 using FluentValidation;
 using FluentValidation.Results;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Application.UseCases.Auth;
-using RestauranteEstoque.Identidade.Tests.Common;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Application.UseCases.Auth;
+using GestaoRestaurante.Identidade.Tests.Common;
 
-namespace RestauranteEstoque.Identidade.Tests.Handlers;
+namespace GestaoRestaurante.Identidade.Tests.Handlers;
 
 public class RegistrarHandlerTests
 {
@@ -24,6 +24,19 @@ public class RegistrarHandlerTests
     }
 
     [Fact]
+    public async Task Handle_ComDadosValidos_DonoDeveNascerAdmin()
+    {
+        using var context = TestDbContextFactory.Create();
+        var identityService = new FakeIdentityService();
+        var handler = CriarHandler(context, identityService);
+
+        await handler.Handle(
+            new RegistrarCommand("Ana", "ana@teste.com", "senha123", "Restaurante da Ana"), CancellationToken.None);
+
+        Assert.Equal("Admin", Assert.Single(identityService.Roles.Values));
+    }
+
+    [Fact]
     public async Task Handle_QuandoOIdentityRecusaOUsuario_NaoDeveConfirmarATransacao()
     {
         using var context = TestDbContextFactory.Create();
@@ -40,8 +53,10 @@ public class RegistrarHandlerTests
     private static RegistrarHandler CriarHandler(TestDbContext context, IIdentityService identityService) =>
         new(
             identityService,
-            new EmissorSessao(identityService, new FakeJwtTokenGenerator(), new FakeGeradorRefreshToken(), new FakeRefreshTokenRepository(context), new FakeRelogio()),
+            new EmissorSessao(new FakeRestauranteRepository(context), identityService, new FakeJwtTokenGenerator(), new FakeGeradorRefreshToken(), new FakeRefreshTokenRepository(context), new FakeRelogio()),
             new FakeRestauranteRepository(context),
             context,
-            new FakeRelogio());
+            new FakeRelogio(),
+            new FakeOutboxMensagemRepository(),
+            new FakeLinksFront());
 }

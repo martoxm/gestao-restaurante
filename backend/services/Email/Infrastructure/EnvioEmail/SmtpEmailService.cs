@@ -3,9 +3,9 @@ using MailKit.Security;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MimeKit;
-using RestauranteEstoque.Email.Application.Abstractions.Services;
+using GestaoRestaurante.Email.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Email.Infrastructure.EnvioEmail;
+namespace GestaoRestaurante.Email.Infrastructure.EnvioEmail;
 
 public class SmtpEmailService : IEmailService
 {

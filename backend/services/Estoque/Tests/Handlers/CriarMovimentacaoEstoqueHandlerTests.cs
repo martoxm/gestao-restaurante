@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class CriarMovimentacaoEstoqueHandlerTests
 {

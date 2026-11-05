@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Domain.Services;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Domain.Services;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Domain;
+namespace GestaoRestaurante.Tests.Domain;
 
 public class MovimentadorEstoqueTests
 {

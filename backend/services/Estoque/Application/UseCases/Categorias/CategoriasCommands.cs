@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace RestauranteEstoque.Application.UseCases.Categorias;
+namespace GestaoRestaurante.Application.UseCases.Categorias;
 
 public record CriarCategoriaCommand(
     string Nome,

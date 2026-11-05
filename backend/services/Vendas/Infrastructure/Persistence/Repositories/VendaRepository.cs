@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
-using RestauranteEstoque.Vendas.Contracts.Common;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
+using GestaoRestaurante.Vendas.Contracts.Common;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Vendas.Infrastructure.Persistence.Repositories;
 
 public class VendaRepository : IVendaRepository
 {
@@ -44,6 +44,12 @@ public class VendaRepository : IVendaRepository
             .ToListAsync(cancellationToken);
 
         return (itens, totalItens);
+    }
+
+    public async Task<int> ObterProximoNumeroAsync(CancellationToken cancellationToken)
+    {
+        var maior = await _context.Vendas.MaxAsync(venda => (int?)venda.Numero, cancellationToken);
+        return (maior ?? 0) + 1;
     }
 
     public void Adicionar(Venda venda) => _context.Vendas.Add(venda);

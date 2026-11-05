@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Domain;
+namespace GestaoRestaurante.Core.Domain;
 
 public interface IDomainEvent
 {

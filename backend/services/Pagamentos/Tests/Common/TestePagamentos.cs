@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Common;
+namespace GestaoRestaurante.Pagamentos.Tests.Common;
 
 public static class TestePagamentos
 {

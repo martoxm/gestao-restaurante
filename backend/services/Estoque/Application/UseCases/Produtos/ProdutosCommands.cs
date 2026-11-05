@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace RestauranteEstoque.Application.UseCases.Produtos;
+namespace GestaoRestaurante.Application.UseCases.Produtos;
 
 public record CriarProdutoCommand(
     string Nome,

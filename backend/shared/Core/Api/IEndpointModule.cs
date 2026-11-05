@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Routing;
-namespace RestauranteEstoque.Core.Api;
+namespace GestaoRestaurante.Core.Api;
 
 public interface IEndpointModule
 {

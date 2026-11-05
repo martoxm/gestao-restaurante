@@ -1,14 +1,14 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Application.UseCases.Auth;
-using RestauranteEstoque.Identidade.Domain.Entities;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence;
-using RestauranteEstoque.Identidade.Tests.Integration.Fixtures;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Application.UseCases.Auth;
+using GestaoRestaurante.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
+using GestaoRestaurante.Identidade.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Identidade.Tests.Integration.Fluxos;
+namespace GestaoRestaurante.Identidade.Tests.Integration.Fluxos;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class RefreshTokenFluxoTests(SqlServerFixture fixture)

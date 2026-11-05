@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Domain.Services;
+namespace GestaoRestaurante.Domain.Services;
 
 public static class MovimentadorEstoque
 {

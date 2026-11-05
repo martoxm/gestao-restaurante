@@ -1,18 +1,22 @@
-using RestauranteEstoque.Core.Tempo;
+using GestaoRestaurante.Core.Tempo;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Infrastructure.Identity;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Identidade.Infrastructure.Security;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Infrastructure.Identity;
+using GestaoRestaurante.Identidade.Infrastructure.Links;
+using GestaoRestaurante.Identidade.Infrastructure.Plataforma;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Identidade.Infrastructure.Security;
 
-namespace RestauranteEstoque.Identidade.Infrastructure;
+namespace GestaoRestaurante.Identidade.Infrastructure;
 
 public static class DependencyInjection
 {
@@ -53,6 +57,17 @@ public static class DependencyInjection
 
         services.AddSingleton<IGeradorRefreshToken, GeradorRefreshToken>();
         services.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+
+        services.AddScoped<IConviteRepository, ConviteRepository>();
+        services.AddScoped<IAuditoriaPlataformaRepository, AuditoriaPlataformaRepository>();
+
+        services.AddScoped<IConsultasPlataforma, ConsultasPlataforma>();
+        services.Configure<PlanosSettings>(configuration.GetSection(PlanosSettings.SectionName));
+        services.AddOutboxMensagens<AppDbContext>();
+        services.AddIdempotenciaMensagens<AppDbContext>();
+        services.AddMensageriaRabbitMq(configuration);
+        services.Configure<FrontSettings>(configuration.GetSection(FrontSettings.SectionName));
+        services.AddSingleton<ILinksFront, LinksFront>();
 
         services.AddHttpContextAccessor();
         services.AddScoped<IUsuarioAtualService, UsuarioAtualService>();

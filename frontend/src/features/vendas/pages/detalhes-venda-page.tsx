@@ -38,7 +38,7 @@ export function DetalhesVendaPage() {
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div>
           <h1 className="font-heading text-lg font-semibold">
-            Venda {venda ? codigoVenda(venda.id) : ""}
+            Venda {venda ? codigoVenda(venda.numero) : ""}
           </h1>
           {venda && <p className="text-sm text-muted-foreground">{formatarDataHora(venda.criadoEm)}</p>}
         </div>

@@ -1,7 +1,7 @@
 using MediatR;
-using RestauranteEstoque.Pagamentos.Contracts.Pagamentos;
+using GestaoRestaurante.Pagamentos.Contracts.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+namespace GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
 public record CriarPagamentoCommand(string ChaveIdempotencia, Guid VendaId, decimal Valor, string TokenCartao)
     : IRequest<PagamentoCriadoResponse>;

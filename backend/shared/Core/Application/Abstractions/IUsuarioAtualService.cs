@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Application.Abstractions;
+namespace GestaoRestaurante.Core.Application.Abstractions;
 
 public interface IUsuarioAtualService
 {

@@ -1,7 +1,7 @@
-using RestauranteEstoque.Vendas.Contracts.Common;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Contracts.Common;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
 
 public interface IVendaRepository
 {
@@ -12,6 +12,8 @@ public interface IVendaRepository
         int tamanhoPagina,
         DirecaoOrdenacao direcaoOrdenacao,
         CancellationToken cancellationToken);
+
+    Task<int> ObterProximoNumeroAsync(CancellationToken cancellationToken);
 
     void Adicionar(Venda venda);
 

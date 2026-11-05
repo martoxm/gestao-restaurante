@@ -1,12 +1,12 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Application.UseCases.Categorias;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Application.UseCases.Categorias;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class ExcluirCategoriaHandlerTests
 {

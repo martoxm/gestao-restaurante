@@ -1,6 +1,6 @@
-using RestauranteEstoque.Contracts.Common;
+using GestaoRestaurante.Contracts.Common;
 
-namespace RestauranteEstoque.Contracts.Fornecedores;
+namespace GestaoRestaurante.Contracts.Fornecedores;
 
 public record ListarFornecedoresRequest(
     int Pagina = 1,

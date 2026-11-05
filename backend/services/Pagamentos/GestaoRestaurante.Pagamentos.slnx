@@ -1,0 +1,29 @@
+<Solution>
+  <Folder Name="/Api/">
+    <Project Path="Api/GestaoRestaurante.Pagamentos.Api.csproj" />
+  </Folder>
+  <Folder Name="/Application/">
+    <Project Path="Application/GestaoRestaurante.Pagamentos.Application.csproj" />
+  </Folder>
+  <Folder Name="/Contracts/">
+    <Project Path="Contracts/GestaoRestaurante.Pagamentos.Contracts.csproj" />
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="../../shared/Core/GestaoRestaurante.Core.csproj" />
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Domain/GestaoRestaurante.Pagamentos.Domain.csproj" />
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/GestaoRestaurante.Pagamentos.Infrastructure.csproj" />
+  </Folder>
+  <Folder Name="/ServiceDefaults/">
+    <Project Path="../../shared/ServiceDefaults/GestaoRestaurante.ServiceDefaults.csproj" />
+  </Folder>
+  <Folder Name="/shared/">
+    <Project Path="../../shared/Core.Persistencia/GestaoRestaurante.Core.Persistencia.csproj" />
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/GestaoRestaurante.Pagamentos.Tests.csproj" />
+  </Folder>
+</Solution>

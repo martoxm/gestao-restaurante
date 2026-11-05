@@ -1,8 +1,8 @@
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Isolamento;
+namespace GestaoRestaurante.Tests.Isolamento;
 
 public class FornecedorIsolamentoTests
 {

@@ -1,7 +1,7 @@
-using RestauranteEstoque.Identidade.Application.UseCases.Restaurantes;
-using RestauranteEstoque.Identidade.Tests.Common;
+using GestaoRestaurante.Identidade.Application.UseCases.Restaurantes;
+using GestaoRestaurante.Identidade.Tests.Common;
 
-namespace RestauranteEstoque.Identidade.Tests.Handlers;
+namespace GestaoRestaurante.Identidade.Tests.Handlers;
 
 public class ListarEmailsAdminsHandlerTests
 {

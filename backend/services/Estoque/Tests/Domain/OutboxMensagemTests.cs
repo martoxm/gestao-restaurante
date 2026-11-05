@@ -1,9 +1,9 @@
 using System.Text.Json;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 
-namespace RestauranteEstoque.Tests.Domain;
+namespace GestaoRestaurante.Tests.Domain;
 
 public class OutboxMensagemTests
 {

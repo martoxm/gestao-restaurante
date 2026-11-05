@@ -1,7 +1,7 @@
 using MediatR;
-using RestauranteEstoque.Pagamentos.Contracts.Pagamentos;
+using GestaoRestaurante.Pagamentos.Contracts.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+namespace GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
 public record ObterPagamentoPorIdQuery(Guid Id) : IRequest<PagamentoDetalhesDto?>;
 

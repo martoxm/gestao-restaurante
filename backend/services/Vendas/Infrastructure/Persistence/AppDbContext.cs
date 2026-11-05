@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Vendas.Application.Abstractions.Services;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Vendas.Application.Abstractions.Services;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Infrastructure.Persistence;
+namespace GestaoRestaurante.Vendas.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IApplicationDbContext
 {
@@ -47,6 +47,10 @@ public class AppDbContext : DbContext, IApplicationDbContext
             return await base.SaveChangesAsync(cancellationToken);
         }
         catch (DbUpdateConcurrencyException ex)
+        {
+            throw new ConflitoConcorrenciaException(ex);
+        }
+        catch (DbUpdateException ex) when (ex.InnerException is Microsoft.Data.SqlClient.SqlException { Number: 2601 or 2627 })
         {
             throw new ConflitoConcorrenciaException(ex);
         }

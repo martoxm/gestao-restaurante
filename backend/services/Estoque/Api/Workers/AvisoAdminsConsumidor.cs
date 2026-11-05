@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 
-namespace RestauranteEstoque.Api.Workers;
+namespace GestaoRestaurante.Api.Workers;
 
 public sealed class AvisoAdminsConsumidor : ConsumidorFilaBase<AvisarAdminsRestauranteMensagem>
 {

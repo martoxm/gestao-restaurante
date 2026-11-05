@@ -1,6 +1,6 @@
-using RestauranteEstoque.Contracts.Common;
+using GestaoRestaurante.Contracts.Common;
 
-namespace RestauranteEstoque.Contracts.Categorias;
+namespace GestaoRestaurante.Contracts.Categorias;
 
 public record CategoriaCriadaResponse(Guid Id);
 

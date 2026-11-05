@@ -1,7 +1,7 @@
 using FluentValidation;
-using RestauranteEstoque.Application.UseCases.Produtos;
+using GestaoRestaurante.Application.UseCases.Produtos;
 
-namespace RestauranteEstoque.Application.Validators;
+namespace GestaoRestaurante.Application.Validators;
 
 public class CriarProdutoCommandValidator : AbstractValidator<CriarProdutoCommand>
 {

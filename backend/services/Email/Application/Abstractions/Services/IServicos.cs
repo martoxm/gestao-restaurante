@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Email.Application.Abstractions.Services;
+namespace GestaoRestaurante.Email.Application.Abstractions.Services;
 
 public interface IApplicationDbContext
 {

@@ -1,8 +1,8 @@
 using MediatR;
-using RestauranteEstoque.Contracts.MovimentacoesEstoque;
-using RestauranteEstoque.Core.Application.Models;
+using GestaoRestaurante.Contracts.MovimentacoesEstoque;
+using GestaoRestaurante.Core.Application.Models;
 
-namespace RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
+namespace GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
 
 public record ListarMovimentacoesEstoqueQuery(
     int Pagina = 1,

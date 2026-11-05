@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Application.Exceptions;
+namespace GestaoRestaurante.Core.Application.Exceptions;
 
 public class ConflitoConcorrenciaException : Exception
 {

@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Email.Application.Abstractions.Services;
-using RestauranteEstoque.Email.Application.UseCases.Emails;
-using RestauranteEstoque.Email.Application.Validators;
-using RestauranteEstoque.Email.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Email.Application.Abstractions.Services;
+using GestaoRestaurante.Email.Application.UseCases.Emails;
+using GestaoRestaurante.Email.Application.Validators;
+using GestaoRestaurante.Email.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 
-namespace RestauranteEstoque.Email.Tests.Handlers;
+namespace GestaoRestaurante.Email.Tests.Handlers;
 
 public class EnviarEmailHandlerTests
 {

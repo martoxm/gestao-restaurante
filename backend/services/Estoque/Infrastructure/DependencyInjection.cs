@@ -1,19 +1,19 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Core.Tempo;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Infrastructure.Integracoes.Identidade;
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Tempo;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Infrastructure.Integracoes.Identidade;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Infrastructure.Persistence;
-using RestauranteEstoque.Infrastructure.Persistence.Interceptors;
-using RestauranteEstoque.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Infrastructure.Persistence;
+using GestaoRestaurante.Infrastructure.Persistence.Interceptors;
+using GestaoRestaurante.Infrastructure.Persistence.Repositories;
 
-namespace RestauranteEstoque.Infrastructure;
+namespace GestaoRestaurante.Infrastructure;
 
 public static class DependencyInjection
 {

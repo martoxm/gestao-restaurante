@@ -1,14 +1,14 @@
 using FluentValidation;
 using MediatR;
-using RestauranteEstoque.Core.Application.Behaviors;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Identidade.Application.Validators;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Application.UseCases.Usuarios;
-using RestauranteEstoque.Identidade.Tests.Common;
+using GestaoRestaurante.Core.Application.Behaviors;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Identidade.Application.Validators;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Application.UseCases.Usuarios;
+using GestaoRestaurante.Identidade.Tests.Common;
 
-namespace RestauranteEstoque.Identidade.Tests.Handlers;
+namespace GestaoRestaurante.Identidade.Tests.Handlers;
 
 public class UsuariosHandlersTests
 {

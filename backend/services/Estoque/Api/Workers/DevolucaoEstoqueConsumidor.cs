@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 
-namespace RestauranteEstoque.Api.Workers;
+namespace GestaoRestaurante.Api.Workers;
 
 public sealed class DevolucaoEstoqueConsumidor : ConsumidorFilaBase<DevolverEstoqueMensagem>
 {
@@ -27,7 +27,7 @@ public sealed class DevolucaoEstoqueConsumidor : ConsumidorFilaBase<DevolverEsto
 
         var sender = servicos.GetRequiredService<ISender>();
         await sender.Send(
-            new DevolverEstoqueVendaCommand(mensagemId, mensagem.VendaId, mensagem.RestauranteId, mensagem.Itens, mensagem.Motivo),
+            new DevolverEstoqueVendaCommand(mensagemId, mensagem.VendaId, mensagem.RestauranteId, mensagem.Itens, mensagem.Motivo, mensagem.NumeroVenda),
             cancellationToken);
 
         return true;

@@ -1,14 +1,14 @@
-using RestauranteEstoque.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.OpenApi;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Api.Modules;
-using RestauranteEstoque.Api.Workers;
-using RestauranteEstoque.Application;
-using RestauranteEstoque.Infrastructure;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Api.Modules;
+using GestaoRestaurante.Api.Workers;
+using GestaoRestaurante.Application;
+using GestaoRestaurante.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -78,6 +78,7 @@ app.UseCorrelationId();
 app.UseValidationExceptionHandling();
 
 app.UseAuthentication();
+app.UseBloqueioRestauranteNaoLiberado();
 app.UseAuthorization();
 
 app.MapGet("/", () => "API Controle de Estoque de Restaurante no ar!");

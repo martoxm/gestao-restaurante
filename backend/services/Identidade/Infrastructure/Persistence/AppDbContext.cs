@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Domain.Entities;
-using RestauranteEstoque.Identidade.Infrastructure.Identity;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Infrastructure.Identity;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence;
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence;
 
 public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, Guid>, IApplicationDbContext
 {
@@ -37,6 +39,13 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
 
+    public DbSet<Convite> Convites => Set<Convite>();
+    public DbSet<OutboxMensagem> OutboxMensagens => Set<OutboxMensagem>();
+
+    public DbSet<AuditoriaPlataforma> AuditoriasPlataforma => Set<AuditoriaPlataforma>();
+
+    public DbSet<MensagemProcessada> MensagensProcessadas => Set<MensagemProcessada>();
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -45,6 +54,11 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 
         modelBuilder.ApplyConfigurationsFromAssembly(typeof(AppDbContext).Assembly);
 
+        modelBuilder.ApplyConfiguration(new OutboxMensagemConfiguration());
+        modelBuilder.ApplyConfiguration(new MensagemProcessadaConfiguration());
+
         modelBuilder.Entity<Restaurante>().HasQueryFilter(restaurante => restaurante.Id == RestauranteIdAtual);
+
+        modelBuilder.Entity<Convite>().HasQueryFilter(convite => convite.RestauranteId == RestauranteIdAtual);
     }
 }

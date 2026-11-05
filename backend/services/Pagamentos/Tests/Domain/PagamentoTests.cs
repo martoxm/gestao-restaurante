@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
-using RestauranteEstoque.Pagamentos.Tests.Common;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Pagamentos.Tests.Common;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Domain;
+namespace GestaoRestaurante.Pagamentos.Tests.Domain;
 
 public class PagamentoTests
 {

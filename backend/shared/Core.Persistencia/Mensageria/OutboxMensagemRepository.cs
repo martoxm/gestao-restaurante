@@ -1,7 +1,7 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Core.Persistencia.Mensageria;
+namespace GestaoRestaurante.Core.Persistencia.Mensageria;
 
 public class OutboxMensagemRepository<TContext> : IOutboxMensagemRepository
     where TContext : DbContext

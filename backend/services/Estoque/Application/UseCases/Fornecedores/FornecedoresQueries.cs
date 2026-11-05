@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Contracts.Fornecedores;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Contracts.Fornecedores;
 
-namespace RestauranteEstoque.Application.UseCases.Fornecedores;
+namespace GestaoRestaurante.Application.UseCases.Fornecedores;
 
 public record ObterFornecedorPorIdQuery(Guid Id) : IRequest<FornecedorDetalhesDto?>;
 

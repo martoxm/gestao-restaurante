@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Email.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Email.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Email.Infrastructure.Persistence;
+namespace GestaoRestaurante.Email.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IApplicationDbContext
 {

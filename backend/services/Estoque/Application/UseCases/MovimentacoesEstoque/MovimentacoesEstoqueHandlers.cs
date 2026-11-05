@@ -1,19 +1,19 @@
 using Microsoft.Extensions.Logging;
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using MediatR;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Domain.Services;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.MovimentacoesEstoque;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Domain.Services;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.MovimentacoesEstoque;
 
-namespace RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
+namespace GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
 
 public class CriarMovimentacaoEstoqueHandler : IRequestHandler<CriarMovimentacaoEstoqueCommand, Guid>
 {
@@ -123,7 +123,7 @@ public class BaixarEstoqueVendaHandler : IRequestHandler<BaixarEstoqueVendaComma
             foreach (var (produto, quantidade) in aBaixar)
             {
                 var movimentacao = MovimentadorEstoque.Movimentar(
-                    produto, TipoMovimentacaoEstoque.Saida, quantidade, agora, $"Venda {request.VendaId}");
+                    produto, TipoMovimentacaoEstoque.Saida, quantidade, agora, $"Venda {VendaTexto.Descrever(request.VendaId, request.NumeroVenda)}");
 
                 _produtoRepository.Atualizar(produto);
                 _movimentacaoEstoqueRepository.Adicionar(movimentacao);
@@ -186,7 +186,7 @@ public class DevolverEstoqueVendaHandler : IRequestHandler<DevolverEstoqueVendaC
 
             var movimentacao = MovimentadorEstoque.Movimentar(
                 produto, TipoMovimentacaoEstoque.Entrada, Quantidade.Criar(item.Quantidade), agora,
-                $"Estorno da venda {request.VendaId}: {request.Motivo}");
+                $"Estorno da venda {VendaTexto.Descrever(request.VendaId, request.NumeroVenda)}: {request.Motivo}");
 
             _produtoRepository.Atualizar(produto);
             _movimentacaoEstoqueRepository.Adicionar(movimentacao);
@@ -239,4 +239,10 @@ file static class MovimentacaoEstoqueMapeamentos
         movimentacao.Quantidade.Valor,
         movimentacao.DataMovimentacao,
         movimentacao.Observacoes);
+}
+
+file static class VendaTexto
+{
+    public static string Descrever(Guid vendaId, int? numero) =>
+        numero is > 0 ? $"#{numero}" : vendaId.ToString();
 }

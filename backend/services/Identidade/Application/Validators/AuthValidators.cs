@@ -1,8 +1,8 @@
 using FluentValidation;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Application.UseCases.Auth;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Application.UseCases.Auth;
 
-namespace RestauranteEstoque.Identidade.Application.Validators;
+namespace GestaoRestaurante.Identidade.Application.Validators;
 
 public class LoginCommandValidator : AbstractValidator<LoginCommand>
 {
@@ -54,5 +54,34 @@ public class RegistrarCommandValidator: AbstractValidator<RegistrarCommand>
     {
         var existe = await _identityService.EmailExisteAsync(email.Trim().ToLowerInvariant(), cancellationToken);
         return !existe;
+    }
+}
+
+public class EsqueciSenhaCommandValidator : AbstractValidator<EsqueciSenhaCommand>
+{
+    public EsqueciSenhaCommandValidator()
+    {
+        RuleFor(command => command.Email)
+            .NotEmpty().WithMessage("O e-mail é obrigatório.")
+            .EmailAddress().WithMessage("O e-mail informado não é válido.");
+    }
+}
+
+public class RedefinirSenhaCommandValidator : AbstractValidator<RedefinirSenhaCommand>
+{
+    public RedefinirSenhaCommandValidator()
+    {
+        RuleFor(command => command.Email).NotEmpty().WithMessage("O e-mail é obrigatório.");
+        RuleFor(command => command.Token).NotEmpty().WithMessage("O link de redefinição está incompleto.");
+        RuleFor(command => command.NovaSenha).NotEmpty().WithMessage("A senha nova é obrigatória.");
+    }
+}
+
+public class ConfirmarEmailCommandValidator : AbstractValidator<ConfirmarEmailCommand>
+{
+    public ConfirmarEmailCommandValidator()
+    {
+        RuleFor(command => command.UsuarioId).NotEqual(Guid.Empty).WithMessage("O link de confirmação está incompleto.");
+        RuleFor(command => command.Token).NotEmpty().WithMessage("O link de confirmação está incompleto.");
     }
 }

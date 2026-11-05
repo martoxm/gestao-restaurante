@@ -1,6 +1,6 @@
 using System.Threading.RateLimiting;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Seguranca;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Logging;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
 using Stripe;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
 public class GatewayStripe : IGatewayPagamento
 {

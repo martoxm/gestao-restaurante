@@ -1,6 +1,6 @@
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public sealed class RabbitMqHealthCheck : IHealthCheck
 {

@@ -1,8 +1,8 @@
 using System.Diagnostics;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Tests.Mensageria;
+namespace GestaoRestaurante.Tests.Mensageria;
 
 public class OutboxMensagemRastreioTests
 {

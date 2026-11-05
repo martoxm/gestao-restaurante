@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Email.Application.UseCases.Emails;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Email.Application.UseCases.Emails;
 
-namespace RestauranteEstoque.Email.Api.Workers;
+namespace GestaoRestaurante.Email.Api.Workers;
 
 public sealed class EnvioEmailConsumidor : ConsumidorFilaBase<EnviarEmailMensagem>
 {

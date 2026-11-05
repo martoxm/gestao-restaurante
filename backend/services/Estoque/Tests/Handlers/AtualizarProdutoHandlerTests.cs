@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class AtualizarProdutoHandlerTests
 {

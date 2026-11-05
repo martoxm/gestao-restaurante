@@ -1,7 +1,7 @@
 using FluentValidation;
-using RestauranteEstoque.Email.Application.UseCases.Emails;
+using GestaoRestaurante.Email.Application.UseCases.Emails;
 
-namespace RestauranteEstoque.Email.Application.Validators;
+namespace GestaoRestaurante.Email.Application.Validators;
 
 public class EnviarEmailCommandValidator : AbstractValidator<EnviarEmailCommand>
 {

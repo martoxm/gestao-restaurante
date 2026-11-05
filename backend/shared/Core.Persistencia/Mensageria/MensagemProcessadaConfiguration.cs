@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Core.Persistencia.Mensageria;
+namespace GestaoRestaurante.Core.Persistencia.Mensageria;
 
 public class MensagemProcessadaConfiguration : IEntityTypeConfiguration<MensagemProcessada>
 {

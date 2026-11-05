@@ -1,8 +1,8 @@
 using MediatR;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Domain.Enums;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Domain.Enums;
 
-namespace RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
+namespace GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
 
 public record CriarMovimentacaoEstoqueCommand(
     Guid ProdutoId,
@@ -14,11 +14,13 @@ public record BaixarEstoqueVendaCommand(
     Guid MensagemId,
     Guid VendaId,
     Guid RestauranteId,
-    IReadOnlyList<ItemBaixaEstoque> Itens) : IRequest;
+    IReadOnlyList<ItemBaixaEstoque> Itens,
+    int? NumeroVenda = null) : IRequest;
 
 public record DevolverEstoqueVendaCommand(
     Guid MensagemId,
     Guid VendaId,
     Guid RestauranteId,
     IReadOnlyList<ItemBaixaEstoque> Itens,
-    string Motivo) : IRequest;
+    string Motivo,
+    int? NumeroVenda = null) : IRequest;

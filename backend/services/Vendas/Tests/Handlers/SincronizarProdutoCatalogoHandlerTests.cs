@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Vendas.Application.UseCases.ProdutosCatalogo;
-using RestauranteEstoque.Vendas.Domain.Entities;
-using RestauranteEstoque.Vendas.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Vendas.Tests.Common;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Vendas.Application.UseCases.ProdutosCatalogo;
+using GestaoRestaurante.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Vendas.Tests.Common;
 
-namespace RestauranteEstoque.Vendas.Tests.Handlers;
+namespace GestaoRestaurante.Vendas.Tests.Handlers;
 
 public class SincronizarProdutoCatalogoHandlerTests
 {

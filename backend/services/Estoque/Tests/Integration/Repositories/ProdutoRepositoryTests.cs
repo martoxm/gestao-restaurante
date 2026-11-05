@@ -1,10 +1,10 @@
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Tests.Integration.Fixtures;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Tests.Integration.Repositories;
+namespace GestaoRestaurante.Tests.Integration.Repositories;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class ProdutoRepositoryTests(SqlServerFixture fixture)

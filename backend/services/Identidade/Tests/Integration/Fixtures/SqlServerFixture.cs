@@ -1,19 +1,19 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Identidade.Application;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Infrastructure;
-using RestauranteEstoque.Identidade.Infrastructure.Identity;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence;
-using RestauranteEstoque.Identidade.Tests.Common;
+using GestaoRestaurante.Identidade.Application;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Infrastructure;
+using GestaoRestaurante.Identidade.Infrastructure.Identity;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
+using GestaoRestaurante.Identidade.Tests.Common;
 using Testcontainers.MsSql;
 
-namespace RestauranteEstoque.Identidade.Tests.Integration.Fixtures;
+namespace GestaoRestaurante.Identidade.Tests.Integration.Fixtures;
 
 public sealed class SqlServerFixture : IAsyncLifetime
 {
@@ -54,8 +54,8 @@ public sealed class SqlServerFixture : IAsyncLifetime
             {
                 ["ConnectionStrings:DefaultConnection"] = ConnectionString,
                 ["Jwt:Secret"] = "segredo-usado-so-nos-testes-de-integracao-com-mais-de-32-caracteres",
-                ["Jwt:Issuer"] = "RestauranteEstoqueTestes",
-                ["Jwt:Audience"] = "RestauranteEstoqueTestes",
+                ["Jwt:Issuer"] = "GestaoRestauranteTestes",
+                ["Jwt:Audience"] = "GestaoRestauranteTestes",
                 ["Jwt:ExpirationMinutes"] = "60"
             })
             .Build();

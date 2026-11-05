@@ -1,11 +1,11 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Pagamentos.Tests.Common;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Pagamentos.Tests.Common;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Handlers;
+namespace GestaoRestaurante.Pagamentos.Tests.Handlers;
 
 public class CriarPagamentoHandlerTests
 {

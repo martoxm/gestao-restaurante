@@ -1,13 +1,13 @@
 using System.Text.Json;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class CriarProdutoHandlerTests
 {

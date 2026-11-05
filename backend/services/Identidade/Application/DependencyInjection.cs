@@ -1,8 +1,8 @@
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Application.Behaviors;
+using GestaoRestaurante.Core.Application.Behaviors;
 
-namespace RestauranteEstoque.Identidade.Application;
+namespace GestaoRestaurante.Identidade.Application;
 
 public static class DependencyInjection
 {

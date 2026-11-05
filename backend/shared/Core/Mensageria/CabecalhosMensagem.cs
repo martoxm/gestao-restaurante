@@ -1,6 +1,6 @@
 using RabbitMQ.Client;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public static class CabecalhosMensagem
 {

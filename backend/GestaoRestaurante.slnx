@@ -1,0 +1,52 @@
+<Solution>
+  <Folder Name="/AppHost/">
+    <Project Path="AppHost/GestaoRestaurante.AppHost.csproj" />
+  </Folder>
+  <Folder Name="/services/" />
+  <Folder Name="/services/Email/">
+    <Project Path="services/Email/Api/GestaoRestaurante.Email.Api.csproj" />
+    <Project Path="services/Email/Application/GestaoRestaurante.Email.Application.csproj" />
+    <Project Path="services/Email/Infrastructure/GestaoRestaurante.Email.Infrastructure.csproj" />
+    <Project Path="services/Email/Tests/GestaoRestaurante.Email.Tests.csproj" />
+  </Folder>
+  <Folder Name="/services/Estoque/">
+    <Project Path="services/Estoque/Api/GestaoRestaurante.Api.csproj" />
+    <Project Path="services/Estoque/Application/GestaoRestaurante.Application.csproj" />
+    <Project Path="services/Estoque/Contracts/GestaoRestaurante.Contracts.csproj" />
+    <Project Path="services/Estoque/Domain/GestaoRestaurante.Domain.csproj" />
+    <Project Path="services/Estoque/Infrastructure/GestaoRestaurante.Infrastructure.csproj" />
+    <Project Path="services/Estoque/Tests/GestaoRestaurante.Tests.csproj" />
+  </Folder>
+  <Folder Name="/services/Gateway/">
+    <Project Path="services/Gateway/Api/GestaoRestaurante.Gateway.Api.csproj" />
+  </Folder>
+  <Folder Name="/services/Identidade/">
+    <Project Path="services/Identidade/Api/GestaoRestaurante.Identidade.Api.csproj" />
+    <Project Path="services/Identidade/Application/GestaoRestaurante.Identidade.Application.csproj" />
+    <Project Path="services/Identidade/Contracts/GestaoRestaurante.Identidade.Contracts.csproj" />
+    <Project Path="services/Identidade/Domain/GestaoRestaurante.Identidade.Domain.csproj" />
+    <Project Path="services/Identidade/Infrastructure/GestaoRestaurante.Identidade.Infrastructure.csproj" />
+    <Project Path="services/Identidade/Tests/GestaoRestaurante.Identidade.Tests.csproj" />
+  </Folder>
+  <Folder Name="/services/Pagamentos/">
+    <Project Path="services/Pagamentos/Api/GestaoRestaurante.Pagamentos.Api.csproj" />
+    <Project Path="services/Pagamentos/Application/GestaoRestaurante.Pagamentos.Application.csproj" />
+    <Project Path="services/Pagamentos/Contracts/GestaoRestaurante.Pagamentos.Contracts.csproj" />
+    <Project Path="services/Pagamentos/Domain/GestaoRestaurante.Pagamentos.Domain.csproj" />
+    <Project Path="services/Pagamentos/Infrastructure/GestaoRestaurante.Pagamentos.Infrastructure.csproj" />
+    <Project Path="services/Pagamentos/Tests/GestaoRestaurante.Pagamentos.Tests.csproj" />
+  </Folder>
+  <Folder Name="/services/Vendas/">
+    <Project Path="services/Vendas/Api/GestaoRestaurante.Vendas.Api.csproj" />
+    <Project Path="services/Vendas/Application/GestaoRestaurante.Vendas.Application.csproj" />
+    <Project Path="services/Vendas/Contracts/GestaoRestaurante.Vendas.Contracts.csproj" />
+    <Project Path="services/Vendas/Domain/GestaoRestaurante.Vendas.Domain.csproj" />
+    <Project Path="services/Vendas/Infrastructure/GestaoRestaurante.Vendas.Infrastructure.csproj" />
+    <Project Path="services/Vendas/Tests/GestaoRestaurante.Vendas.Tests.csproj" />
+  </Folder>
+  <Folder Name="/shared/">
+    <Project Path="shared/Core.Persistencia/GestaoRestaurante.Core.Persistencia.csproj" />
+    <Project Path="shared/Core/GestaoRestaurante.Core.csproj" />
+    <Project Path="shared/ServiceDefaults/GestaoRestaurante.ServiceDefaults.csproj" />
+  </Folder>
+</Solution>

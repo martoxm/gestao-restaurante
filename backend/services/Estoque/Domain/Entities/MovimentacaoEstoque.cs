@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Domain.Entities;
+namespace GestaoRestaurante.Domain.Entities;
 
 public class MovimentacaoEstoque : Entity
 {

@@ -1,13 +1,13 @@
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Core.Application.Abstractions;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Security;
+namespace GestaoRestaurante.Identidade.Infrastructure.Security;
 
 public class JwtTokenGenerator : IJwtTokenGenerator
 {
@@ -18,7 +18,7 @@ public class JwtTokenGenerator : IJwtTokenGenerator
         _settings = options.Value;
     }
 
-    public string GerarToken(Guid usuarioId, string nome, string email, IEnumerable<string> roles, Guid? restauranteId)
+    public string GerarToken(Guid usuarioId, string nome, string email, IEnumerable<string> roles, Guid? restauranteId, bool restauranteLiberado = true, bool emailConfirmado = true)
     {
         var claims = new List<Claim>
         {
@@ -28,11 +28,16 @@ public class JwtTokenGenerator : IJwtTokenGenerator
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
+        claims.Add(new Claim("emailConfirmado", emailConfirmado ? "true" : "false"));
+
         claims.AddRange(roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         if (restauranteId.HasValue)
         {
             claims.Add(new Claim(UsuarioAtualService.RestauranteIdClaimType, restauranteId.Value.ToString()));
+
+            claims.Add(new Claim(BloqueioRestauranteExtensions.ClaimRestauranteLiberado,
+                restauranteLiberado ? "true" : "false"));
         }
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_settings.Secret));

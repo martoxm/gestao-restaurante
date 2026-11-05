@@ -1,6 +1,6 @@
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
 
 public interface IRefreshTokenRepository
 {

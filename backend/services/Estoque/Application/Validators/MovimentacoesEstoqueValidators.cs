@@ -1,8 +1,8 @@
 using FluentValidation;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Domain.Enums;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Domain.Enums;
 
-namespace RestauranteEstoque.Application.Validators;
+namespace GestaoRestaurante.Application.Validators;
 
 public class CriarMovimentacaoEstoqueCommandValidator : AbstractValidator<CriarMovimentacaoEstoqueCommand>
 {

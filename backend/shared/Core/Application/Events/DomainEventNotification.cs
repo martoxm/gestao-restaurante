@@ -1,7 +1,7 @@
 using MediatR;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Core.Application.Events;
+namespace GestaoRestaurante.Core.Application.Events;
 
 public sealed record DomainEventNotification<TEvento>(TEvento Evento) : INotification
     where TEvento : IDomainEvent;

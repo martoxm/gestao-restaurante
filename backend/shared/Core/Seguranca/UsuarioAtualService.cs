@@ -1,8 +1,8 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.AspNetCore.Http;
-using RestauranteEstoque.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Exceptions;
 
-namespace RestauranteEstoque.Core.Seguranca;
+namespace GestaoRestaurante.Core.Seguranca;
 
 public class UsuarioAtualService : IUsuarioAtualService, IDefinidorRestauranteAtual
 {

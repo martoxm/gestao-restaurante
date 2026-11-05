@@ -1,0 +1,58 @@
+<Solution>
+  <Configurations>
+    <BuildType Name="Debug" />
+    <BuildType Name="Default" />
+    <BuildType Name="Release" />
+  </Configurations>
+  <Folder Name="/Api/">
+    <Project Path="Api/GestaoRestaurante.Api.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Application/">
+    <Project Path="Application/GestaoRestaurante.Application.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Contracts/">
+    <Project Path="Contracts/GestaoRestaurante.Contracts.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Core/">
+    <Project Path="../../shared/Core/GestaoRestaurante.Core.csproj">
+      <BuildType Solution="Default|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Domain/">
+    <Project Path="Domain/GestaoRestaurante.Domain.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/Infrastructure/">
+    <Project Path="Infrastructure/GestaoRestaurante.Infrastructure.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+  <Folder Name="/ServiceDefaults/">
+    <Project Path="../../shared/ServiceDefaults/GestaoRestaurante.ServiceDefaults.csproj">
+      <BuildType Solution="Default|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/shared/">
+    <Project Path="../../shared/Core.Persistencia/GestaoRestaurante.Core.Persistencia.csproj">
+      <BuildType Solution="Default|*" Project="Debug" />
+    </Project>
+  </Folder>
+  <Folder Name="/Tests/">
+    <Project Path="Tests/GestaoRestaurante.Tests.csproj">
+      <BuildType Solution="Default|*" Project="Release" />
+      <Build Solution="Default|*" Project="false" />
+    </Project>
+  </Folder>
+</Solution>

@@ -1,6 +1,6 @@
-using RestauranteEstoque.Vendas.Contracts.Common;
+using GestaoRestaurante.Vendas.Contracts.Common;
 
-namespace RestauranteEstoque.Vendas.Contracts.Vendas;
+namespace GestaoRestaurante.Vendas.Contracts.Vendas;
 
 public record ItemVendaRequest(Guid ProdutoId, int Quantidade);
 
@@ -20,6 +20,7 @@ public record ItemVendaDto(
 
 public record VendaDetalhesDto(
     Guid Id,
+    int Numero,
     string Status,
     DateTime CriadoEm,
     decimal Total,
@@ -29,6 +30,7 @@ public record VendaDetalhesDto(
 
 public record VendaItemListaDto(
     Guid Id,
+    int Numero,
     string Status,
     DateTime CriadoEm,
     int QuantidadeItens,

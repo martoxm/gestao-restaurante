@@ -2,7 +2,7 @@ using System.Globalization;
 using System.Security.Cryptography;
 using System.Text;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
 public static class AssinaturaWebhook
 {

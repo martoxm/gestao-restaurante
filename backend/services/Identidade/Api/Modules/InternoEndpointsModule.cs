@@ -1,11 +1,11 @@
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Application.UseCases.Restaurantes;
-using RestauranteEstoque.Identidade.Contracts.Restaurantes;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Application.UseCases.Restaurantes;
+using GestaoRestaurante.Identidade.Contracts.Restaurantes;
 
-namespace RestauranteEstoque.Identidade.Api.Modules;
+namespace GestaoRestaurante.Identidade.Api.Modules;
 
 public class InternoEndpointsModule : IEndpointModule
 {

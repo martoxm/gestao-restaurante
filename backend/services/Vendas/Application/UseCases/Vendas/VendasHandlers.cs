@@ -1,18 +1,18 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
-using RestauranteEstoque.Vendas.Application.Abstractions.Services;
-using RestauranteEstoque.Vendas.Contracts.Vendas;
-using RestauranteEstoque.Vendas.Domain.Entities;
-using RestauranteEstoque.Vendas.Domain.Enums;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
+using GestaoRestaurante.Vendas.Application.Abstractions.Services;
+using GestaoRestaurante.Vendas.Contracts.Vendas;
+using GestaoRestaurante.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Domain.Enums;
 using Microsoft.Extensions.Logging;
 
-namespace RestauranteEstoque.Vendas.Application.UseCases.Vendas;
+namespace GestaoRestaurante.Vendas.Application.UseCases.Vendas;
 
 public class CriarVendaHandler : IRequestHandler<CriarVendaCommand, Guid>
 {
@@ -53,14 +53,16 @@ public class CriarVendaHandler : IRequestHandler<CriarVendaCommand, Guid>
             itens.Add(new NovoItemVenda(produto.Id, produto.Nome, produto.Preco, Quantidade.Criar(item.Quantidade)));
         }
 
-        var venda = Venda.Criar(restauranteId, _relogio.AgoraUtc, itens, request.TokenCartao);
+        var numero = await _vendaRepository.ObterProximoNumeroAsync(cancellationToken);
+        var venda = Venda.Criar(restauranteId, numero, _relogio.AgoraUtc, itens, request.TokenCartao);
 
         _vendaRepository.Adicionar(venda);
 
         var pedido = new BaixarEstoqueMensagem(
             venda.Id,
             restauranteId,
-            venda.Itens.Select(item => new ItemBaixaEstoque(item.ProdutoId, item.Quantidade.Valor)).ToList());
+            venda.Itens.Select(item => new ItemBaixaEstoque(item.ProdutoId, item.Quantidade.Valor)).ToList(),
+            venda.Numero);
         _outbox.Adicionar(OutboxMensagem.Criar(Filas.BaixarEstoque, pedido, _relogio.AgoraUtc));
         await _context.SaveChangesAsync(cancellationToken);
 
@@ -248,13 +250,15 @@ file static class VendaSaga
         venda.Id,
         venda.RestauranteId,
         venda.Itens.Select(item => new ItemBaixaEstoque(item.ProdutoId, item.Quantidade.Valor)).ToList(),
-        motivo);
+        motivo,
+        venda.Numero);
 }
 
 file static class VendaMapeamentos
 {
     public static VendaDetalhesDto ParaDetalhesDto(this Venda venda) => new(
         venda.Id,
+        venda.Numero,
         venda.Status.ToString(),
         venda.CriadoEm,
         venda.Total.Valor,
@@ -269,6 +273,7 @@ file static class VendaMapeamentos
 
     public static VendaItemListaDto ParaItemListaDto(this Venda venda) => new(
         venda.Id,
+        venda.Numero,
         venda.Status.ToString(),
         venda.CriadoEm,
         venda.Itens.Count,

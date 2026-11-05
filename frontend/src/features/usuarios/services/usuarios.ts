@@ -10,3 +10,7 @@ export async function listarUsuarios(): Promise<UsuarioItemLista[]> {
 export async function alterarRoleUsuario(id: string, role: RoleUsuario): Promise<void> {
   await apiIdentidade.put(`/usuarios/${id}/role`, { role });
 }
+
+export async function alterarAtivoUsuario(id: string, ativo: boolean): Promise<void> {
+  await apiIdentidade.put(`/usuarios/${id}/ativo`, { ativo });
+}

@@ -1,8 +1,8 @@
 using MediatR;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Vendas.Contracts.Vendas;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Vendas.Contracts.Vendas;
 
-namespace RestauranteEstoque.Vendas.Application.UseCases.Vendas;
+namespace GestaoRestaurante.Vendas.Application.UseCases.Vendas;
 
 public record CriarVendaCommand(IReadOnlyList<ItemVendaRequest> Itens, string TokenCartao) : IRequest<Guid>;
 

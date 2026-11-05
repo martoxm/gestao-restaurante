@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Contracts.MovimentacoesEstoque;
+namespace GestaoRestaurante.Contracts.MovimentacoesEstoque;
 
 public record MovimentacaoEstoqueCriadaResponse(Guid Id);
 

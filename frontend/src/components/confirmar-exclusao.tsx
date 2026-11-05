@@ -18,17 +18,19 @@ export function ConfirmarExclusao({
   descricao,
   onConfirmar,
   disabled,
+  rotulo = "Excluir",
 }: {
   titulo: string;
   descricao: string;
   onConfirmar: () => void;
   disabled?: boolean;
+  rotulo?: string;
 }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
         <Button variant="destructive" size="sm" disabled={disabled}>
-          Excluir
+          {rotulo}
         </Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -37,9 +39,9 @@ export function ConfirmarExclusao({
           <AlertDialogDescription>{descricao}</AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancelar</AlertDialogCancel>
+          <AlertDialogCancel>Voltar</AlertDialogCancel>
           <AlertDialogAction variant="destructive" onClick={onConfirmar}>
-            Excluir
+            {rotulo}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

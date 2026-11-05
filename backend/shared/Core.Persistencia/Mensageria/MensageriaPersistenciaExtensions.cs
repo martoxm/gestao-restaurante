@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Core.Persistencia.Mensageria;
+namespace GestaoRestaurante.Core.Persistencia.Mensageria;
 
 public static class MensageriaPersistenciaExtensions
 {

@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Vendas.Application.Abstractions.Repositories;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Application.Abstractions.Repositories;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Vendas.Infrastructure.Persistence.Repositories;
 
 public class ProdutoCatalogoRepository : IProdutoCatalogoRepository
 {

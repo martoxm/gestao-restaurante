@@ -1,13 +1,13 @@
 using System.Text.Json;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class BaixarEstoqueVendaHandlerTests
 {
@@ -107,5 +107,29 @@ public class BaixarEstoqueVendaHandlerTests
         var arroz = await c.Context.Produtos.IgnoreQueryFilters().SingleAsync(p => p.Id == c.Arroz.Id);
         Assert.Equal(20, arroz.QuantidadeEmEstoque.Valor);
         Assert.False(Resposta(c.Outbox).Baixado);
+    }
+
+    [Fact]
+    public async Task Handle_ComNumeroDaVenda_ObservacaoMostraONumero()
+    {
+        var c = await MontarAsync();
+        var vendaId = Guid.NewGuid();
+
+        await c.Handler.Handle(new BaixarEstoqueVendaCommand(Guid.NewGuid(), vendaId, DadosTeste.RestauranteId, [new ItemBaixaEstoque(c.Arroz.Id, 1)], 42), CancellationToken.None);
+
+        var movimentacao = await c.Context.MovimentacoesEstoque.IgnoreQueryFilters().SingleAsync();
+        Assert.Equal("Venda #42", movimentacao.Observacoes);
+    }
+
+    [Fact]
+    public async Task Handle_SemNumeroDaVenda_ObservacaoContinuaComOGuid()
+    {
+        var c = await MontarAsync();
+        var vendaId = Guid.NewGuid();
+
+        await c.Handler.Handle(new BaixarEstoqueVendaCommand(Guid.NewGuid(), vendaId, DadosTeste.RestauranteId, [new ItemBaixaEstoque(c.Arroz.Id, 1)]), CancellationToken.None);
+
+        var movimentacao = await c.Context.MovimentacoesEstoque.IgnoreQueryFilters().SingleAsync();
+        Assert.Equal($"Venda {vendaId}", movimentacao.Observacoes);
     }
 }

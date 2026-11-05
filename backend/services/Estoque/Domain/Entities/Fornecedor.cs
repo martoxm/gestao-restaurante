@@ -1,7 +1,7 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Domain.Entities;
+namespace GestaoRestaurante.Domain.Entities;
 
 public class Fornecedor : Entity
 {

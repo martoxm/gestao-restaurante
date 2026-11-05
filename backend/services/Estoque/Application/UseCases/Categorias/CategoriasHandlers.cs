@@ -1,13 +1,13 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using MediatR;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.Categorias;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.Categorias;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Application.UseCases.Categorias;
+namespace GestaoRestaurante.Application.UseCases.Categorias;
 
 public class CriarCategoriaHandler : IRequestHandler<CriarCategoriaCommand, Guid>
 {

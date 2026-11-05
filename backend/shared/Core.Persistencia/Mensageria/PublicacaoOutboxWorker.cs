@@ -2,10 +2,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Core.Persistencia.Mensageria;
+namespace GestaoRestaurante.Core.Persistencia.Mensageria;
 
 public sealed class PublicacaoOutboxWorker<TContext> : BackgroundService
     where TContext : DbContext

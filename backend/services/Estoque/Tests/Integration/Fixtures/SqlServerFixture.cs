@@ -1,15 +1,15 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Application;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Infrastructure;
-using RestauranteEstoque.Infrastructure.Persistence;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Application;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Infrastructure;
+using GestaoRestaurante.Infrastructure.Persistence;
+using GestaoRestaurante.Tests.Common;
 using Testcontainers.MsSql;
 
-namespace RestauranteEstoque.Tests.Integration.Fixtures;
+namespace GestaoRestaurante.Tests.Integration.Fixtures;
 
 public sealed class SqlServerFixture : IAsyncLifetime
 {

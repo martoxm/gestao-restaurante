@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 
-namespace RestauranteEstoque.Core.Seguranca;
+namespace GestaoRestaurante.Core.Seguranca;
 
 public static class AutenticacaoJwtExtensions
 {

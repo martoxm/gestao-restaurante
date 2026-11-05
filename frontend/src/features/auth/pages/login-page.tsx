@@ -108,10 +108,14 @@ export function LoginPage() {
                 {loginMutation.isPending ? "Entrando..." : "Entrar"}
               </Button>
 
+              <Link href="/esqueci-senha" className="text-center text-sm underline">
+                Esqueci a senha
+              </Link>
+
               <p className="text-center text-sm text-muted-foreground">
-                Não tem conta?{" "}
+                Quer usar no seu restaurante?{" "}
                 <Link href="/registrar" className="underline">
-                  Criar conta
+                  Criar conta da empresa
                 </Link>
               </p>
             </form>

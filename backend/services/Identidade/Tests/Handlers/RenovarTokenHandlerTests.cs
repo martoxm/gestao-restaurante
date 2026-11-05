@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Application.UseCases.Auth;
-using RestauranteEstoque.Identidade.Tests.Common;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Application.UseCases.Auth;
+using GestaoRestaurante.Identidade.Tests.Common;
 
-namespace RestauranteEstoque.Identidade.Tests.Handlers;
+namespace GestaoRestaurante.Identidade.Tests.Handlers;
 
 public class RenovarTokenHandlerTests
 {
@@ -18,13 +18,13 @@ public class RenovarTokenHandlerTests
     public RenovarTokenHandlerTests()
     {
         var repository = new FakeRefreshTokenRepository(_context);
-        _emissor = new EmissorSessao(_identityService, new FakeJwtTokenGenerator(), _gerador, repository, _relogio);
+        _emissor = new EmissorSessao(new FakeRestauranteRepository(_context), _identityService, new FakeJwtTokenGenerator(), _gerador, repository, _relogio);
         _handler = new RenovarTokenHandler(repository, _gerador, _identityService, _emissor, _context, _relogio);
     }
 
     private async Task<string> LogarAsync()
     {
-        var usuarioId = await _identityService.CriarUsuarioAsync("Ana", "ana@teste.com", "senha123", Guid.NewGuid(), CancellationToken.None);
+        var usuarioId = await _identityService.CriarUsuarioAsync("Ana", "ana@teste.com", "senha123", Guid.NewGuid(), "Funcionario", true, CancellationToken.None);
         var resposta = await _emissor.EmitirAsync(_identityService.Usuarios[usuarioId], CancellationToken.None);
         await _context.SaveChangesAsync();
         _context.ChangeTracker.Clear();

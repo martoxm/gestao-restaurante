@@ -1,14 +1,14 @@
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.OpenApi;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Pagamentos.Api.Modules;
-using RestauranteEstoque.Pagamentos.Api.Workers;
-using RestauranteEstoque.Pagamentos.Application;
-using RestauranteEstoque.Pagamentos.Infrastructure;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Pagamentos.Api.Modules;
+using GestaoRestaurante.Pagamentos.Api.Workers;
+using GestaoRestaurante.Pagamentos.Application;
+using GestaoRestaurante.Pagamentos.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -75,6 +75,7 @@ if (app.Environment.IsDevelopment())
 app.UseCorrelationId();
 app.UseValidationExceptionHandling();
 app.UseAuthentication();
+app.UseBloqueioRestauranteNaoLiberado();
 app.UseAuthorization();
 
 app.MapGet("/", () => "API de Pagamentos no ar!");
@@ -82,6 +83,7 @@ app.MapGet("/", () => "API de Pagamentos no ar!");
 IEndpointModule[] endpointModules =
 [
     new PagamentoEndpointsModule(),
+    new AssinaturaEndpointsModule(),
     new WebhookEndpointsModule()
 ];
 

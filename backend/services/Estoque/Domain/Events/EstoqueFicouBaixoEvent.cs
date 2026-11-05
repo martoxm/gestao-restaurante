@@ -1,7 +1,7 @@
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Domain.Events;
+namespace GestaoRestaurante.Domain.Events;
 
 public sealed record EstoqueFicouBaixoEvent(
     Guid ProdutoId,

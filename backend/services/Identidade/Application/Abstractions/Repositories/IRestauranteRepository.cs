@@ -1,7 +1,7 @@
-using RestauranteEstoque.Identidade.Contracts.Common;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Contracts.Common;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
 
 public interface IRestauranteRepository
 {
@@ -13,6 +13,10 @@ public interface IRestauranteRepository
         string? nome,
         DirecaoOrdenacao direcaoOrdenacao,
         CancellationToken cancellationToken);
+
+    Task<Restaurante?> ObterPorIdSemFiltroAsync(Guid id, CancellationToken cancellationToken);
+
+    Task<IReadOnlyList<Restaurante>> ListarTestesTerminandoAsync(DateTime agora, DateTime ate, CancellationToken cancellationToken);
 
     void Adicionar(Restaurante restaurante);
 

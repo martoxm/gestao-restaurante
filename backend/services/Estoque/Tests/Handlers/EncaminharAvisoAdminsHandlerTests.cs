@@ -1,12 +1,12 @@
 using System.Text.Json;
 using Microsoft.Extensions.Logging.Abstractions;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class EncaminharAvisoAdminsHandlerTests
 {

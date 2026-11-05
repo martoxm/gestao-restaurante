@@ -6,7 +6,12 @@ import { obterMensagemErro } from "@/lib/api-errors";
 import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
 import { useUsuarios } from "@/features/usuarios/hooks/useUsuarios";
 import { useAlterarRoleUsuario } from "@/features/usuarios/hooks/useAlterarRoleUsuario";
+import { useAlterarAtivoUsuario } from "@/features/usuarios/hooks/useAlterarAtivoUsuario";
+import { ConfirmarExclusao } from "@/components/confirmar-exclusao";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import type { RoleUsuario, UsuarioItemLista } from "@/features/usuarios/types/usuario";
+import { ConvitesSection } from "@/features/usuarios/components/convites-section";
 import { TelaVazia } from "@/components/tela-vazia";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
@@ -29,6 +34,37 @@ export function ListaUsuariosPage() {
   const { data, isLoading, isError } = useUsuarios();
   const { usuarioId } = useUsuarioAtual();
   const alterarRoleMutation = useAlterarRoleUsuario();
+  const alterarAtivoMutation = useAlterarAtivoUsuario();
+
+  function renderizarAtivo(usuario: UsuarioItemLista) {
+    const aoFalhar = (error: unknown) =>
+      toast.error(obterMensagemErro(error, "Não foi possível alterar o acesso."));
+
+    if (!usuario.ativo) {
+      return (
+        <Button
+          size="sm"
+          variant="outline"
+          disabled={alterarAtivoMutation.isPending}
+          onClick={() => alterarAtivoMutation.mutate({ id: usuario.id, ativo: true }, { onError: aoFalhar })}
+        >
+          Reativar
+        </Button>
+      );
+    }
+
+    if (usuario.role === "Admin") return null;
+
+    return (
+      <ConfirmarExclusao
+        rotulo="Desativar"
+        titulo={`Desativar ${usuario.nome}?`}
+        descricao="A pessoa não consegue mais entrar e sai do sistema em até 15 minutos. Os dados continuam aqui e dá para reativar depois."
+        onConfirmar={() => alterarAtivoMutation.mutate({ id: usuario.id, ativo: false }, { onError: aoFalhar })}
+        disabled={alterarAtivoMutation.isPending}
+      />
+    );
+  }
 
   function alterarRole(usuario: UsuarioItemLista, role: RoleUsuario) {
     if (role === usuario.role) return;
@@ -65,6 +101,11 @@ export function ListaUsuariosPage() {
         {usuario.nome}
         {usuario.id === usuarioId && (
           <span className="ml-1 text-xs text-muted-foreground">(você)</span>
+        )}
+        {!usuario.ativo && (
+          <Badge variant="outline" className="ml-2">
+            Desativado
+          </Badge>
         )}
       </>
     );
@@ -107,6 +148,7 @@ export function ListaUsuariosPage() {
                   <TableHead>Nome</TableHead>
                   <TableHead>E-mail</TableHead>
                   <TableHead>Role</TableHead>
+                  <TableHead>Acesso</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
@@ -115,6 +157,7 @@ export function ListaUsuariosPage() {
                     <TableCell>{nomeComMarca(usuario)}</TableCell>
                     <TableCell>{usuario.email}</TableCell>
                     <TableCell>{renderizarSeletor(usuario)}</TableCell>
+                    <TableCell>{renderizarAtivo(usuario)}</TableCell>
                   </TableRow>
                 ))}
               </TableBody>
@@ -125,12 +168,17 @@ export function ListaUsuariosPage() {
               <div key={usuario.id} className="flex flex-col gap-1 rounded-lg border p-4">
                 <p className="font-medium">{nomeComMarca(usuario)}</p>
                 <p className="text-sm text-muted-foreground">{usuario.email}</p>
-                <div className="mt-2">{renderizarSeletor(usuario)}</div>
+                <div className="mt-2 flex items-center gap-2">
+                  {renderizarSeletor(usuario)}
+                  {renderizarAtivo(usuario)}
+                </div>
               </div>
             ))}
           </div>
         </>
       )}
+
+      <ConvitesSection />
     </div>
   );
 }

@@ -1,10 +1,10 @@
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
-using RestauranteEstoque.Pagamentos.Contracts.Pagamentos;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Contracts.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Api.Modules;
+namespace GestaoRestaurante.Pagamentos.Api.Modules;
 
 public class PagamentoEndpointsModule : IEndpointModule
 {

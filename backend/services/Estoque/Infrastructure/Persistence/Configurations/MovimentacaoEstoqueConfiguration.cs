@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Infrastructure.Persistence.Configurations;
 
 public class MovimentacaoEstoqueConfiguration : IEntityTypeConfiguration<MovimentacaoEstoque>
 {

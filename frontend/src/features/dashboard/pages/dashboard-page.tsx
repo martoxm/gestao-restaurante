@@ -91,6 +91,7 @@ export function DashboardPage() {
             {restaurante ? restaurante.nome : "Visão geral do restaurante"}
             {resumo.emAndamento > 0 && ` · ${resumo.emAndamento} venda(s) em andamento`}
           </p>
+          <AvisoTeste testeTerminaEm={restaurante?.plano === "Teste" ? restaurante.testeTerminaEm : null} />
         </div>
         <Button asChild>
           <Link href="/vendas/nova">
@@ -197,7 +198,7 @@ export function DashboardPage() {
             >
               <span className="flex items-center gap-3">
                 <CreditCard className="size-4 text-muted-foreground" />
-                <span className="font-mono text-xs">{codigoVenda(venda.id)}</span>
+                <span className="font-mono text-xs">{codigoVenda(venda.numero)}</span>
                 <span className="text-muted-foreground">{formatarDataHora(venda.criadoEm)}</span>
               </span>
               <span className="flex items-center gap-3">
@@ -214,5 +215,29 @@ export function DashboardPage() {
         <EstoquePorCategoriaChart data={estoquePorCategoria} />
       </div>
     </div>
+  );
+}
+
+function AvisoTeste({ testeTerminaEm }: { testeTerminaEm: string | null }) {
+  const { isAdmin } = useUsuarioAtual();
+  if (!testeTerminaEm) return null;
+
+  const fim = new Date(testeTerminaEm.endsWith("Z") ? testeTerminaEm : `${testeTerminaEm}Z`);
+  const dias = Math.ceil((fim.getTime() - Date.now()) / 86_400_000);
+
+  return (
+    <p className="mt-1 text-sm font-medium text-amber-600 dark:text-amber-400">
+      {dias > 0
+        ? `Teste grátis: falta${dias > 1 ? "m" : ""} ${dias} dia${dias > 1 ? "s" : ""}.`
+        : "Seu período de teste terminou."}
+      {isAdmin && (
+        <>
+          {" "}
+          <Link href="/assinatura" className="underline underline-offset-2">
+            Assinar agora
+          </Link>
+        </>
+      )}
+    </p>
   );
 }

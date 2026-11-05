@@ -1,17 +1,17 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Repositories;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
-using RestauranteEstoque.Pagamentos.Contracts.Pagamentos;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Repositories;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Contracts.Pagamentos;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
 
-namespace RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+namespace GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
 public class CriarPagamentoHandler : IRequestHandler<CriarPagamentoCommand, PagamentoCriadoResponse>
 {

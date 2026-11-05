@@ -1,8 +1,8 @@
 using System.Text.Json;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public class OutboxMensagem : Entity
 {

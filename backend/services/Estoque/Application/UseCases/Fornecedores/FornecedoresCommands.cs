@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace RestauranteEstoque.Application.UseCases.Fornecedores;
+namespace GestaoRestaurante.Application.UseCases.Fornecedores;
 
 public record CriarFornecedorCommand(
     string Nome,

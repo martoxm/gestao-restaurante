@@ -3,17 +3,17 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
-import { NAV_ITEMS } from "@/components/layout/nav-items";
+import { NAV_ITEMS, itemVisivel } from "@/components/layout/nav-items";
 import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
 
 export function Sidebar() {
   const pathname = usePathname();
-  const { isAdmin } = useUsuarioAtual();
+  const { isAdmin, isSuperAdmin } = useUsuarioAtual();
 
   return (
     <aside className="hidden w-56 shrink-0 border-r bg-muted/30 p-4 sm:block">
       <nav className="flex flex-col gap-1">
-        {NAV_ITEMS.filter((item) => !item.soAdmin || isAdmin).map(({ href, label, icon: Icon }) => {
+        {NAV_ITEMS.filter((item) => itemVisivel(item, { isAdmin, isSuperAdmin })).map(({ href, label, icon: Icon }) => {
           const isActive =
             href === "/" ? pathname === "/" : pathname.startsWith(href);
 

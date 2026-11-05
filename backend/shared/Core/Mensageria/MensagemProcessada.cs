@@ -1,6 +1,6 @@
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public class MensagemProcessada : Entity
 {

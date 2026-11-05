@@ -1,6 +1,6 @@
-using RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+using GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Gateways;
+namespace GestaoRestaurante.Pagamentos.Tests.Gateways;
 
 public class AssinaturaWebhookTests
 {

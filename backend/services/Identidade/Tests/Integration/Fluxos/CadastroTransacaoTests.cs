@@ -2,10 +2,10 @@ using FluentValidation;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Identidade.Application.UseCases.Auth;
-using RestauranteEstoque.Identidade.Tests.Integration.Fixtures;
+using GestaoRestaurante.Identidade.Application.UseCases.Auth;
+using GestaoRestaurante.Identidade.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Identidade.Tests.Integration.Fluxos;
+namespace GestaoRestaurante.Identidade.Tests.Integration.Fluxos;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class CadastroTransacaoTests(SqlServerFixture fixture)

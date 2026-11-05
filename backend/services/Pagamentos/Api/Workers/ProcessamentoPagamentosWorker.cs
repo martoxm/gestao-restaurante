@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Repositories;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Repositories;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Api.Workers;
+namespace GestaoRestaurante.Pagamentos.Api.Workers;
 
 public sealed class ProcessamentoPagamentosWorker : BackgroundService
 {

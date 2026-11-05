@@ -1,10 +1,10 @@
-using RestauranteEstoque.Identidade.Contracts.Common;
-using RestauranteEstoque.Identidade.Domain.Entities;
-using RestauranteEstoque.Identidade.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Identidade.Tests.Common;
-using RestauranteEstoque.Identidade.Tests.Integration.Fixtures;
+using GestaoRestaurante.Identidade.Contracts.Common;
+using GestaoRestaurante.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Identidade.Tests.Common;
+using GestaoRestaurante.Identidade.Tests.Integration.Fixtures;
 
-namespace RestauranteEstoque.Identidade.Tests.Integration.Repositories;
+namespace GestaoRestaurante.Identidade.Tests.Integration.Repositories;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class RestauranteRepositoryTests(SqlServerFixture fixture)

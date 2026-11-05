@@ -1,7 +1,7 @@
 using FluentValidation;
-using RestauranteEstoque.Identidade.Application.UseCases.Restaurantes;
+using GestaoRestaurante.Identidade.Application.UseCases.Restaurantes;
 
-namespace RestauranteEstoque.Identidade.Application.Validators;
+namespace GestaoRestaurante.Identidade.Application.Validators;
 
 public class ListarRestaurantesQueryValidator : AbstractValidator<ListarRestaurantesQuery>
 {

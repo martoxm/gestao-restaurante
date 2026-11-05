@@ -13,12 +13,12 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { NAV_ITEMS } from "@/components/layout/nav-items";
+import { NAV_ITEMS, itemVisivel } from "@/components/layout/nav-items";
 import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
 
 export function MobileNav() {
   const pathname = usePathname();
-  const { isAdmin } = useUsuarioAtual();
+  const { isAdmin, isSuperAdmin } = useUsuarioAtual();
   const [open, setOpen] = useState(false);
 
   return (
@@ -31,10 +31,10 @@ export function MobileNav() {
       </SheetTrigger>
       <SheetContent side="left" className="w-64">
         <SheetHeader>
-          <SheetTitle>Controle de Estoque</SheetTitle>
+          <SheetTitle>Gestão Restaurante</SheetTitle>
         </SheetHeader>
         <nav className="flex flex-col gap-1 px-4">
-          {NAV_ITEMS.filter((item) => !item.soAdmin || isAdmin).map(({ href, label, icon: Icon }) => {
+          {NAV_ITEMS.filter((item) => itemVisivel(item, { isAdmin, isSuperAdmin })).map(({ href, label, icon: Icon }) => {
             const isActive =
               href === "/" ? pathname === "/" : pathname.startsWith(href);
 

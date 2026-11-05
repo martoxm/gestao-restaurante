@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Configurations;
 
 public class RefreshTokenConfiguration : IEntityTypeConfiguration<RefreshToken>
 {

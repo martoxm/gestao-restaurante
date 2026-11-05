@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Vendas.Application.UseCases.ProdutosCatalogo;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Vendas.Application.UseCases.ProdutosCatalogo;
 
-namespace RestauranteEstoque.Vendas.Api.Workers;
+namespace GestaoRestaurante.Vendas.Api.Workers;
 
 public sealed class ProdutoCatalogoConsumidor : ConsumidorFilaBase<ProdutoCatalogoMensagem>
 {

@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Infrastructure.Integracoes.Identidade;
+namespace GestaoRestaurante.Infrastructure.Integracoes.Identidade;
 
 public class IdentidadeSettings
 {

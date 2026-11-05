@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Infrastructure.Persistence.Repositories;
 
 public class FornecedorRepository : IFornecedorRepository
 {

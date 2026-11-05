@@ -1,17 +1,17 @@
-using RestauranteEstoque.Vendas.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Vendas.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging.Abstractions;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Vendas.Application.UseCases.Vendas;
-using RestauranteEstoque.Vendas.Domain.Entities;
-using RestauranteEstoque.Vendas.Domain.Enums;
-using RestauranteEstoque.Vendas.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Vendas.Tests.Common;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Vendas.Application.UseCases.Vendas;
+using GestaoRestaurante.Vendas.Domain.Entities;
+using GestaoRestaurante.Vendas.Domain.Enums;
+using GestaoRestaurante.Vendas.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Vendas.Tests.Common;
 
-namespace RestauranteEstoque.Vendas.Tests.Handlers;
+namespace GestaoRestaurante.Vendas.Tests.Handlers;
 
 public class ProcessarResultadoPagamentoHandlerTests
 {
@@ -21,7 +21,7 @@ public class ProcessarResultadoPagamentoHandlerTests
     {
         var nomeBanco = Guid.NewGuid().ToString();
         await using var context = TesteVendas.CriarContexto(nomeBanco: nomeBanco);
-        var venda = Venda.Criar(TesteVendas.RestauranteId, TesteVendas.Agora,
+        var venda = Venda.Criar(TesteVendas.RestauranteId, 1, TesteVendas.Agora,
             [new NovoItemVenda(ProdutoId, "Coca-Cola", Dinheiro.Criar(5m), Quantidade.Criar(2))], TesteVendas.Token);
         venda.AguardarPagamento();
         context.Vendas.Add(venda);

@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Email.Infrastructure.EnvioEmail;
+namespace GestaoRestaurante.Email.Infrastructure.EnvioEmail;
 
 public class EmailSettings
 {

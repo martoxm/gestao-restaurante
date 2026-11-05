@@ -1,6 +1,6 @@
 using MediatR;
-using RestauranteEstoque.Identidade.Contracts.Usuarios;
+using GestaoRestaurante.Identidade.Contracts.Usuarios;
 
-namespace RestauranteEstoque.Identidade.Application.UseCases.Usuarios;
+namespace GestaoRestaurante.Identidade.Application.UseCases.Usuarios;
 
 public record ListarUsuariosQuery : IRequest<IReadOnlyList<UsuarioItemListaDto>>;

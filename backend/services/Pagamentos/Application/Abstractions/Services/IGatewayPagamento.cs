@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
+namespace GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
 
 public interface IGatewayPagamento
 {

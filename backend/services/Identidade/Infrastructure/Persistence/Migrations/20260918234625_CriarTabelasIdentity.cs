@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Migrations
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Migrations
 {
     public partial class CriarTabelasIdentity : Migration
     {

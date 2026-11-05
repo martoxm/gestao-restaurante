@@ -1,10 +1,10 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Api.Workers;
+namespace GestaoRestaurante.Pagamentos.Api.Workers;
 
 public sealed class PedidoPagamentoConsumidor : ConsumidorFilaBase<ProcessarPagamentoMensagem>
 {   

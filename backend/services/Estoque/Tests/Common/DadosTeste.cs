@@ -1,6 +1,6 @@
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Tests;
+namespace GestaoRestaurante.Tests;
 
 public static class DadosTeste
 {

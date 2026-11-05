@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Email.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Email.Api.Workers;
-using RestauranteEstoque.Email.Application;
-using RestauranteEstoque.Email.Infrastructure;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Email.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Email.Api.Workers;
+using GestaoRestaurante.Email.Application;
+using GestaoRestaurante.Email.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 

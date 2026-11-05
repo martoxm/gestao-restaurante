@@ -1,7 +1,7 @@
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 
-namespace RestauranteEstoque.Core.Tempo;
+namespace GestaoRestaurante.Core.Tempo;
 
 public class Relogio : IRelogio
 {

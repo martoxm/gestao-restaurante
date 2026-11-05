@@ -2,13 +2,15 @@ using System.Text.Json.Serialization;
 using Asp.Versioning;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.OpenApi;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Api.Modules;
-using RestauranteEstoque.Identidade.Api.Workers;
-using RestauranteEstoque.Identidade.Application;
-using RestauranteEstoque.Identidade.Infrastructure;
-using RestauranteEstoque.Identidade.Infrastructure.Identity;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Api.Modules;
+using GestaoRestaurante.Identidade.Api.Workers;
+using GestaoRestaurante.Identidade.Application;
+using GestaoRestaurante.Identidade.Infrastructure;
+using GestaoRestaurante.Identidade.Infrastructure.Identity;
+using GestaoRestaurante.Identidade.Infrastructure.Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -58,6 +60,11 @@ builder.Services.AddApiVersioning(options =>
 builder.Services.AddAutenticacaoJwt(builder.Configuration);
 
 builder.Services.AddHostedService<LimpezaRefreshTokensWorker>();
+builder.Services.AddHostedService<AvisoFimDoTesteWorker>();
+builder.Services.AddHostedService<PlanoPagoConsumidor>();
+
+builder.Services.AddHostedService<PublicacaoOutboxWorker<AppDbContext>>();
+builder.Services.AddHostedService<LimpezaMensageriaWorker<AppDbContext>>();
 
 var app = builder.Build();
 
@@ -66,7 +73,7 @@ app.MapDefaultEndpoints();
 using (var scope = app.Services.CreateScope())
 {
     var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<ApplicationRole>>();
-    string[] roleNames = [RoleNames.Admin, RoleNames.Funcionario];
+    string[] roleNames = [RoleNames.Admin, RoleNames.Funcionario, RoleNames.SuperAdmin];
 
     foreach (var roleName in roleNames)
     {
@@ -75,6 +82,11 @@ using (var scope = app.Services.CreateScope())
             await roleManager.CreateAsync(new ApplicationRole { Name = roleName });
         }
     }
+
+    await SemeadorSuperAdmin.SemearAsync(
+        scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>(),
+        app.Configuration,
+        app.Logger);
 }
 
 if (app.Environment.IsDevelopment())
@@ -88,6 +100,7 @@ app.UseCorrelationId();
 app.UseValidationExceptionHandling();
 
 app.UseAuthentication();
+app.UseBloqueioRestauranteNaoLiberado();
 app.UseAuthorization();
 
 app.MapGet("/", () => "API de Identidade no ar!");
@@ -97,7 +110,9 @@ IEndpointModule[] endpointModules =
     new AuthEndpointsModule(),
     new RestauranteEndpointsModule(),
     new InternoEndpointsModule(),
-    new UsuarioEndpointsModule()
+    new UsuarioEndpointsModule(),
+    new ConviteEndpointsModule(),
+    new PlataformaEndpointsModule()
 ];
 
 foreach (var module in endpointModules)

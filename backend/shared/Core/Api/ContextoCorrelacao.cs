@@ -1,10 +1,10 @@
 using System.Diagnostics;
 
-namespace RestauranteEstoque.Core.Api;
+namespace GestaoRestaurante.Core.Api;
 
 public static class ContextoCorrelacao
 {
-    public const string NomeFonteTraces = "RestauranteEstoque.Mensageria";
+    public const string NomeFonteTraces = "GestaoRestaurante.Mensageria";
     public static readonly ActivitySource FonteTraces = new(NomeFonteTraces);
 
     private static readonly AsyncLocal<string?> _atual = new();

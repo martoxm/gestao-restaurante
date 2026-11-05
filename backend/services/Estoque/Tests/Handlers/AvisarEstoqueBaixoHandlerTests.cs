@@ -1,12 +1,12 @@
 using System.Text.Json;
-using RestauranteEstoque.Core.Application.Events;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Domain.Events;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Core.Application.Events;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Domain.Events;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class AvisarEstoqueBaixoHandlerTests
 {

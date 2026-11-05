@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Pagamentos.Domain.Enums;
+namespace GestaoRestaurante.Pagamentos.Domain.Enums;
 
 public enum StatusPagamento
 {

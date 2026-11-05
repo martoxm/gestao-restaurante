@@ -1,6 +1,6 @@
-using RestauranteEstoque.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
 
-namespace RestauranteEstoque.Pagamentos.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Pagamentos.Application.Abstractions.Repositories;
 
 public interface IPagamentoRepository
 {

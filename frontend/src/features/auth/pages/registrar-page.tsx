@@ -41,9 +41,10 @@ export function RegistrarPage() {
     <div className="flex flex-1 items-center justify-center bg-zinc-50 p-4 dark:bg-black">
       <Card className="w-full max-w-sm">
         <CardHeader>
-          <CardTitle>Criar conta</CardTitle>
+          <CardTitle>Criar conta da empresa</CardTitle>
           <CardDescription>
-            Informe seus dados para criar uma conta no sistema.
+            Cadastre seu restaurante e sua conta de administrador. Você tem 14
+            dias de teste grátis.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -58,7 +59,7 @@ export function RegistrarPage() {
                 rules={{ required: "O nome é obrigatório." }}
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Nome</FormLabel>
+                    <FormLabel>Seu nome</FormLabel>
                     <FormControl>
                       <Input
                         type="text"
@@ -148,7 +149,7 @@ export function RegistrarPage() {
                 disabled={registrarMutation.isPending}
                 className="mt-2"
               >
-                {registrarMutation.isPending ? "Criando conta..." : "Criar conta"}
+                {registrarMutation.isPending ? "Criando conta..." : "Começar teste grátis"}
               </Button>
 
               <p className="text-center text-sm text-muted-foreground">

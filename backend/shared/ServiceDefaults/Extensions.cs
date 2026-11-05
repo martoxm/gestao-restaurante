@@ -43,7 +43,7 @@ public static class Extensions
             .WithTracing(tracing =>
             {
                 tracing.AddSource(builder.Environment.ApplicationName)
-                    .AddSource("RestauranteEstoque.Mensageria")
+                    .AddSource("GestaoRestaurante.Mensageria")
                     .AddAspNetCoreInstrumentation(options =>
                         options.Filter = context =>
                             !context.Request.Path.StartsWithSegments(HealthEndpointPath)

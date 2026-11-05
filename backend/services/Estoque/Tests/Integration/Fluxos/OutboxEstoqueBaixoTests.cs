@@ -1,17 +1,17 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using RestauranteEstoque.Application.UseCases.MovimentacoesEstoque;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Tests.Integration.Fixtures;
+using GestaoRestaurante.Application.UseCases.MovimentacoesEstoque;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Tests.Integration.Fixtures;
 using System.Text.Json;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 
-namespace RestauranteEstoque.Tests.Integration.Fluxos;
+namespace GestaoRestaurante.Tests.Integration.Fluxos;
 
 [Collection(nameof(SqlServerCollection))]
 public sealed class OutboxEstoqueBaixoTests(SqlServerFixture fixture)

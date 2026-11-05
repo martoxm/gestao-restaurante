@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Vendas.Domain.Enums;
+namespace GestaoRestaurante.Vendas.Domain.Enums;
 
 public enum MotivoCancelamento
 {

@@ -1,14 +1,14 @@
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.Extensions.Logging.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Pagamentos.Tests.Common;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Pagamentos.Tests.Common;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Handlers;
+namespace GestaoRestaurante.Pagamentos.Tests.Handlers;
 
 public class ProcessarWebhookGatewayHandlerTests
 {

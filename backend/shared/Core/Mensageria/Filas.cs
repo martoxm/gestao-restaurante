@@ -1,6 +1,6 @@
 using RabbitMQ.Client;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public static class Filas
 {
@@ -17,6 +17,8 @@ public static class Filas
     public const string ProcessarPagamento = "processar-pagamento-queue";
     public const string ResultadoPagamento = "resultado-pagamento-queue";
     public const string DevolverEstoque = "devolver-estoque-queue";
+
+    public const string PlanoPago = "plano-pago-queue";
 
     public static string DeadLetter(string fila) => $"{fila}.dlq";
 

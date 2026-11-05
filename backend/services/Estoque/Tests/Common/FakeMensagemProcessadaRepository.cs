@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Tests.Common;
+namespace GestaoRestaurante.Tests.Common;
 
 public class FakeMensagemProcessadaRepository : IMensagemProcessadaRepository
 {

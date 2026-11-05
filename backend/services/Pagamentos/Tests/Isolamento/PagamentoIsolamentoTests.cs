@@ -1,7 +1,7 @@
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Pagamentos.Tests.Common;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Pagamentos.Tests.Common;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Isolamento;
+namespace GestaoRestaurante.Pagamentos.Tests.Isolamento;
 
 public class PagamentoIsolamentoTests
 {

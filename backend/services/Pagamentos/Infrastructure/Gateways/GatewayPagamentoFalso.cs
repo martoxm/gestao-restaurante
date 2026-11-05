@@ -1,7 +1,7 @@
 using System.Threading.Channels;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
 public class GatewayPagamentoFalso : IGatewayPagamento
 {

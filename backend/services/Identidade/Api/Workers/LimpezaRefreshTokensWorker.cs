@@ -1,8 +1,8 @@
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
 
-namespace RestauranteEstoque.Identidade.Api.Workers;
+namespace GestaoRestaurante.Identidade.Api.Workers;
 
 public class LimpezaRefreshTokensWorker : BackgroundService
 {

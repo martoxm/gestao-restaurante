@@ -1,8 +1,8 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
 
-namespace RestauranteEstoque.Pagamentos.Domain.Entities;
+namespace GestaoRestaurante.Pagamentos.Domain.Entities;
 
 public class Pagamento : Entity
 {

@@ -1,11 +1,11 @@
 using System.Text.Json;
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
-using RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
 
-namespace RestauranteEstoque.Pagamentos.Api.Modules;
+namespace GestaoRestaurante.Pagamentos.Api.Modules;
 
 public class WebhookEndpointsModule : IEndpointModule
 {
@@ -33,7 +33,7 @@ public class WebhookEndpointsModule : IEndpointModule
             .AllowAnonymous()
             .WithName("ReceberWebhookStripe")
             .WithSummary("Recebe o aviso do Stripe")
-            .WithDescription("Chamado pelo Stripe (ou pelo stripe listen). Exige o cabeçalho Stripe-Signature, conferido com o segredo whsec_ do webhook. Trata payment_intent.succeeded e payment_intent.payment_failed; os outros eventos só recebem 200.")
+            .WithDescription("Chamado pelo Stripe (ou pelo stripe listen). Exige o cabeçalho Stripe-Signature, conferido com o segredo whsec_ do webhook. Trata payment_intent.succeeded e payment_intent.payment_failed (vendas) e checkout.session.completed (plano do restaurante, M19c3); os outros eventos só recebem 200.")
             .Produces(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status401Unauthorized);
     }
@@ -57,6 +57,9 @@ public class WebhookEndpointsModule : IEndpointModule
 
         if (resultado.Comando is not null)
             await sender.Send(resultado.Comando, cancellationToken);
+
+        if (resultado.ConfirmacaoPlano is not null)
+            await sender.Send(resultado.ConfirmacaoPlano, cancellationToken);
 
         return Results.Ok();
     }

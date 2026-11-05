@@ -1,9 +1,9 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Infrastructure.Persistence.Configurations;
 
 public class CategoriaConfiguration : IEntityTypeConfiguration<Categoria>
 {

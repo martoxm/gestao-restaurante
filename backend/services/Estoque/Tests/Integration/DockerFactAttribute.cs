@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Tests.Integration;
+namespace GestaoRestaurante.Tests.Integration;
 
 public sealed class DockerFactAttribute : FactAttribute
 {

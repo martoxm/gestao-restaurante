@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Core.Domain.ValueObjects;
+namespace GestaoRestaurante.Core.Domain.ValueObjects;
 
 public sealed partial record Email
 {

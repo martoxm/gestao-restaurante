@@ -1,11 +1,11 @@
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Api;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Vendas.Application.UseCases.Vendas;
-using RestauranteEstoque.Vendas.Contracts.Vendas;
+using GestaoRestaurante.Core.Api;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Vendas.Application.UseCases.Vendas;
+using GestaoRestaurante.Vendas.Contracts.Vendas;
 
-namespace RestauranteEstoque.Vendas.Api.Modules;
+namespace GestaoRestaurante.Vendas.Api.Modules;
 
 public class VendaEndpointsModule : IEndpointModule
 {

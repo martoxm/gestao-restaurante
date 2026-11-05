@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Application.Abstractions.Services;
+namespace GestaoRestaurante.Application.Abstractions.Services;
 
 public interface IIdentidadeClient
 {

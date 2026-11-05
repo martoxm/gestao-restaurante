@@ -20,12 +20,12 @@ export function useAvisoMudancaStatus(venda: VendaDetalhes | undefined) {
     if (!anterior || !estaEmAndamento(anterior) || estaEmAndamento(venda.status)) return;
 
     if (venda.status === "Confirmada") {
-      toast.success(`Venda ${codigoVenda(venda.id)} confirmada`, {
+      toast.success(`Venda ${codigoVenda(venda.numero)} confirmada`, {
         description: `Pagamento aprovado — ${formatarMoeda(venda.total)}.`,
       });
     } else {
       const explicacao = explicarCancelamento(venda.motivoCancelamento, venda.detalheCancelamento);
-      toast.error(`${explicacao.titulo} — venda ${codigoVenda(venda.id)}`, {
+      toast.error(`${explicacao.titulo} — venda ${codigoVenda(venda.numero)}`, {
         description: explicacao.descricao,
       });
     }

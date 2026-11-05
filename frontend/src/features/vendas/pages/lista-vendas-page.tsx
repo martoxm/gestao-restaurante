@@ -148,7 +148,7 @@ export function ListaVendasPage() {
                   onClick={() => router.push(`/vendas/${venda.id}`)}
                   onKeyDown={(e) => e.key === "Enter" && router.push(`/vendas/${venda.id}`)}
                 >
-                  <TableCell className="font-mono text-xs">{codigoVenda(venda.id)}</TableCell>
+                  <TableCell className="font-mono text-xs">{codigoVenda(venda.numero)}</TableCell>
                   <TableCell>{formatarDataHora(venda.criadoEm)}</TableCell>
                   <TableCell className="text-right tabular-nums">{venda.quantidadeItens}</TableCell>
                   <TableCell className="text-right font-medium tabular-nums">

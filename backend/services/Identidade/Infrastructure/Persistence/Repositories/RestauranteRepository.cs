@@ -1,9 +1,10 @@
+using GestaoRestaurante.Identidade.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Contracts.Common;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Contracts.Common;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Identidade.Infrastructure.Persistence.Repositories;
 
 public class RestauranteRepository : IRestauranteRepository
 {
@@ -46,8 +47,26 @@ public class RestauranteRepository : IRestauranteRepository
         return (itens, totalItens);
     }
 
+    public async Task<Restaurante?> ObterPorIdSemFiltroAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.Restaurantes
+            .IgnoreQueryFilters()
+            .FirstOrDefaultAsync(restaurante => restaurante.Id == id, cancellationToken);
+    }
+
     public void Adicionar(Restaurante restaurante) => _context.Restaurantes.Add(restaurante);
 
     public void Atualizar(Restaurante restaurante) => _context.Restaurantes.Update(restaurante);
+
+    public async Task<IReadOnlyList<Restaurante>> ListarTestesTerminandoAsync(DateTime agora, DateTime ate, CancellationToken cancellationToken)
+    {
+        return await _context.Restaurantes
+            .IgnoreQueryFilters()
+            .Where(restaurante => restaurante.Ativo
+                && restaurante.Plano == PlanoRestaurante.Teste
+                && restaurante.TesteTerminaEm > agora
+                && restaurante.TesteTerminaEm <= ate)
+            .ToListAsync(cancellationToken);
+    }
 }
   

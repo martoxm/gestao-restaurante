@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Identidade.Application.Abstractions.Services;
+namespace GestaoRestaurante.Identidade.Application.Abstractions.Services;
 
 public record RefreshTokenGerado(string Token, string Hash);
 

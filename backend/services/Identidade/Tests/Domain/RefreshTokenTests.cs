@@ -1,7 +1,7 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Tests.Domain;
+namespace GestaoRestaurante.Identidade.Tests.Domain;
 
 public class RefreshTokenTests
 {

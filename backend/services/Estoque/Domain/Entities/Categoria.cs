@@ -1,6 +1,6 @@
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Domain.Entities;
+namespace GestaoRestaurante.Domain.Entities;
 
 public class Categoria : Entity
 {

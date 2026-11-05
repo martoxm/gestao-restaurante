@@ -1,9 +1,9 @@
 using MediatR;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Identidade.Contracts.Common;
-using RestauranteEstoque.Identidade.Contracts.Restaurantes;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Identidade.Contracts.Common;
+using GestaoRestaurante.Identidade.Contracts.Restaurantes;
 
-namespace RestauranteEstoque.Identidade.Application.UseCases.Restaurantes;
+namespace GestaoRestaurante.Identidade.Application.UseCases.Restaurantes;
 
 public record ObterRestaurantePorIdQuery(Guid Id) : IRequest<RestauranteDetalhesDto?>;
 

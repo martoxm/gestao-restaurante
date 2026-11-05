@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Identidade.Tests.Common;
+namespace GestaoRestaurante.Identidade.Tests.Common;
 
 public sealed class FakeTransacao
 {

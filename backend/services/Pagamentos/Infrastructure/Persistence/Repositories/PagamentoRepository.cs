@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Repositories;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Repositories;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
 
 public class PagamentoRepository : IPagamentoRepository
 {

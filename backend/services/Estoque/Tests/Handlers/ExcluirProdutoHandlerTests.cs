@@ -1,15 +1,15 @@
 using System.Text.Json;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class ExcluirProdutoHandlerTests
 {

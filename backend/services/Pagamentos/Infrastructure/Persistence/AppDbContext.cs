@@ -1,11 +1,11 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Pagamentos.Application.Abstractions.Services;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Pagamentos.Application.Abstractions.Services;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IApplicationDbContext
 {
@@ -20,6 +20,8 @@ public class AppDbContext : DbContext, IApplicationDbContext
     private Guid? RestauranteIdAtual => _usuarioAtualService.RestauranteId;
 
     public DbSet<Pagamento> Pagamentos => Set<Pagamento>();
+
+    public DbSet<CobrancaPlano> CobrancasPlano => Set<CobrancaPlano>();
     public DbSet<OutboxMensagem> OutboxMensagens => Set<OutboxMensagem>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -31,5 +33,6 @@ public class AppDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfiguration(new OutboxMensagemConfiguration());
 
         modelBuilder.Entity<Pagamento>().HasQueryFilter(pagamento => pagamento.RestauranteId == RestauranteIdAtual);
+        modelBuilder.Entity<CobrancaPlano>().HasQueryFilter(cobranca => cobranca.RestauranteId == RestauranteIdAtual);
     }
 }

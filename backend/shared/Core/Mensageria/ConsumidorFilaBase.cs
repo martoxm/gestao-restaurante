@@ -1,13 +1,13 @@
 using System.Diagnostics;
 using System.Text.Json;
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Core.Api;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public abstract class ConsumidorFilaBase<TMensagem> : BackgroundService
 {

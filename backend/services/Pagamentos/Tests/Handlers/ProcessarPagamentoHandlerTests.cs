@@ -1,15 +1,15 @@
-using RestauranteEstoque.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
 using System.Threading.Channels;
 using Microsoft.Extensions.Logging.Abstractions;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
-using RestauranteEstoque.Pagamentos.Domain.Enums;
-using RestauranteEstoque.Pagamentos.Infrastructure.Gateways;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence;
-using RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Repositories;
-using RestauranteEstoque.Pagamentos.Tests.Common;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Pagamentos.Domain.Enums;
+using GestaoRestaurante.Pagamentos.Infrastructure.Gateways;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence;
+using GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Repositories;
+using GestaoRestaurante.Pagamentos.Tests.Common;
 
-namespace RestauranteEstoque.Pagamentos.Tests.Handlers;
+namespace GestaoRestaurante.Pagamentos.Tests.Handlers;
 
 public class ProcessarPagamentoHandlerTests
 {
@@ -108,10 +108,10 @@ public class ProcessarPagamentoHandlerTests
         Assert.Single(context.OutboxMensagens);
     }
 
-    private class GatewayQueRecusaNaHora : RestauranteEstoque.Pagamentos.Application.Abstractions.Services.IGatewayPagamento
+    private class GatewayQueRecusaNaHora : GestaoRestaurante.Pagamentos.Application.Abstractions.Services.IGatewayPagamento
     {
-        public Task<RestauranteEstoque.Pagamentos.Application.Abstractions.Services.CobrancaAceita> CobrarAsync(
-            RestauranteEstoque.Pagamentos.Application.Abstractions.Services.PedidoCobranca pedido, CancellationToken cancellationToken) =>
-            throw new RestauranteEstoque.Pagamentos.Application.Abstractions.Services.CobrancaRecusadaException("No such PaymentMethod.");
+        public Task<GestaoRestaurante.Pagamentos.Application.Abstractions.Services.CobrancaAceita> CobrarAsync(
+            GestaoRestaurante.Pagamentos.Application.Abstractions.Services.PedidoCobranca pedido, CancellationToken cancellationToken) =>
+            throw new GestaoRestaurante.Pagamentos.Application.Abstractions.Services.CobrancaRecusadaException("No such PaymentMethod.");
     }
 }

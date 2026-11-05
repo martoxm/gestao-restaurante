@@ -1,10 +1,10 @@
-using RestauranteEstoque.Application.UseCases.Categorias;
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Tests.Common;
+using GestaoRestaurante.Application.UseCases.Categorias;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Tests.Common;
 
-namespace RestauranteEstoque.Tests.Handlers;
+namespace GestaoRestaurante.Tests.Handlers;
 
 public class QuantidadeProdutosCategoriaTests
 {

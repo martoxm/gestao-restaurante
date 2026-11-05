@@ -1,12 +1,17 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Seguranca;
 using MediatR;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Identidade.Contracts.Auth;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Identidade.Contracts.Auth;
+using GestaoRestaurante.Identidade.Domain.Entities;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
+using System.Net;
 
-namespace RestauranteEstoque.Identidade.Application.UseCases.Auth;
+namespace GestaoRestaurante.Identidade.Application.UseCases.Auth;
 
 public class LoginHandler : IRequestHandler<LoginCommand, LoginResponse>
 {
@@ -41,14 +46,20 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
     private readonly IRestauranteRepository _restauranteRepository;
     private readonly IApplicationDbContext _context;
     private readonly IRelogio _relogio;
+    private readonly IOutboxMensagemRepository _outboxRepository;
+    private readonly ILinksFront _linksFront;
 
     public RegistrarHandler(
         IIdentityService identityService,
         EmissorSessao emissorSessao,
         IRestauranteRepository restauranteRepository,
         IApplicationDbContext context,
-        IRelogio relogio)
+        IRelogio relogio,
+        IOutboxMensagemRepository outboxRepository,
+        ILinksFront linksFront)
     {
+        _outboxRepository = outboxRepository;
+        _linksFront = linksFront;
         _identityService = identityService;
         _emissorSessao = emissorSessao;
         _restauranteRepository = restauranteRepository;
@@ -64,9 +75,15 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
             _restauranteRepository.Adicionar(restaurante);
             await _context.SaveChangesAsync(ct);
 
-            var usuarioId = await _identityService.CriarUsuarioAsync(request.Nome, request.Email, request.Senha, restaurante.Id, ct);
+            var usuarioId = await _identityService.CriarUsuarioAsync(request.Nome, request.Email, request.Senha, restaurante.Id, RoleNames.Admin, emailConfirmado: false, ct);
 
-            var usuario = new UsuarioAutenticado(usuarioId, request.Nome, request.Email, restaurante.Id);
+            var tokenConfirmacao = await _identityService.GerarTokenConfirmacaoEmailAsync(usuarioId, ct);
+            _outboxRepository.Adicionar(OutboxMensagem.Criar(
+                Filas.Email,
+                EmailsConta.ConfirmarEmail(request.Email, request.Nome, _linksFront.ConfirmarEmail(usuarioId, tokenConfirmacao)),
+                _relogio.AgoraUtc));
+
+            var usuario = new UsuarioAutenticado(usuarioId, request.Nome, request.Email, restaurante.Id, EmailConfirmado: false);
             var resposta = await _emissorSessao.EmitirAsync(usuario, ct);
             await _context.SaveChangesAsync(ct);
 
@@ -143,8 +160,10 @@ public class EmissorSessao
     private readonly IGeradorRefreshToken _geradorRefreshToken;
     private readonly IRefreshTokenRepository _refreshTokenRepository;
     private readonly IRelogio _relogio;
+    private readonly IRestauranteRepository _restauranteRepository;
 
     public EmissorSessao(
+        IRestauranteRepository restauranteRepository,
         IIdentityService identityService,
         IJwtTokenGenerator jwtTokenGenerator,
         IGeradorRefreshToken geradorRefreshToken,
@@ -156,18 +175,165 @@ public class EmissorSessao
         _geradorRefreshToken = geradorRefreshToken;
         _refreshTokenRepository = refreshTokenRepository;
         _relogio = relogio;
+        _restauranteRepository = restauranteRepository;
     }
 
     public async Task<LoginResponse> EmitirAsync(UsuarioAutenticado usuario, CancellationToken cancellationToken)
     {
         var roles = await _identityService.ObterRolesAsync(usuario.Id, cancellationToken);
-        var token = _jwtTokenGenerator.GerarToken(usuario.Id, usuario.Nome, usuario.Email, roles, usuario.RestauranteId);
-
         var agora = _relogio.AgoraUtc;
+
+        var liberado = true;
+        if (usuario.RestauranteId is Guid restauranteId)
+        {
+            var restaurante = await _restauranteRepository.ObterPorIdSemFiltroAsync(restauranteId, cancellationToken);
+            liberado = restaurante?.EstaLiberado(agora) ?? false;
+        }
+
+        var token = _jwtTokenGenerator.GerarToken(usuario.Id, usuario.Nome, usuario.Email, roles, usuario.RestauranteId, liberado, usuario.EmailConfirmado);
+
         var refreshToken = _geradorRefreshToken.Gerar();
         _refreshTokenRepository.Adicionar(
             RefreshToken.Criar(usuario.Id, refreshToken.Hash, agora, agora.AddDays(_geradorRefreshToken.DiasValidade)));
 
         return new LoginResponse(token, refreshToken.Token, usuario.Nome, usuario.Email);
     }
+}
+
+
+public class EsqueciSenhaHandler : IRequestHandler<EsqueciSenhaCommand>
+{
+    private readonly IIdentityService _identityService;
+    private readonly IOutboxMensagemRepository _outboxRepository;
+    private readonly ILinksFront _linksFront;
+    private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
+
+    public EsqueciSenhaHandler(IIdentityService identityService, IOutboxMensagemRepository outboxRepository,
+        ILinksFront linksFront, IApplicationDbContext context, IRelogio relogio)
+    {
+        _identityService = identityService;
+        _outboxRepository = outboxRepository;
+        _linksFront = linksFront;
+        _context = context;
+        _relogio = relogio;
+    }
+
+    public async Task Handle(EsqueciSenhaCommand request, CancellationToken cancellationToken)
+    {
+        var email = request.Email.Trim().ToLowerInvariant();
+        var gerado = await _identityService.GerarTokenRedefinicaoSenhaAsync(email, cancellationToken);
+
+        if (gerado is null)
+            return;
+
+        _outboxRepository.Adicionar(OutboxMensagem.Criar(
+            Filas.Email,
+            EmailsConta.RedefinirSenha(email, _linksFront.RedefinirSenha(email, gerado.Value.Token)),
+            _relogio.AgoraUtc));
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class RedefinirSenhaHandler : IRequestHandler<RedefinirSenhaCommand>
+{
+    private readonly IIdentityService _identityService;
+    private readonly IRefreshTokenRepository _refreshTokenRepository;
+    private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
+
+    public RedefinirSenhaHandler(IIdentityService identityService, IRefreshTokenRepository refreshTokenRepository,
+        IApplicationDbContext context, IRelogio relogio)
+    {
+        _identityService = identityService;
+        _refreshTokenRepository = refreshTokenRepository;
+        _context = context;
+        _relogio = relogio;
+    }
+
+    public async Task Handle(RedefinirSenhaCommand request, CancellationToken cancellationToken)
+    {
+        var usuarioId = await _identityService.RedefinirSenhaAsync(
+            request.Email.Trim().ToLowerInvariant(), request.Token, request.NovaSenha, cancellationToken);
+
+        await SessoesUsuario.EncerrarTodasAsync(_refreshTokenRepository, usuarioId, _relogio.AgoraUtc, cancellationToken);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ConfirmarEmailHandler : IRequestHandler<ConfirmarEmailCommand>
+{
+    private readonly IIdentityService _identityService;
+
+    public ConfirmarEmailHandler(IIdentityService identityService)
+    {
+        _identityService = identityService;
+    }
+
+    public async Task Handle(ConfirmarEmailCommand request, CancellationToken cancellationToken)
+    {
+        if (!await _identityService.ConfirmarEmailAsync(request.UsuarioId, request.Token, cancellationToken))
+            throw new DomainException("Este link de confirmação é inválido ou já venceu. Peça um novo pelo aviso no sistema.");
+    }
+}
+
+public class ReenviarConfirmacaoEmailHandler : IRequestHandler<ReenviarConfirmacaoEmailCommand>
+{
+    private readonly IIdentityService _identityService;
+    private readonly IOutboxMensagemRepository _outboxRepository;
+    private readonly ILinksFront _linksFront;
+    private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
+
+    public ReenviarConfirmacaoEmailHandler(IIdentityService identityService, IOutboxMensagemRepository outboxRepository,
+        ILinksFront linksFront, IApplicationDbContext context, IRelogio relogio)
+    {
+        _identityService = identityService;
+        _outboxRepository = outboxRepository;
+        _linksFront = linksFront;
+        _context = context;
+        _relogio = relogio;
+    }
+
+    public async Task Handle(ReenviarConfirmacaoEmailCommand request, CancellationToken cancellationToken)
+    {
+        var usuario = await _identityService.ObterUsuarioPorIdAsync(request.UsuarioId, cancellationToken)
+            ?? throw new NaoEncontradoException("Usuário não encontrado.");
+
+        if (usuario.EmailConfirmado)
+            throw new DomainException("Seu e-mail já está confirmado.");
+
+        var token = await _identityService.GerarTokenConfirmacaoEmailAsync(usuario.Id, cancellationToken);
+        _outboxRepository.Adicionar(OutboxMensagem.Criar(
+            Filas.Email,
+            EmailsConta.ConfirmarEmail(usuario.Email, usuario.Nome, _linksFront.ConfirmarEmail(usuario.Id, token)),
+            _relogio.AgoraUtc));
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public static class SessoesUsuario
+{
+    public static async Task EncerrarTodasAsync(IRefreshTokenRepository repository, Guid usuarioId, DateTime agora, CancellationToken cancellationToken)
+    {
+        foreach (var ativo in await repository.ListarAtivosDoUsuarioAsync(usuarioId, agora, cancellationToken))
+            repository.Remover(ativo);
+    }
+}
+
+file static class EmailsConta
+{
+    public static EnviarEmailMensagem ConfirmarEmail(string email, string nome, string link) =>
+        new([email], "Confirme seu e-mail - Gestão Restaurante", $"""
+            <p>Olá, {WebUtility.HtmlEncode(nome)}!</p>
+            <p>Confirme que este e-mail é seu: <a href="{link}">clique aqui para confirmar</a>.</p>
+            <p>Se não foi você que criou a conta, pode ignorar esta mensagem.</p>
+            """);
+
+    public static EnviarEmailMensagem RedefinirSenha(string email, string link) =>
+        new([email], "Redefinir sua senha - Gestão Restaurante", $"""
+            <p>Recebemos um pedido para redefinir a sua senha.</p>
+            <p><a href="{link}">Clique aqui para escolher uma senha nova</a>. O link vale por 1 dia e só funciona uma vez.</p>
+            <p>Se não foi você, ignore esta mensagem: sua senha continua a mesma.</p>
+            """);
 }

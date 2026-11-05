@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace RestauranteEstoque.Core.Seguranca;
+namespace GestaoRestaurante.Core.Seguranca;
 
 public static class ApiKeyExtensions
 {

@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Pagamentos.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Pagamentos.Domain.Entities;
 
-namespace RestauranteEstoque.Pagamentos.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Pagamentos.Infrastructure.Persistence.Configurations;
 
 public class PagamentoConfiguration : IEntityTypeConfiguration<Pagamento>
 {

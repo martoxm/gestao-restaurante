@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Core.Api;
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Application.UseCases.Produtos;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Contracts.Produtos;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Application.UseCases.Produtos;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Contracts.Produtos;
 
-namespace RestauranteEstoque.Api.Modules;
+namespace GestaoRestaurante.Api.Modules;
 
 public class ProdutoEndpointsModule : IEndpointModule
 {

@@ -1,5 +1,7 @@
 import { Header } from "@/components/layout/header";
 import { Sidebar } from "@/components/layout/sidebar";
+import { AvisoRestauranteBloqueado } from "@/components/layout/aviso-restaurante-bloqueado";
+import { AvisoEmailNaoConfirmado } from "@/components/layout/aviso-email-nao-confirmado";
 
 export default function AppLayout({ children }: LayoutProps<"/">) {
   return (
@@ -7,7 +9,11 @@ export default function AppLayout({ children }: LayoutProps<"/">) {
       <Header />
       <div className="flex flex-1">
         <Sidebar />
-        <main className="flex-1 p-6">{children}</main>
+        <main className="flex-1 p-6">
+          <AvisoRestauranteBloqueado />
+          <AvisoEmailNaoConfirmado />
+          {children}
+        </main>
       </div>
     </div>
   );

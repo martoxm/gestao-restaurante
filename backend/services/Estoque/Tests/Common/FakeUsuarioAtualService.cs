@@ -1,8 +1,8 @@
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Exceptions;
 
-namespace RestauranteEstoque.Tests.Common;
+namespace GestaoRestaurante.Tests.Common;
 
 public class FakeUsuarioAtualService : IUsuarioAtualService, IDefinidorRestauranteAtual
 {

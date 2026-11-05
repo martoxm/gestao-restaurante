@@ -1,6 +1,6 @@
 using MediatR;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 
-namespace RestauranteEstoque.Vendas.Application.UseCases.ProdutosCatalogo;
+namespace GestaoRestaurante.Vendas.Application.UseCases.ProdutosCatalogo;
 
 public record SincronizarProdutoCatalogoCommand(ProdutoCatalogoMensagem Produto) : IRequest;

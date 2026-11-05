@@ -25,5 +25,26 @@ export interface DecodedToken {
   sub: string;
   email: string;
   restauranteId?: string;
+  restauranteLiberado?: string;
+  emailConfirmado?: string;
   [claim: string]: unknown;
+}
+
+export interface ConvitePublico {
+  email: string;
+  nomeRestaurante: string;
+  role: "Admin" | "Funcionario";
+  expiraEm: string;
+}
+
+export interface AceitarConviteRequest {
+  token: string;
+  nome: string;
+  senha: string;
+}
+
+export interface RedefinirSenhaRequest {
+  email: string;
+  token: string;
+  novaSenha: string;
 }

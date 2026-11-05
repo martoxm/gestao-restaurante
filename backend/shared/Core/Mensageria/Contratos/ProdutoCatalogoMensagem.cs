@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Mensageria.Contratos;
+namespace GestaoRestaurante.Core.Mensageria.Contratos;
 
 public sealed record ProdutoCatalogoMensagem(
     Guid ProdutoId,

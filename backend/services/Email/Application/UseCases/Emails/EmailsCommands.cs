@@ -1,6 +1,6 @@
 using MediatR;
 
-namespace RestauranteEstoque.Email.Application.UseCases.Emails;
+namespace GestaoRestaurante.Email.Application.UseCases.Emails;
 
 public record EnviarEmailCommand(
     Guid MensagemId,

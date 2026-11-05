@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Persistencia.Mensageria;
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Persistencia.Mensageria;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Infrastructure.Persistence;
+namespace GestaoRestaurante.Infrastructure.Persistence;
 
 public class AppDbContext : DbContext, IApplicationDbContext
 {

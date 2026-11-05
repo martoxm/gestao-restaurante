@@ -1,11 +1,11 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
 
-namespace RestauranteEstoque.Tests.Common;
+namespace GestaoRestaurante.Tests.Common;
 
 public class TestDbContext : DbContext, IApplicationDbContext
 {

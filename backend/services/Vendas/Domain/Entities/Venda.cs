@@ -1,14 +1,16 @@
-using RestauranteEstoque.Core.Domain;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Vendas.Domain.Enums;
+using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Vendas.Domain.Enums;
 
-namespace RestauranteEstoque.Vendas.Domain.Entities;
+namespace GestaoRestaurante.Vendas.Domain.Entities;
 
 public class Venda : Entity
 {
     private readonly List<ItemVenda> _itens = [];
 
     public Guid RestauranteId { get; private set; }
+
+    public int Numero { get; private set; }
     public StatusVenda Status { get; private set; }
     public DateTime CriadoEm { get; private set; }
 
@@ -27,10 +29,13 @@ public class Venda : Entity
     {
     }
 
-    public static Venda Criar(Guid restauranteId, DateTime criadoEm, IReadOnlyCollection<NovoItemVenda> itens, string tokenCartao)
+    public static Venda Criar(Guid restauranteId, int numero, DateTime criadoEm, IReadOnlyCollection<NovoItemVenda> itens, string tokenCartao)
     {
         if (restauranteId == Guid.Empty)
             throw new DomainException("A venda precisa pertencer a um restaurante.");
+
+        if (numero <= 0)
+            throw new DomainException("O número da venda precisa ser maior que zero.");
 
         if (string.IsNullOrWhiteSpace(tokenCartao))
             throw new DomainException("Informe o token do cartão para pagar a venda.");
@@ -44,6 +49,7 @@ public class Venda : Entity
         var venda = new Venda
         {
             RestauranteId = restauranteId,
+            Numero = numero,
             Status = StatusVenda.Pendente,
             CriadoEm = criadoEm,
             TokenCartao = tokenCartao.Trim()

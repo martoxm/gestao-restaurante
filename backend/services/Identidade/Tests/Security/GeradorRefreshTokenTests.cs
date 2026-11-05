@@ -1,8 +1,8 @@
 using Microsoft.Extensions.Options;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Identidade.Infrastructure.Security;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Identidade.Infrastructure.Security;
 
-namespace RestauranteEstoque.Identidade.Tests.Security;
+namespace GestaoRestaurante.Identidade.Tests.Security;
 
 public class GeradorRefreshTokenTests
 {

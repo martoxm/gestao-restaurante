@@ -1,20 +1,20 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using MediatR;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Events;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.Produtos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Events;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Core.Mensageria;
-using RestauranteEstoque.Core.Mensageria.Contratos;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Events;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Events;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Core.Mensageria;
+using GestaoRestaurante.Core.Mensageria.Contratos;
 using Microsoft.Extensions.Logging;
 using System.Net;
 
-namespace RestauranteEstoque.Application.UseCases.Produtos;
+namespace GestaoRestaurante.Application.UseCases.Produtos;
 
 public class CriarProdutoHandler : IRequestHandler<CriarProdutoCommand, Guid>
 {

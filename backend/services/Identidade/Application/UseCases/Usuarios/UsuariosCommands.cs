@@ -1,5 +1,7 @@
 using MediatR;
 
-namespace RestauranteEstoque.Identidade.Application.UseCases.Usuarios;
+namespace GestaoRestaurante.Identidade.Application.UseCases.Usuarios;
 
 public record AlterarRoleUsuarioCommand(Guid UsuarioId, string Role) : IRequest;
+
+public record AlterarAtivoUsuarioCommand(Guid UsuarioId, bool Ativo) : IRequest;

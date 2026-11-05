@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Core.Application.Abstractions;
-using RestauranteEstoque.Identidade.Application.Abstractions.Services;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Core.Application.Abstractions;
+using GestaoRestaurante.Identidade.Application.Abstractions.Services;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Tests.Common;
+namespace GestaoRestaurante.Identidade.Tests.Common;
 
 public class TestDbContext : DbContext, IApplicationDbContext
 {
@@ -18,6 +18,10 @@ public class TestDbContext : DbContext, IApplicationDbContext
     public DbSet<Restaurante> Restaurantes => Set<Restaurante>();
 
     public DbSet<RefreshToken> RefreshTokens => Set<RefreshToken>();
+
+    public DbSet<Convite> Convites => Set<Convite>();
+
+    public DbSet<AuditoriaPlataforma> AuditoriasPlataforma => Set<AuditoriaPlataforma>();
 
     private Guid? RestauranteIdAtual => _usuarioAtualService.RestauranteId;
 
@@ -41,6 +45,7 @@ public class TestDbContext : DbContext, IApplicationDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Restaurante>().HasQueryFilter(restaurante => restaurante.Id == RestauranteIdAtual);
+        modelBuilder.Entity<Convite>().HasQueryFilter(convite => convite.RestauranteId == RestauranteIdAtual);
     }
 }
 

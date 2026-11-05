@@ -1,8 +1,8 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Identidade.Application.Abstractions.Repositories;
-using RestauranteEstoque.Identidade.Domain.Entities;
+using GestaoRestaurante.Identidade.Application.Abstractions.Repositories;
+using GestaoRestaurante.Identidade.Domain.Entities;
 
-namespace RestauranteEstoque.Identidade.Tests.Common;
+namespace GestaoRestaurante.Identidade.Tests.Common;
 
 public class FakeRefreshTokenRepository : IRefreshTokenRepository
 {

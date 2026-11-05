@@ -1,10 +1,10 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Diagnostics;
-using RestauranteEstoque.Core.Application.Events;
-using RestauranteEstoque.Core.Domain;
+using GestaoRestaurante.Core.Application.Events;
+using GestaoRestaurante.Core.Domain;
 
-namespace RestauranteEstoque.Infrastructure.Persistence.Interceptors;
+namespace GestaoRestaurante.Infrastructure.Persistence.Interceptors;
 
 public class PublicarEventosDominioInterceptor : SaveChangesInterceptor
 {

@@ -22,6 +22,7 @@ export interface ItemVenda {
 
 export interface VendaDetalhes {
   id: string;
+  numero: number;
   status: StatusVenda;
   criadoEm: string;
   total: number;
@@ -32,6 +33,7 @@ export interface VendaDetalhes {
 
 export interface VendaItemLista {
   id: string;
+  numero: number;
   status: StatusVenda;
   criadoEm: string;
   quantidadeItens: number;
@@ -116,6 +118,6 @@ export function formatarDataHora(data: string) {
   return new Date(data).toLocaleString("pt-BR", { dateStyle: "short", timeStyle: "short" });
 }
 
-export function codigoVenda(id: string) {
-  return `#${id.slice(0, 6).toUpperCase()}`;
+export function codigoVenda(numero: number) {
+  return `#${numero}`;
 }

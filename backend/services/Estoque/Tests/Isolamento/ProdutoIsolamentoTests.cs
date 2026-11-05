@@ -1,10 +1,10 @@
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Contracts.Produtos;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Isolamento;
+namespace GestaoRestaurante.Tests.Isolamento;
 
 public class ProdutoIsolamentoTests
 {

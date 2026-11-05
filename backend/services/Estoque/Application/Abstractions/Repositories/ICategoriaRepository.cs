@@ -1,7 +1,7 @@
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Application.Abstractions.Repositories;
 
 public interface ICategoriaRepository
 {

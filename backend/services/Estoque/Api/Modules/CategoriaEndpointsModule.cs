@@ -1,12 +1,12 @@
-using RestauranteEstoque.Core.Api;
+using GestaoRestaurante.Core.Api;
 using Asp.Versioning;
 using MediatR;
-using RestauranteEstoque.Application.UseCases.Categorias;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Core.Seguranca;
-using RestauranteEstoque.Contracts.Categorias;
+using GestaoRestaurante.Application.UseCases.Categorias;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Core.Seguranca;
+using GestaoRestaurante.Contracts.Categorias;
 
-namespace RestauranteEstoque.Api.Modules;
+namespace GestaoRestaurante.Api.Modules;
 
 public class CategoriaEndpointsModule : IEndpointModule
 {

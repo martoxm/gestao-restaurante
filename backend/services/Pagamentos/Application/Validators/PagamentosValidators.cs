@@ -1,7 +1,7 @@
 using FluentValidation;
-using RestauranteEstoque.Pagamentos.Application.UseCases.Pagamentos;
+using GestaoRestaurante.Pagamentos.Application.UseCases.Pagamentos;
 
-namespace RestauranteEstoque.Pagamentos.Application.Validators;
+namespace GestaoRestaurante.Pagamentos.Application.Validators;
 
 public class CriarPagamentoCommandValidator : AbstractValidator<CriarPagamentoCommand>
 {

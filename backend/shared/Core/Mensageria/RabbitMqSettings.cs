@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Mensageria;
+namespace GestaoRestaurante.Core.Mensageria;
 
 public sealed class RabbitMqSettings
 {

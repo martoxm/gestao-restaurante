@@ -2,7 +2,7 @@ import axios, { type AxiosError, type AxiosInstance, type InternalAxiosRequestCo
 import type { LoginResponse } from "@/features/auth/types/auth";
 import { limparSessao, obterRefreshToken, obterToken, salvarSessao } from "@/lib/sessao";
 
-const AUTH_PUBLIC_PATHS = ["/auth/login", "/auth/registrar", "/auth/renovar"];
+const AUTH_PUBLIC_PATHS = ["/auth/login", "/auth/registrar", "/auth/renovar", "/auth/convite", "/auth/aceitar-convite", "/auth/esqueci-senha", "/auth/redefinir-senha", "/auth/confirmar-email"];
 
 const URL_GATEWAY = process.env.NEXT_PUBLIC_API_URL;
 
@@ -12,7 +12,7 @@ interface ConfigComRetentativa extends InternalAxiosRequestConfig {
 
 let renovacaoEmAndamento: Promise<string> | null = null;
 
-function renovarSessao(): Promise<string> {
+export function renovarSessao(): Promise<string> {
   if (!renovacaoEmAndamento) {
     renovacaoEmAndamento = (async () => {
       const refreshToken = obterRefreshToken();
@@ -96,3 +96,5 @@ export const api = criarClienteApi("estoque");
 export const apiIdentidade = criarClienteApi("identidade");
 
 export const apiVendas = criarClienteApi("vendas");
+
+export const apiPagamentos = criarClienteApi("pagamentos");

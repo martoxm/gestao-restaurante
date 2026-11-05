@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Application.Models;
+namespace GestaoRestaurante.Core.Application.Models;
 
 public record ResultadoPaginado<T>(IReadOnlyList<T> Itens, int Pagina, int TamanhoPagina, int TotalItens)
 {

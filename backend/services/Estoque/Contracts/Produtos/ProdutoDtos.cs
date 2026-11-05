@@ -1,7 +1,7 @@
-using RestauranteEstoque.Contracts.Common;
+using GestaoRestaurante.Contracts.Common;
 using System.Text.Json.Serialization;
 
-namespace RestauranteEstoque.Contracts.Produtos;
+namespace GestaoRestaurante.Contracts.Produtos;
 
 public record ListarProdutosRequest(
     int Pagina = 1,

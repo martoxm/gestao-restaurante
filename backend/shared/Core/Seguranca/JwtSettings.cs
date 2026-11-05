@@ -1,4 +1,4 @@
-namespace RestauranteEstoque.Core.Seguranca;
+namespace GestaoRestaurante.Core.Seguranca;
 
 public class JwtSettings
 {

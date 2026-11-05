@@ -1,9 +1,9 @@
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
-using RestauranteEstoque.Tests.Common;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
+using GestaoRestaurante.Tests.Common;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Tests.Isolamento;
+namespace GestaoRestaurante.Tests.Isolamento;
 
 public class MovimentacaoEstoqueIsolamentoTests
 {

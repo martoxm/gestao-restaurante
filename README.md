@@ -91,6 +91,14 @@ E termine com os scripts que dependem delas:
 22. `26-rastreio-outbox-mensagens.sql` — CorrelationId e traceparent nas caixas de saída, para seguir a venda de ponta a ponta
 23. `27-criar-schema-email.sql` — cria o schema `email` com o controle de mensagens já enviadas da API de Email
 24. `28-concorrencia-otimista.sql` — adiciona a coluna `VersaoLinha` (rowversion) em `estoque.Produtos` e `vendas.Vendas`, pra uma gravação não sobrescrever a outra
+25. `29-plano-restaurante.sql` — adiciona `Plano`, `TesteTerminaEm` e `Ativo` em `identidade.Restaurantes` (os restaurantes que já existiam viram `Pro`)
+26. `30-criar-convites-e-outbox-identidade.sql` — cria `identidade.Convites` e `identidade.OutboxMensagens` (o e-mail do convite sai pela fila, igual ao aviso de estoque baixo)
+27. `31-confirmar-emails-existentes.sql` — marca como confirmado o e-mail das contas que já existiam antes da confirmação de e-mail (Etapa M18e)
+28. `33-numero-venda.sql` — adiciona `Numero` em `vendas.Vendas` (Venda #1, #2... por restaurante, numerando as vendas que já existiam) e o índice único `(RestauranteId, Numero)`
+29. `34-aviso-fim-teste.sql` — adiciona `UltimoAvisoFimTesteDias` em `identidade.Restaurantes` (o e-mail de "seu teste está acabando" não sai repetido)
+30. `35-criar-cobrancas-plano.sql` — cria `pagamentos.CobrancasPlano` (o restaurante pagando o plano Básico/Pro pelo Stripe Checkout em modo teste)
+31. `36-plano-pago-identidade.sql` — adiciona `PlanoValidoAte` em `identidade.Restaurantes` e cria `identidade.MensagensProcessadas` (o plano pago chega pela fila `plano-pago-queue`)
+32. `37-data-assinatura-restaurante.sql` — adiciona `AssinadoEm` e `UltimoPagamentoEm` em `identidade.Restaurantes` (painel do SuperAdmin mostra os assinantes)
 
 ### 2. Configuração
 
@@ -188,12 +196,12 @@ O app sobe em `http://localhost:3000`.
 
 Crie uma conta pela tela de cadastro (`/registrar`). O cadastro pede o nome do restaurante, cria o restaurante e já faz login.
 
-Toda conta nova nasce com a role `Funcionario`. Para virar `Admin`, abra `backend/services/Estoque/Database/scripts/06-promover-usuario-admin.sql`, troque o e-mail pelo seu, rode o script e faça login de novo (o token novo já vem com a role atualizada).
+Quem cria a conta da empresa em `/registrar` já nasce `Admin` do restaurante novo, com 14 dias de teste grátis. Para trocar a role de outro usuário do mesmo restaurante, use a tela **Usuários** (só Admin).
 
 ## Testes
 
 ```bash
-dotnet test backend/RestauranteEstoque.slnx
+dotnet test backend/GestaoRestaurante.slnx
 ```
 
 Cobrem regras de domínio, Handlers (com banco em memória) e o isolamento de dados entre restaurantes.

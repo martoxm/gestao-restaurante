@@ -1,7 +1,7 @@
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Domain.Enums;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Domain.Enums;
 
-namespace RestauranteEstoque.Application.Abstractions.Repositories;
+namespace GestaoRestaurante.Application.Abstractions.Repositories;
 
 public interface IMovimentacaoEstoqueRepository
 {

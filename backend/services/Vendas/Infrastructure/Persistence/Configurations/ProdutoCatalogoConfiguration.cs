@@ -1,9 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using RestauranteEstoque.Core.Domain.ValueObjects;
-using RestauranteEstoque.Vendas.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
+using GestaoRestaurante.Vendas.Domain.Entities;
 
-namespace RestauranteEstoque.Vendas.Infrastructure.Persistence.Configurations;
+namespace GestaoRestaurante.Vendas.Infrastructure.Persistence.Configurations;
 
 public class ProdutoCatalogoConfiguration : IEntityTypeConfiguration<ProdutoCatalogo>
 {

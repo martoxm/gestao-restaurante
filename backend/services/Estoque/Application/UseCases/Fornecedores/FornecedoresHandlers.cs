@@ -1,14 +1,14 @@
-using RestauranteEstoque.Core.Application.Abstractions;
+using GestaoRestaurante.Core.Application.Abstractions;
 using MediatR;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Application.Abstractions.Services;
-using RestauranteEstoque.Core.Application.Exceptions;
-using RestauranteEstoque.Core.Application.Models;
-using RestauranteEstoque.Contracts.Fornecedores;
-using RestauranteEstoque.Domain.Entities;
-using RestauranteEstoque.Core.Domain.ValueObjects;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Application.Abstractions.Services;
+using GestaoRestaurante.Core.Application.Exceptions;
+using GestaoRestaurante.Core.Application.Models;
+using GestaoRestaurante.Contracts.Fornecedores;
+using GestaoRestaurante.Domain.Entities;
+using GestaoRestaurante.Core.Domain.ValueObjects;
 
-namespace RestauranteEstoque.Application.UseCases.Fornecedores;
+namespace GestaoRestaurante.Application.UseCases.Fornecedores;
 
 public class CriarFornecedorHandler : IRequestHandler<CriarFornecedorCommand, Guid>
 {

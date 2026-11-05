@@ -1,10 +1,10 @@
 using Microsoft.EntityFrameworkCore;
-using RestauranteEstoque.Application.Abstractions.Repositories;
-using RestauranteEstoque.Contracts.Common;
-using RestauranteEstoque.Contracts.Produtos;
-using RestauranteEstoque.Domain.Entities;
+using GestaoRestaurante.Application.Abstractions.Repositories;
+using GestaoRestaurante.Contracts.Common;
+using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Domain.Entities;
 
-namespace RestauranteEstoque.Tests.Common;
+namespace GestaoRestaurante.Tests.Common;
 
 public class FakeProdutoRepository : IProdutoRepository
 {

@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <!-- Etapa M17a: o API Gateway. Repara que é um projeto só, sem Domain,
+       Application nem Infrastructure: aqui não tem regra de negócio nenhuma, ele
+       só recebe a requisição e repassa pra API certa (é o papel do Azure API
+       Management na Prover, só que com o YARP, que é gratuito e roda local). -->
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <!-- Etapa M17c: mesmo UserSecretsId das APIs. Se um dia o Jwt:Secret for
+         pro user-secrets, o gateway lê o mesmo valor que elas e continua
+         aceitando o mesmo token. -->
+    <UserSecretsId>f5904ef8-bbd2-4b18-9739-9894f5062f18</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\shared\Core\GestaoRestaurante.Core.csproj" />
+    <ProjectReference Include="..\..\..\shared\ServiceDefaults\GestaoRestaurante.ServiceDefaults.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Yarp.ReverseProxy" Version="2.3.0" />
+  </ItemGroup>
+
+</Project>
