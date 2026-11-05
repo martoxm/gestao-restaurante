@@ -16,3 +16,7 @@ public record ReenviarConviteCommand(SuperAdminAtual QuemFaz, Guid ConviteId) : 
 public record ForcarLogoutUsuarioCommand(SuperAdminAtual QuemFaz, Guid UsuarioId) : IRequest;
 
 public record AlterarAtivoUsuarioPlataformaCommand(SuperAdminAtual QuemFaz, Guid UsuarioId, bool Ativo) : IRequest;
+
+public record MarcarNotificacoesLidasCommand(Guid? Id) : IRequest<int>;
+
+public record NotificarVencimentosCommand : IRequest<int>;

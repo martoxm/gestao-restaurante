@@ -23,6 +23,8 @@ public class TestDbContext : DbContext, IApplicationDbContext
 
     public DbSet<AuditoriaPlataforma> AuditoriasPlataforma => Set<AuditoriaPlataforma>();
 
+    public DbSet<NotificacaoPlataforma> NotificacoesPlataforma => Set<NotificacaoPlataforma>();
+
     private Guid? RestauranteIdAtual => _usuarioAtualService.RestauranteId;
 
     public FakeTransacao? UltimaTransacao { get; private set; }

@@ -109,6 +109,51 @@ public class PlataformaEndpointsModule : IEndpointModule
             .WithDescription("Da mais nova pra mais antiga; dá pra filtrar por restaurante. Exige a role SuperAdmin.")
             .Produces<ResultadoPaginado<AuditoriaItemDto>>(StatusCodes.Status200OK)
             .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapGet("/notificacoes", ListarNotificacoes)
+            .WithName("ListarNotificacoesPlataforma")
+            .WithSummary("Notificações do SuperAdmin")
+            .WithDescription("Cliente novo, assinatura, renovação, troca de plano, teste ou plano vencido. soNaoLidas=true mostra só as não lidas. Exige a role SuperAdmin.")
+            .Produces<ResultadoPaginado<NotificacaoPlataformaDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapGet("/notificacoes/nao-lidas", ContarNaoLidas)
+            .WithName("ContarNotificacoesNaoLidas")
+            .WithSummary("Quantas notificações não lidas")
+            .WithDescription("O número do badge do sino. Exige a role SuperAdmin.")
+            .Produces<NotificacoesNaoLidasDto>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapPost("/notificacoes/{id:guid}/lida", MarcarLida)
+            .WithName("MarcarNotificacaoLida")
+            .WithSummary("Marca uma notificação como lida")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapPost("/notificacoes/marcar-todas-lidas", MarcarTodasLidas)
+            .WithName("MarcarTodasNotificacoesLidas")
+            .WithSummary("Marca todas as notificações como lidas")
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status403Forbidden);
+    }
+
+    private static async Task<IResult> ListarNotificacoes([AsParameters] ListarNotificacoesRequest filtro, ISender sender, CancellationToken cancellationToken) =>
+        Results.Ok(await sender.Send(new ListarNotificacoesPlataformaQuery(filtro), cancellationToken));
+
+    private static async Task<IResult> ContarNaoLidas(ISender sender, CancellationToken cancellationToken) =>
+        Results.Ok(await sender.Send(new ContarNotificacoesNaoLidasQuery(), cancellationToken));
+
+    private static async Task<IResult> MarcarLida(Guid id, ISender sender, CancellationToken cancellationToken)
+    {
+        await sender.Send(new MarcarNotificacoesLidasCommand(id), cancellationToken);
+        return Results.NoContent();
+    }
+
+    private static async Task<IResult> MarcarTodasLidas(ISender sender, CancellationToken cancellationToken)
+    {
+        await sender.Send(new MarcarNotificacoesLidasCommand(null), cancellationToken);
+        return Results.NoContent();
     }
 
     private static async Task<IResult> ObterResumo(ISender sender, CancellationToken cancellationToken) =>

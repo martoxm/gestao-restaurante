@@ -99,6 +99,7 @@ E termine com os scripts que dependem delas:
 30. `35-criar-cobrancas-plano.sql` — cria `pagamentos.CobrancasPlano` (o restaurante pagando o plano Básico/Pro pelo Stripe Checkout em modo teste)
 31. `36-plano-pago-identidade.sql` — adiciona `PlanoValidoAte` em `identidade.Restaurantes` e cria `identidade.MensagensProcessadas` (o plano pago chega pela fila `plano-pago-queue`)
 32. `37-data-assinatura-restaurante.sql` — adiciona `AssinadoEm` e `UltimoPagamentoEm` em `identidade.Restaurantes` (painel do SuperAdmin mostra os assinantes)
+33. `38-criar-notificacoes-plataforma.sql` — cria `identidade.NotificacoesPlataforma` (o sino do SuperAdmin: cadastro, assinatura, renovação, troca de plano e vencimentos)
 
 ### 2. Configuração
 

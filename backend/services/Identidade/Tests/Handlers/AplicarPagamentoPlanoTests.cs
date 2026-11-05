@@ -88,7 +88,8 @@ public class AplicarPagamentoPlanoTests
 
         var processadas = new FakeMensagensProcessadas();
         var handler = new AplicarPagamentoPlanoHandler(new FakeRestauranteRepository(context), processadas, context,
-            new FakeRelogio { AgoraUtc = CriadoEm.AddDays(5) }, NullLogger<AplicarPagamentoPlanoHandler>.Instance);
+            new FakeRelogio { AgoraUtc = CriadoEm.AddDays(5) }, NullLogger<AplicarPagamentoPlanoHandler>.Instance,
+            new FakeNotificacaoPlataformaRepository(context));
         return (context, restaurante, processadas, handler);
     }
 

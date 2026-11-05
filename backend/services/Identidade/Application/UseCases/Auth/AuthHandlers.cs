@@ -48,6 +48,7 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
     private readonly IRelogio _relogio;
     private readonly IOutboxMensagemRepository _outboxRepository;
     private readonly ILinksFront _linksFront;
+    private readonly INotificacaoPlataformaRepository _notificacoes;
 
     public RegistrarHandler(
         IIdentityService identityService,
@@ -56,8 +57,10 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
         IApplicationDbContext context,
         IRelogio relogio,
         IOutboxMensagemRepository outboxRepository,
-        ILinksFront linksFront)
+        ILinksFront linksFront,
+        INotificacaoPlataformaRepository notificacoes)
     {
+        _notificacoes = notificacoes;
         _outboxRepository = outboxRepository;
         _linksFront = linksFront;
         _identityService = identityService;
@@ -82,6 +85,8 @@ public class RegistrarHandler : IRequestHandler<RegistrarCommand, LoginResponse>
                 Filas.Email,
                 EmailsConta.ConfirmarEmail(request.Email, request.Nome, _linksFront.ConfirmarEmail(usuarioId, tokenConfirmacao)),
                 _relogio.AgoraUtc));
+
+            _notificacoes.Adicionar(NotificacaoPlataforma.NovoCadastro(restaurante, _relogio.AgoraUtc));
 
             var usuario = new UsuarioAutenticado(usuarioId, request.Nome, request.Email, restaurante.Id, EmailConfirmado: false);
             var resposta = await _emissorSessao.EmitirAsync(usuario, ct);

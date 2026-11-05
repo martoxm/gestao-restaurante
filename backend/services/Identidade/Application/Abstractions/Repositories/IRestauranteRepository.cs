@@ -18,6 +18,8 @@ public interface IRestauranteRepository
 
     Task<IReadOnlyList<Restaurante>> ListarTestesTerminandoAsync(DateTime agora, DateTime ate, CancellationToken cancellationToken);
 
+    Task<IReadOnlyList<Restaurante>> ListarVencidosEntreAsync(DateTime desde, DateTime ate, CancellationToken cancellationToken);
+
     void Adicionar(Restaurante restaurante);
 
     void Atualizar(Restaurante restaurante);

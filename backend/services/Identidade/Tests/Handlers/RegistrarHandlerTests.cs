@@ -58,5 +58,6 @@ public class RegistrarHandlerTests
             context,
             new FakeRelogio(),
             new FakeOutboxMensagemRepository(),
-            new FakeLinksFront());
+            new FakeLinksFront(),
+            new FakeNotificacaoPlataformaRepository(context));
 }

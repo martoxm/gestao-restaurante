@@ -44,6 +44,8 @@ public class AppDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, 
 
     public DbSet<AuditoriaPlataforma> AuditoriasPlataforma => Set<AuditoriaPlataforma>();
 
+    public DbSet<NotificacaoPlataforma> NotificacoesPlataforma => Set<NotificacaoPlataforma>();
+
     public DbSet<MensagemProcessada> MensagensProcessadas => Set<MensagemProcessada>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

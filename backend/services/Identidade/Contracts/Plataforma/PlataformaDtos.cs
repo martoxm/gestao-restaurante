@@ -90,3 +90,17 @@ public record MudarPlanoRequest(string Plano);
 public record EstenderTesteRequest(int Dias);
 
 public record AlterarAtivoRequest(bool Ativo);
+
+
+public record NotificacaoPlataformaDto(
+    Guid Id,
+    string Tipo,
+    string Titulo,
+    string Mensagem,
+    Guid? RestauranteId,
+    DateTime OcorridoEm,
+    bool Lida);
+
+public record ListarNotificacoesRequest(bool SoNaoLidas = false, int Pagina = 1, int TamanhoPagina = 20);
+
+public record NotificacoesNaoLidasDto(int Quantidade);

@@ -57,3 +57,14 @@ public class ListarAuditoriaQueryValidator : AbstractValidator<ListarAuditoriaQu
             .InclusiveBetween(1, 100).WithMessage("O tamanho da página tem que ser de 1 a 100.");
     }
 }
+
+public class ListarNotificacoesPlataformaQueryValidator : AbstractValidator<ListarNotificacoesPlataformaQuery>
+{
+    public ListarNotificacoesPlataformaQueryValidator()
+    {
+        RuleFor(query => query.Filtro.Pagina).GreaterThanOrEqualTo(1).WithMessage("A página tem que ser 1 ou mais.");
+
+        RuleFor(query => query.Filtro.TamanhoPagina)
+            .InclusiveBetween(1, 100).WithMessage("O tamanho da página tem que ser de 1 a 100.");
+    }
+}

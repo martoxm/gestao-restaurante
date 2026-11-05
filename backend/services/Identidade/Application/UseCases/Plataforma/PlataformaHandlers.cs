@@ -365,3 +365,100 @@ file static class ObterUsuario
         return usuario;
     }
 }
+
+
+public class ListarNotificacoesPlataformaHandler : IRequestHandler<ListarNotificacoesPlataformaQuery, ResultadoPaginado<NotificacaoPlataformaDto>>
+{
+    private readonly INotificacaoPlataformaRepository _notificacoes;
+
+    public ListarNotificacoesPlataformaHandler(INotificacaoPlataformaRepository notificacoes)
+    {
+        _notificacoes = notificacoes;
+    }
+
+    public async Task<ResultadoPaginado<NotificacaoPlataformaDto>> Handle(ListarNotificacoesPlataformaQuery request, CancellationToken cancellationToken)
+    {
+        var filtro = request.Filtro;
+        var (itens, total) = await _notificacoes.ListarAsync(filtro.Pagina, filtro.TamanhoPagina, filtro.SoNaoLidas, cancellationToken);
+
+        var dtos = itens
+            .Select(notificacao => new NotificacaoPlataformaDto(
+                notificacao.Id, notificacao.Tipo, notificacao.Titulo, notificacao.Mensagem,
+                notificacao.RestauranteId, notificacao.OcorridoEm, notificacao.LidaEm is not null))
+            .ToList();
+
+        return new ResultadoPaginado<NotificacaoPlataformaDto>(dtos, filtro.Pagina, filtro.TamanhoPagina, total);
+    }
+}
+
+public class ContarNotificacoesNaoLidasHandler : IRequestHandler<ContarNotificacoesNaoLidasQuery, NotificacoesNaoLidasDto>
+{
+    private readonly INotificacaoPlataformaRepository _notificacoes;
+
+    public ContarNotificacoesNaoLidasHandler(INotificacaoPlataformaRepository notificacoes)
+    {
+        _notificacoes = notificacoes;
+    }
+
+    public async Task<NotificacoesNaoLidasDto> Handle(ContarNotificacoesNaoLidasQuery request, CancellationToken cancellationToken) =>
+        new(await _notificacoes.ContarNaoLidasAsync(cancellationToken));
+}
+
+public class MarcarNotificacoesLidasHandler : IRequestHandler<MarcarNotificacoesLidasCommand, int>
+{
+    private readonly INotificacaoPlataformaRepository _notificacoes;
+    private readonly IRelogio _relogio;
+
+    public MarcarNotificacoesLidasHandler(INotificacaoPlataformaRepository notificacoes, IRelogio relogio)
+    {
+        _notificacoes = notificacoes;
+        _relogio = relogio;
+    }
+
+    public Task<int> Handle(MarcarNotificacoesLidasCommand request, CancellationToken cancellationToken) =>
+        _notificacoes.MarcarComoLidasAsync(request.Id, _relogio.AgoraUtc, cancellationToken);
+}
+
+public class NotificarVencimentosHandler : IRequestHandler<NotificarVencimentosCommand, int>
+{
+    public const int DiasParaTras = 7;
+
+    private readonly IRestauranteRepository _restauranteRepository;
+    private readonly INotificacaoPlataformaRepository _notificacoes;
+    private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
+
+    public NotificarVencimentosHandler(
+        IRestauranteRepository restauranteRepository,
+        INotificacaoPlataformaRepository notificacoes,
+        IApplicationDbContext context,
+        IRelogio relogio)
+    {
+        _restauranteRepository = restauranteRepository;
+        _notificacoes = notificacoes;
+        _context = context;
+        _relogio = relogio;
+    }
+
+    public async Task<int> Handle(NotificarVencimentosCommand request, CancellationToken cancellationToken)
+    {
+        var agora = _relogio.AgoraUtc;
+        var vencidos = await _restauranteRepository.ListarVencidosEntreAsync(agora.AddDays(-DiasParaTras), agora, cancellationToken);
+
+        var criadas = 0;
+        foreach (var restaurante in vencidos)
+        {
+            var notificacao = NotificacaoPlataforma.Vencimento(restaurante, agora);
+            if (notificacao?.Chave is null || await _notificacoes.ExisteChaveAsync(notificacao.Chave, cancellationToken))
+                continue;
+
+            _notificacoes.Adicionar(notificacao);
+            criadas++;
+        }
+
+        if (criadas > 0)
+            await _context.SaveChangesAsync(cancellationToken);
+
+        return criadas;
+    }
+}

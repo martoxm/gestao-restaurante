@@ -12,3 +12,7 @@ public record ListarRestaurantesPlataformaQuery(ListarRestaurantesPlataformaRequ
 public record ObterRestaurantePlataformaQuery(Guid Id) : IRequest<RestaurantePlataformaDetalhesDto>;
 
 public record ListarAuditoriaQuery(ListarAuditoriaRequest Filtro) : IRequest<ResultadoPaginado<AuditoriaItemDto>>;
+
+public record ListarNotificacoesPlataformaQuery(ListarNotificacoesRequest Filtro) : IRequest<ResultadoPaginado<NotificacaoPlataformaDto>>;
+
+public record ContarNotificacoesNaoLidasQuery : IRequest<NotificacoesNaoLidasDto>;

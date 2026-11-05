@@ -12,7 +12,7 @@ builder.AddProject<Projects.GestaoRestaurante_Email_Api>("email", launchProfileN
 
 builder.AddExecutable("stripe-listen", "stripe", ".",
         "listen",
-        "--events", "payment_intent.succeeded,payment_intent.payment_failed",
+        "--events", "payment_intent.succeeded,payment_intent.payment_failed,checkout.session.completed",
         "--forward-to", "http://localhost:5268/api/v1/webhooks/stripe")
     .WaitFor(pagamentos);
 

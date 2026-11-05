@@ -74,4 +74,14 @@ public class FakeRestauranteRepository : IRestauranteRepository
                 && restaurante.TesteTerminaEm <= ate)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<IReadOnlyList<Restaurante>> ListarVencidosEntreAsync(DateTime desde, DateTime ate, CancellationToken cancellationToken)
+    {
+        return await _context.Restaurantes
+            .IgnoreQueryFilters()
+            .Where(restaurante => restaurante.Ativo
+                && ((restaurante.Plano == PlanoRestaurante.Teste && restaurante.TesteTerminaEm > desde && restaurante.TesteTerminaEm <= ate)
+                    || (restaurante.Plano != PlanoRestaurante.Teste && restaurante.PlanoValidoAte > desde && restaurante.PlanoValidoAte <= ate)))
+            .ToListAsync(cancellationToken);
+    }
 }

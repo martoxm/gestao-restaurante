@@ -75,3 +75,24 @@ export const ROTULO_SITUACAO: Record<SituacaoRestaurante, string> = {
 };
 
 export const ROTULO_PLANO: Record<PlanoRestaurante, string> = { Teste: "Teste", Basico: "Básico", Pro: "Pro" };
+
+export type TipoNotificacao =
+  | "NovoCadastro"
+  | "PlanoAssinado"
+  | "PlanoRenovado"
+  | "PlanoTrocado"
+  | "TesteVencido"
+  | "PlanoVencido";
+
+export type NotificacaoPlataforma = {
+  id: string;
+  tipo: TipoNotificacao;
+  titulo: string;
+  mensagem: string;
+  restauranteId: string | null;
+  ocorridoEm: string;
+  lida: boolean;
+};
+
+export type PaginaNotificacoes = ResultadoPaginado<NotificacaoPlataforma>;
+

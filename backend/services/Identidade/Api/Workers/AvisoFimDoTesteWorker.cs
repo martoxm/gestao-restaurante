@@ -1,4 +1,5 @@
 using MediatR;
+using GestaoRestaurante.Identidade.Application.UseCases.Plataforma;
 using GestaoRestaurante.Identidade.Application.UseCases.Restaurantes;
 
 namespace GestaoRestaurante.Identidade.Api.Workers;
@@ -38,6 +39,9 @@ public class AvisoFimDoTesteWorker : BackgroundService
 
                 var avisados = await sender.Send(new AvisarFimDoTesteCommand(), stoppingToken);
                 _logger.LogInformation("Aviso de fim do teste: {Avisados} restaurante(s) avisado(s).", avisados);
+
+                var vencidos = await sender.Send(new NotificarVencimentosCommand(), stoppingToken);
+                _logger.LogInformation("Notificações de vencimento: {Vencidos} nova(s).", vencidos);
             }
             catch (Exception ex) when (ex is not OperationCanceledException)
             {

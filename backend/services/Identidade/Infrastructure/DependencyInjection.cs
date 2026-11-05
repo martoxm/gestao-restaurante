@@ -60,6 +60,7 @@ public static class DependencyInjection
 
         services.AddScoped<IConviteRepository, ConviteRepository>();
         services.AddScoped<IAuditoriaPlataformaRepository, AuditoriaPlataformaRepository>();
+        services.AddScoped<INotificacaoPlataformaRepository, NotificacaoPlataformaRepository>();
 
         services.AddScoped<IConsultasPlataforma, ConsultasPlataforma>();
         services.Configure<PlanosSettings>(configuration.GetSection(PlanosSettings.SectionName));

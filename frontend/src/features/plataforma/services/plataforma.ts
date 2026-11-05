@@ -2,6 +2,7 @@ import { apiIdentidade } from "@/lib/axios";
 import type {
   FiltroRestaurantesPlataforma,
   PaginaAuditoria,
+  PaginaNotificacoes,
   PaginaRestaurantes,
   PlanoRestaurante,
   RestaurantePlataformaDetalhes,
@@ -51,3 +52,24 @@ export async function forcarLogout(usuarioId: string) {
 export async function alterarAtivoUsuarioPlataforma(usuarioId: string, ativo: boolean) {
   await apiIdentidade.put(`/plataforma/usuarios/${usuarioId}/ativo`, { ativo });
 }
+
+export async function listarNotificacoes(pagina: number, soNaoLidas: boolean): Promise<PaginaNotificacoes> {
+  return (
+    await apiIdentidade.get<PaginaNotificacoes>("/plataforma/notificacoes", {
+      params: { pagina, tamanhoPagina: 20, soNaoLidas },
+    })
+  ).data;
+}
+
+export async function contarNotificacoesNaoLidas(): Promise<number> {
+  return (await apiIdentidade.get<{ quantidade: number }>("/plataforma/notificacoes/nao-lidas")).data.quantidade;
+}
+
+export async function marcarNotificacaoLida(id: string) {
+  await apiIdentidade.post(`/plataforma/notificacoes/${id}/lida`);
+}
+
+export async function marcarTodasNotificacoesLidas() {
+  await apiIdentidade.post("/plataforma/notificacoes/marcar-todas-lidas");
+}
+

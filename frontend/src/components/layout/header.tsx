@@ -6,9 +6,12 @@ import { LogOut, Warehouse } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileNav } from "@/components/layout/mobile-nav";
 import { ThemeToggle } from "@/components/layout/theme-toggle";
+import { useUsuarioAtual } from "@/features/auth/hooks/useUsuarioAtual";
+import { SinoNotificacoes } from "@/features/plataforma/components/sino-notificacoes";
 
 export function Header() {
   const router = useRouter();
+  const { isSuperAdmin } = useUsuarioAtual();
 
   function handleLogout() {
     limparSessao();
@@ -26,6 +29,7 @@ export function Header() {
       </div>
 
       <div className="flex items-center gap-2">
+        {isSuperAdmin && <SinoNotificacoes />}
         <ThemeToggle />
         <Button variant="outline" size="sm" onClick={handleLogout}>
           <LogOut className="size-4" />

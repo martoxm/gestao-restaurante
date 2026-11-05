@@ -50,13 +50,18 @@ function Assinatura() {
   const planoPagoValendo =
     !!restaurante?.planoValidoAte && new Date(comFuso(restaurante.planoValidoAte)).getTime() > agora;
 
+  const [validadeInicial, setValidadeInicial] = useState<string | null | undefined>(undefined);
+  if (restaurante && validadeInicial === undefined) setValidadeInicial(restaurante.planoValidoAte ?? null);
+  const pagamentoConfirmado =
+    planoPagoValendo && validadeInicial !== undefined && restaurante?.planoValidoAte !== validadeInicial;
+
   useEffect(() => {
-    if (status !== "sucesso" || !planoPagoValendo) return;
+    if (status !== "sucesso" || !pagamentoConfirmado) return;
     (async () => {
       if (obterRefreshToken()) await renovarSessao().catch(() => undefined);
       window.location.replace("/assinatura?status=liberado");
     })();
-  }, [status, planoPagoValendo]);
+  }, [status, pagamentoConfirmado]);
   const { data: planos, isLoading, isError } = usePlanos();
   const iniciar = useIniciarAssinatura();
 

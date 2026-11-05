@@ -197,14 +197,17 @@ public class AplicarPagamentoPlanoHandler : IRequestHandler<AplicarPagamentoPlan
     private readonly IApplicationDbContext _context;
     private readonly IRelogio _relogio;
     private readonly ILogger<AplicarPagamentoPlanoHandler> _logger;
+    private readonly INotificacaoPlataformaRepository _notificacoes;
 
     public AplicarPagamentoPlanoHandler(
         IRestauranteRepository restauranteRepository,
         IMensagemProcessadaRepository mensagensProcessadas,
         IApplicationDbContext context,
         IRelogio relogio,
-        ILogger<AplicarPagamentoPlanoHandler> logger)
+        ILogger<AplicarPagamentoPlanoHandler> logger,
+        INotificacaoPlataformaRepository notificacoes)
     {
+        _notificacoes = notificacoes;
         _restauranteRepository = restauranteRepository;
         _mensagensProcessadas = mensagensProcessadas;
         _context = context;
@@ -226,8 +229,12 @@ public class AplicarPagamentoPlanoHandler : IRequestHandler<AplicarPagamentoPlan
             _logger.LogError("Plano desconhecido na mensagem de pagamento: {Plano}.", pagamento.Plano);
         else
         {
+            var planoAntes = restaurante.Plano;
+            var jaTinhaAssinado = restaurante.AssinadoEm is not null;
+
             restaurante.AplicarPagamentoDoPlano(plano, pagamento.Dias, _relogio.AgoraUtc);
             _restauranteRepository.Atualizar(restaurante);
+            _notificacoes.Adicionar(NotificacaoPlataforma.PlanoPago(restaurante, planoAntes, jaTinhaAssinado, pagamento.Dias, _relogio.AgoraUtc));
             _logger.LogInformation("Restaurante {RestauranteId} no plano {Plano} até {ValidoAte}.", restaurante.Id, plano, restaurante.PlanoValidoAte);
         }
 
