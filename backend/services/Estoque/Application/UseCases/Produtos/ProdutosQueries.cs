@@ -14,3 +14,5 @@ public record ListarProdutosQuery(
     Guid? CategoriaId = null,
     OrdenacaoProduto OrdenarPor = OrdenacaoProduto.Nome,
     DirecaoOrdenacao DirecaoOrdenacao = DirecaoOrdenacao.Asc) : IRequest<ResultadoPaginado<ProdutoItemListaDto>>;
+
+public record ListarProdutosExcluidosQuery : IRequest<IReadOnlyList<ItemExcluidoDto>>;

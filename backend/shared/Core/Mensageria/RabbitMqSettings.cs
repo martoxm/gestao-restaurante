@@ -8,4 +8,6 @@ public sealed class RabbitMqSettings
     public int Porta { get; set; } = 5672;
     public string Usuario { get; set; } = "guest";
     public string Senha { get; set; } = "guest";
+
+    public string? Url { get; set; }
 }

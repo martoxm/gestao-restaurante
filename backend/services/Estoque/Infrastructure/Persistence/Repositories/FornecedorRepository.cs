@@ -1,3 +1,4 @@
+using GestaoRestaurante.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using GestaoRestaurante.Application.Abstractions.Repositories;
 using GestaoRestaurante.Contracts.Common;
@@ -50,6 +51,21 @@ public class FornecedorRepository : IFornecedorRepository
 
     public void Atualizar(Fornecedor fornecedor) => _context.Fornecedores.Update(fornecedor);
     
-    public void Remover(Fornecedor fornecedor) => _context.Fornecedores.Remove(fornecedor);
+    public async Task<Fornecedor?> ObterExcluidoPorIdAsync(Guid id, CancellationToken cancellationToken)
+    {
+        return await _context.Fornecedores
+            .IgnoreQueryFilters([FiltrosConsulta.NaoExcluido])
+            .FirstOrDefaultAsync(fornecedor => fornecedor.Id == id && fornecedor.ExcluidoEm != null, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Fornecedor>> ListarExcluidosAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Fornecedores
+            .IgnoreQueryFilters([FiltrosConsulta.NaoExcluido])
+            .Where(fornecedor => fornecedor.ExcluidoEm != null)
+            .OrderByDescending(fornecedor => fornecedor.ExcluidoEm)
+            .Take(100)
+            .ToListAsync(cancellationToken);
+    }
     
 }

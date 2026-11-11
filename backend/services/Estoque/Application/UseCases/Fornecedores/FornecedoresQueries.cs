@@ -12,3 +12,5 @@ public record ListarFornecedoresQuery(
     int TamanhoPagina = 10,
     string? Nome = null,
     DirecaoOrdenacao DirecaoOrdenacao = DirecaoOrdenacao.Asc) : IRequest<ResultadoPaginado<FornecedorItemListaDto>>;
+
+public record ListarFornecedoresExcluidosQuery : IRequest<IReadOnlyList<ItemExcluidoDto>>;

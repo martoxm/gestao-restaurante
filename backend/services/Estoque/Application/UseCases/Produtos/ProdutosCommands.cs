@@ -23,3 +23,5 @@ public record EncaminharAvisoAdminsCommand(
     Guid RestauranteId,
     string Assunto,
     string CorpoHtml) : IRequest;
+
+public record ReativarProdutoCommand(Guid Id) : IRequest;

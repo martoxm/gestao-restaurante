@@ -1,3 +1,4 @@
+using GestaoRestaurante.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using GestaoRestaurante.Application.Abstractions.Repositories;
 using GestaoRestaurante.Contracts.Common;
@@ -65,8 +66,20 @@ public class FakeCategoriaRepository : ICategoriaRepository
         _context.Categorias.Update(categoria);
     }
 
-    public void Remover(Categoria categoria)
+    public async Task<Categoria?> ObterExcluidoPorIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        _context.Categorias.Remove(categoria);
+        return await _context.Categorias
+            .IgnoreQueryFilters([FiltrosConsulta.NaoExcluido])
+            .FirstOrDefaultAsync(categoria => categoria.Id == id && categoria.ExcluidoEm != null, cancellationToken);
+    }
+
+    public async Task<IReadOnlyList<Categoria>> ListarExcluidosAsync(CancellationToken cancellationToken)
+    {
+        return await _context.Categorias
+            .IgnoreQueryFilters([FiltrosConsulta.NaoExcluido])
+            .Where(categoria => categoria.ExcluidoEm != null)
+            .OrderByDescending(categoria => categoria.ExcluidoEm)
+            .Take(100)
+            .ToListAsync(cancellationToken);
     }
 }

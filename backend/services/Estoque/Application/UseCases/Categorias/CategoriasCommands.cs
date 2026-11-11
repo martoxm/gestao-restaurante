@@ -12,3 +12,5 @@ public record AtualizarCategoriaCommand(
     Guid Id,
     string Nome,
     string? Descricao) : IRequest;
+
+public record ReativarCategoriaCommand(Guid Id) : IRequest;

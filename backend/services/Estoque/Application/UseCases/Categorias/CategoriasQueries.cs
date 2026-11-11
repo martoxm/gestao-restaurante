@@ -12,3 +12,5 @@ public record ListarCategoriasQuery(
     DirecaoOrdenacao DirecaoOrdenacao = DirecaoOrdenacao.Asc) : IRequest<ResultadoPaginado<CategoriaItemListaDto>>;
 
 public record ObterCategoriaPorIdQuery(Guid Id) : IRequest<CategoriaDetalhesDto?>;
+
+public record ListarCategoriasExcluidosQuery : IRequest<IReadOnlyList<ItemExcluidoDto>>;

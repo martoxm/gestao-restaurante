@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using GestaoRestaurante.Core.Application.Exceptions;
 using GestaoRestaurante.Application.UseCases.Produtos;
 using GestaoRestaurante.Core.Domain;
+using GestaoRestaurante.Domain.Common;
 using GestaoRestaurante.Domain.Entities;
 using GestaoRestaurante.Domain.Enums;
 using GestaoRestaurante.Core.Domain.ValueObjects;
@@ -16,20 +17,21 @@ public class ExcluirProdutoHandlerTests
     private static readonly DateTime CriadoEm = new(2026, 1, 1, 12, 0, 0, DateTimeKind.Utc);
 
     [Fact]
-    public async Task Handle_ProdutoSemMovimentacoes_DeveExcluir()
+    public async Task Handle_Produto_DeveSumirDasConsultasMasContinuarNoBanco()
     {
         using var context = TestDbContextFactory.Create();
         var produto = await CriarProdutoAsync(context);
 
-        var handler = CriarHandler(context);
-
-        await handler.Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None);
+        await CriarHandler(context).Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None);
+        context.ChangeTracker.Clear();
 
         Assert.False(await context.Produtos.AnyAsync(p => p.Id == produto.Id));
+        var noBanco = await context.Produtos.IgnoreQueryFilters([FiltrosConsulta.NaoExcluido]).SingleAsync(p => p.Id == produto.Id);
+        Assert.NotNull(noBanco.ExcluidoEm);
     }
 
     [Fact]
-    public async Task Handle_ProdutoComMovimentacoes_DeveLancarDomainExceptionENaoExcluir()
+    public async Task Handle_ProdutoComMovimentacoes_DeveExcluirEManterOHistorico()
     {
         using var context = TestDbContextFactory.Create();
         var produto = await CriarProdutoAsync(context);
@@ -38,23 +40,22 @@ public class ExcluirProdutoHandlerTests
         await context.SaveChangesAsync();
         context.ChangeTracker.Clear();
 
-        var handler = CriarHandler(context);
+        await CriarHandler(context).Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None);
+        context.ChangeTracker.Clear();
 
-        var excecao = await Assert.ThrowsAsync<DomainException>(() =>
-            handler.Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None));
-
-        Assert.Equal("Não é possível excluir um produto que possui movimentações de estoque vinculadas.", excecao.Message);
-        Assert.True(await context.Produtos.AnyAsync(p => p.Id == produto.Id));
+        var historico = await new FakeMovimentacaoEstoqueRepository(context)
+            .ListarPaginadoAsync(1, 10, null, null, null, null, CancellationToken.None);
+        var item = Assert.Single(historico.Itens);
+        Assert.Equal("Arroz", item.Produto!.Nome);
     }
 
     [Fact]
     public async Task Handle_ProdutoInexistente_DeveLancarNaoEncontradoException()
     {
         using var context = TestDbContextFactory.Create();
-        var handler = CriarHandler(context);
 
         await Assert.ThrowsAsync<NaoEncontradoException>(() =>
-            handler.Handle(new ExcluirProdutoCommand(Guid.NewGuid()), CancellationToken.None));
+            CriarHandler(context).Handle(new ExcluirProdutoCommand(Guid.NewGuid()), CancellationToken.None));
     }
 
     [Fact]
@@ -71,8 +72,55 @@ public class ExcluirProdutoHandlerTests
         Assert.True(mensagem.Excluido);
     }
 
+    [Fact]
+    public async Task Reativar_ProdutoExcluido_DeveVoltarEAvisarOCatalogoComExcluidoFalse()
+    {
+        using var context = TestDbContextFactory.Create();
+        var produto = await CriarProdutoAsync(context);
+        await CriarHandler(context).Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None);
+        context.ChangeTracker.Clear();
+        var outbox = new FakeOutboxMensagemRepository();
+
+        await CriarReativar(context, outbox).Handle(new ReativarProdutoCommand(produto.Id), CancellationToken.None);
+        context.ChangeTracker.Clear();
+
+        Assert.True(await context.Produtos.AnyAsync(p => p.Id == produto.Id));
+        var mensagem = JsonSerializer.Deserialize<ProdutoCatalogoMensagem>(Assert.Single(outbox.Mensagens).Conteudo)!;
+        Assert.False(mensagem.Excluido);
+    }
+
+    [Fact]
+    public async Task Reativar_ProdutoNaoExcluido_DeveLancarNaoEncontradoException()
+    {
+        using var context = TestDbContextFactory.Create();
+        var produto = await CriarProdutoAsync(context);
+
+        await Assert.ThrowsAsync<NaoEncontradoException>(() =>
+            CriarReativar(context).Handle(new ReativarProdutoCommand(produto.Id), CancellationToken.None));
+    }
+
+    [Fact]
+    public async Task Reativar_ComCategoriaExcluida_DeveLancarDomainException()
+    {
+        using var context = TestDbContextFactory.Create();
+        var produto = await CriarProdutoAsync(context);
+        await CriarHandler(context).Handle(new ExcluirProdutoCommand(produto.Id), CancellationToken.None);
+        context.ChangeTracker.Clear();
+        var categoria = await context.Categorias.SingleAsync();
+        categoria.Excluir(CriadoEm);
+        context.Categorias.Update(categoria);
+        await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
+
+        await Assert.ThrowsAsync<DomainException>(() =>
+            CriarReativar(context).Handle(new ReativarProdutoCommand(produto.Id), CancellationToken.None));
+    }
+
     private static ExcluirProdutoHandler CriarHandler(TestDbContext context, FakeOutboxMensagemRepository? outbox = null) =>
-        new(new FakeProdutoRepository(context), new FakeMovimentacaoEstoqueRepository(context), context, outbox ?? new FakeOutboxMensagemRepository(), new FakeRelogio());
+        new(new FakeProdutoRepository(context), context, outbox ?? new FakeOutboxMensagemRepository(), new FakeRelogio());
+
+    private static ReativarProdutoHandler CriarReativar(TestDbContext context, FakeOutboxMensagemRepository? outbox = null) =>
+        new(new FakeProdutoRepository(context), new FakeCategoriaRepository(context), context, outbox ?? new FakeOutboxMensagemRepository(), new FakeRelogio());
 
     private static async Task<Produto> CriarProdutoAsync(TestDbContext context)
     {
@@ -81,6 +129,7 @@ public class ExcluirProdutoHandlerTests
         context.Categorias.Add(categoria);
         context.Produtos.Add(produto);
         await context.SaveChangesAsync();
+        context.ChangeTracker.Clear();
         return produto;
     }
 }

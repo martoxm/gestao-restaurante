@@ -1,3 +1,4 @@
+using GestaoRestaurante.Domain.Common;
 using GestaoRestaurante.Core.Application.Exceptions;
 using GestaoRestaurante.Core.Persistencia.Mensageria;
 using GestaoRestaurante.Core.Application.Abstractions;
@@ -37,10 +38,13 @@ public class AppDbContext : DbContext, IApplicationDbContext
         modelBuilder.ApplyConfiguration(new OutboxMensagemConfiguration());
         modelBuilder.ApplyConfiguration(new MensagemProcessadaConfiguration());
 
-        modelBuilder.Entity<Produto>().HasQueryFilter(produto => produto.RestauranteId == RestauranteIdAtual);
-        modelBuilder.Entity<Categoria>().HasQueryFilter(categoria => categoria.RestauranteId == RestauranteIdAtual);
-        modelBuilder.Entity<Fornecedor>().HasQueryFilter(fornecedor => fornecedor.RestauranteId == RestauranteIdAtual);
-        modelBuilder.Entity<MovimentacaoEstoque>().HasQueryFilter(movimentacao => movimentacao.RestauranteId == RestauranteIdAtual);
+        modelBuilder.Entity<Produto>().HasQueryFilter(FiltrosConsulta.Restaurante, produto => produto.RestauranteId == RestauranteIdAtual);
+        modelBuilder.Entity<Produto>().HasQueryFilter(FiltrosConsulta.NaoExcluido, produto => produto.ExcluidoEm == null);
+        modelBuilder.Entity<Categoria>().HasQueryFilter(FiltrosConsulta.Restaurante, categoria => categoria.RestauranteId == RestauranteIdAtual);
+        modelBuilder.Entity<Categoria>().HasQueryFilter(FiltrosConsulta.NaoExcluido, categoria => categoria.ExcluidoEm == null);
+        modelBuilder.Entity<Fornecedor>().HasQueryFilter(FiltrosConsulta.Restaurante, fornecedor => fornecedor.RestauranteId == RestauranteIdAtual);
+        modelBuilder.Entity<Fornecedor>().HasQueryFilter(FiltrosConsulta.NaoExcluido, fornecedor => fornecedor.ExcluidoEm == null);
+        modelBuilder.Entity<MovimentacaoEstoque>().HasQueryFilter(FiltrosConsulta.Restaurante, movimentacao => movimentacao.RestauranteId == RestauranteIdAtual);
     }
 
     public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

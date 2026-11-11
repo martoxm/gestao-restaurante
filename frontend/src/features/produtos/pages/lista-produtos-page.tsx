@@ -17,6 +17,7 @@ import type {
 } from "@/features/produtos/services/produtos";
 import { MovimentarProdutoDialog } from "@/features/movimentacoes-estoque/components/movimentar-produto-dialog";
 import { ConfirmarExclusao } from "@/components/confirmar-exclusao";
+import { ItensExcluidos } from "@/components/itens-excluidos";
 import { TelaVazia } from "@/components/tela-vazia";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -136,7 +137,7 @@ export function ListaProdutosPage() {
         {isAdmin && (
           <ConfirmarExclusao
             titulo={`Excluir o produto "${produto.nome}"?`}
-            descricao="Produto que já teve movimentação de estoque não pode ser excluído."
+            descricao="Ele some das listagens, mas o histórico continua. Dá pra reativar depois em Produtos excluídos."
             disabled={excluirProdutoMutation.isPending}
             onConfirmar={() => handleExcluir(produto.id)}
           />
@@ -304,6 +305,7 @@ export function ListaProdutosPage() {
           )}
         </>
       )}
+      {isAdmin && <ItensExcluidos rota="/produtos" chaveConsulta="produtos" rotulo="produtos" />}
     </div>
   );
 }

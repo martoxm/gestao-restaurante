@@ -13,6 +13,7 @@ import { Truck } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { ConfirmarExclusao } from "@/components/confirmar-exclusao";
+import { ItensExcluidos } from "@/components/itens-excluidos";
 import { TelaVazia } from "@/components/tela-vazia";
 import {
   Table,
@@ -131,6 +132,7 @@ export function ListaFornecedoresPage() {
           </div>
         </>
       )}
+      {isAdmin && <ItensExcluidos rota="/fornecedores" chaveConsulta="fornecedores" rotulo="fornecedores" />}
     </div>
   );
 }

@@ -78,21 +78,22 @@ public static class Extensions
 
     public static WebApplication MapDefaultEndpoints(this WebApplication app)
     {
-        if (app.Environment.IsDevelopment())
+        app.MapHealthChecks(HealthEndpointPath, new HealthCheckOptions
         {
-            app.MapHealthChecks(HealthEndpointPath, new HealthCheckOptions
-            {
-                ResponseWriter = EscreverRespostaJsonAsync
-            }).AllowAnonymous();
+            ResponseWriter = app.Environment.IsDevelopment()
+                ? EscreverRespostaJsonAsync
+                : HealthCheckOptionsPadrao.ResponseWriter
+        }).AllowAnonymous();
 
-            app.MapHealthChecks(AlivenessEndpointPath, new HealthCheckOptions
-            {
-                Predicate = r => r.Tags.Contains("live")
-            }).AllowAnonymous();
-        }
+        app.MapHealthChecks(AlivenessEndpointPath, new HealthCheckOptions
+        {
+            Predicate = r => r.Tags.Contains("live")
+        }).AllowAnonymous();
 
         return app;
     }
+
+    private static readonly HealthCheckOptions HealthCheckOptionsPadrao = new();
 
     private static Task EscreverRespostaJsonAsync(HttpContext context, HealthReport relatorio)
     {

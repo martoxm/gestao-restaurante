@@ -5,6 +5,7 @@ using GestaoRestaurante.Application.Abstractions.Services;
 using GestaoRestaurante.Core.Application.Exceptions;
 using GestaoRestaurante.Core.Application.Models;
 using GestaoRestaurante.Contracts.Fornecedores;
+using GestaoRestaurante.Contracts.Common;
 using GestaoRestaurante.Domain.Entities;
 using GestaoRestaurante.Core.Domain.ValueObjects;
 
@@ -44,22 +45,60 @@ public class ExcluirFornecedorHandler : IRequestHandler<ExcluirFornecedorCommand
 {
     private readonly IFornecedorRepository _fornecedorRepository;
     private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
 
-    public ExcluirFornecedorHandler(IFornecedorRepository fornecedorRepository, IApplicationDbContext context)
+    public ExcluirFornecedorHandler(IFornecedorRepository fornecedorRepository, IApplicationDbContext context, IRelogio relogio)
+    {
+        _fornecedorRepository = fornecedorRepository;
+        _context = context;
+        _relogio = relogio;
+    }
+
+    public async Task Handle(ExcluirFornecedorCommand request, CancellationToken cancellationToken)
+    {
+        var fornecedor = await _fornecedorRepository.ObterPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Fornecedor com Id '{request.Id}' não encontrado.");
+
+        fornecedor.Excluir(_relogio.AgoraUtc);
+
+        _fornecedorRepository.Atualizar(fornecedor);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ReativarFornecedorHandler : IRequestHandler<ReativarFornecedorCommand>
+{
+    private readonly IFornecedorRepository _fornecedorRepository;
+    private readonly IApplicationDbContext _context;
+
+    public ReativarFornecedorHandler(IFornecedorRepository fornecedorRepository, IApplicationDbContext context)
     {
         _fornecedorRepository = fornecedorRepository;
         _context = context;
     }
 
-    public async Task Handle(ExcluirFornecedorCommand request, CancellationToken cancellationToken)
+    public async Task Handle(ReativarFornecedorCommand request, CancellationToken cancellationToken)
     {
-        var fornecedor = await _fornecedorRepository.ObterPorIdAsync(request.Id, cancellationToken);
+        var fornecedor = await _fornecedorRepository.ObterExcluidoPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Fornecedor excluído com Id '{request.Id}' não encontrado.");
 
-        if (fornecedor is null)
-            throw new NaoEncontradoException($"Fornecedor com Id '{request.Id}' não encontrado.");
+        fornecedor.Reativar();
 
-        _fornecedorRepository.Remover(fornecedor);
+        _fornecedorRepository.Atualizar(fornecedor);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ListarFornecedoresExcluidosHandler : IRequestHandler<ListarFornecedoresExcluidosQuery, IReadOnlyList<ItemExcluidoDto>>
+{
+    private readonly IFornecedorRepository _fornecedorRepository;
+
+    public ListarFornecedoresExcluidosHandler(IFornecedorRepository fornecedorRepository) => _fornecedorRepository = fornecedorRepository;
+
+    public async Task<IReadOnlyList<ItemExcluidoDto>> Handle(ListarFornecedoresExcluidosQuery request, CancellationToken cancellationToken)
+    {
+        var fornecedores = await _fornecedorRepository.ListarExcluidosAsync(cancellationToken);
+        return fornecedores.Select(fornecedor => new ItemExcluidoDto(fornecedor.Id, fornecedor.Nome, fornecedor.ExcluidoEm!.Value)).ToList();
     }
 }
 

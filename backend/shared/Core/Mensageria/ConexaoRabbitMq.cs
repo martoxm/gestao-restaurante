@@ -37,6 +37,9 @@ public sealed class ConexaoRabbitMq : IAsyncDisposable
                 AutomaticRecoveryEnabled = true
             };
 
+            if (!string.IsNullOrWhiteSpace(_settings.Url))
+                factory.Uri = new Uri(_settings.Url);
+
             _conexao = await factory.CreateConnectionAsync(cancellationToken);
             return _conexao;
         }

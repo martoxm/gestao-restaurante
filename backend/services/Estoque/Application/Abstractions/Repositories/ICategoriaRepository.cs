@@ -18,5 +18,6 @@ public interface ICategoriaRepository
 
     void Atualizar(Categoria categoria);
 
-    void Remover(Categoria categoria);
+    Task<Categoria?> ObterExcluidoPorIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Categoria>> ListarExcluidosAsync(CancellationToken cancellationToken);
 }

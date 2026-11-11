@@ -43,6 +43,26 @@ public class Fornecedor : Entity
         Email = email;
     }
 
+    public DateTime? ExcluidoEm { get; private set; }
+
+    public bool EstaExcluido => ExcluidoEm.HasValue;
+
+    public void Excluir(DateTime agora)
+    {
+        if (EstaExcluido)
+            throw new DomainException("Esse registro já está excluído.");
+
+        ExcluidoEm = agora;
+    }
+
+    public void Reativar()
+    {
+        if (!EstaExcluido)
+            throw new DomainException("Esse registro não está excluído.");
+
+        ExcluidoEm = null;
+    }
+
     private static void ValidarNome(string nome)
     {
         if (string.IsNullOrWhiteSpace(nome))

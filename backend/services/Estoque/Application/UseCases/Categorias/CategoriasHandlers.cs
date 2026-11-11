@@ -5,6 +5,7 @@ using GestaoRestaurante.Application.Abstractions.Services;
 using GestaoRestaurante.Core.Application.Exceptions;
 using GestaoRestaurante.Core.Application.Models;
 using GestaoRestaurante.Contracts.Categorias;
+using GestaoRestaurante.Contracts.Common;
 using GestaoRestaurante.Domain.Entities;
 
 namespace GestaoRestaurante.Application.UseCases.Categorias;
@@ -44,30 +45,68 @@ public class ExcluirCategoriaHandler : IRequestHandler<ExcluirCategoriaCommand>
     private readonly ICategoriaRepository _categoriaRepository;
     private readonly IProdutoRepository _produtoRepository;
     private readonly IApplicationDbContext _context;
+    private readonly IRelogio _relogio;
 
     public ExcluirCategoriaHandler(
         ICategoriaRepository categoriaRepository,
         IProdutoRepository produtoRepository,
-        IApplicationDbContext context)
+        IApplicationDbContext context,
+        IRelogio relogio)
     {
         _categoriaRepository = categoriaRepository;
         _produtoRepository = produtoRepository;
         _context = context;
+        _relogio = relogio;
     }
 
     public async Task Handle(ExcluirCategoriaCommand request, CancellationToken cancellationToken)
     {
-        var categoria = await _categoriaRepository.ObterPorIdAsync(request.Id, cancellationToken);
-
-        if (categoria is null)
-            throw new NaoEncontradoException($"Categoria com Id '{request.Id}' não encontrada.");
+        var categoria = await _categoriaRepository.ObterPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Categoria com Id '{request.Id}' não encontrada.");
 
         var possuiProdutos = await _produtoRepository.ExisteParaCategoriaAsync(categoria.Id, cancellationToken);
-
         categoria.GarantirQuePodeSerExcluida(possuiProdutos);
 
-        _categoriaRepository.Remover(categoria);
+        categoria.Excluir(_relogio.AgoraUtc);
+
+        _categoriaRepository.Atualizar(categoria);
         await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ReativarCategoriaHandler : IRequestHandler<ReativarCategoriaCommand>
+{
+    private readonly ICategoriaRepository _categoriaRepository;
+    private readonly IApplicationDbContext _context;
+
+    public ReativarCategoriaHandler(ICategoriaRepository categoriaRepository, IApplicationDbContext context)
+    {
+        _categoriaRepository = categoriaRepository;
+        _context = context;
+    }
+
+    public async Task Handle(ReativarCategoriaCommand request, CancellationToken cancellationToken)
+    {
+        var categoria = await _categoriaRepository.ObterExcluidoPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Categoria excluída com Id '{request.Id}' não encontrada.");
+
+        categoria.Reativar();
+
+        _categoriaRepository.Atualizar(categoria);
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ListarCategoriasExcluidosHandler : IRequestHandler<ListarCategoriasExcluidosQuery, IReadOnlyList<ItemExcluidoDto>>
+{
+    private readonly ICategoriaRepository _categoriaRepository;
+
+    public ListarCategoriasExcluidosHandler(ICategoriaRepository categoriaRepository) => _categoriaRepository = categoriaRepository;
+
+    public async Task<IReadOnlyList<ItemExcluidoDto>> Handle(ListarCategoriasExcluidosQuery request, CancellationToken cancellationToken)
+    {
+        var categorias = await _categoriaRepository.ListarExcluidosAsync(cancellationToken);
+        return categorias.Select(categoria => new ItemExcluidoDto(categoria.Id, categoria.Nome, categoria.ExcluidoEm!.Value)).ToList();
     }
 }
 

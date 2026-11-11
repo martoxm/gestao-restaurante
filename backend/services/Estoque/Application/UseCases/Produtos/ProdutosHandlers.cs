@@ -6,6 +6,7 @@ using GestaoRestaurante.Core.Application.Events;
 using GestaoRestaurante.Core.Application.Exceptions;
 using GestaoRestaurante.Core.Application.Models;
 using GestaoRestaurante.Contracts.Produtos;
+using GestaoRestaurante.Contracts.Common;
 using GestaoRestaurante.Domain.Entities;
 using GestaoRestaurante.Domain.Events;
 using GestaoRestaurante.Core.Domain.ValueObjects;
@@ -69,20 +70,17 @@ public class CriarProdutoHandler : IRequestHandler<CriarProdutoCommand, Guid>
 public class ExcluirProdutoHandler : IRequestHandler<ExcluirProdutoCommand>
 {
     private readonly IProdutoRepository _produtoRepository;
-    private readonly IMovimentacaoEstoqueRepository _movimentacaoEstoqueRepository;
     private readonly IApplicationDbContext _context;
     private readonly IOutboxMensagemRepository _outbox;
     private readonly IRelogio _relogio;
 
     public ExcluirProdutoHandler(
         IProdutoRepository produtoRepository,
-        IMovimentacaoEstoqueRepository movimentacaoEstoqueRepository,
         IApplicationDbContext context,
         IOutboxMensagemRepository outbox,
         IRelogio relogio)
     {
         _produtoRepository = produtoRepository;
-        _movimentacaoEstoqueRepository = movimentacaoEstoqueRepository;
         _context = context;
         _outbox = outbox;
         _relogio = relogio;
@@ -90,17 +88,66 @@ public class ExcluirProdutoHandler : IRequestHandler<ExcluirProdutoCommand>
 
     public async Task Handle(ExcluirProdutoCommand request, CancellationToken cancellationToken)
     {
-        var produto = await _produtoRepository.ObterPorIdAsync(request.Id, cancellationToken);
+        var produto = await _produtoRepository.ObterPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Produto com Id '{request.Id}' não encontrado.");
 
-        if (produto is null)
-            throw new NaoEncontradoException($"Produto com Id '{request.Id}' não encontrado.");
+        produto.Excluir(_relogio.AgoraUtc);
 
-        var possuiMovimentacoes = await _movimentacaoEstoqueRepository.ExisteParaProdutoAsync(request.Id, cancellationToken);
-        produto.GarantirQuePodeSerExcluido(possuiMovimentacoes);
-
-        _produtoRepository.Remover(produto);
+        _produtoRepository.Atualizar(produto);
         _outbox.Adicionar(CatalogoProdutosMensagens.Excluido(produto, _relogio.AgoraUtc));
         await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ReativarProdutoHandler : IRequestHandler<ReativarProdutoCommand>
+{
+    private readonly IProdutoRepository _produtoRepository;
+    private readonly ICategoriaRepository _categoriaRepository;
+    private readonly IApplicationDbContext _context;
+    private readonly IOutboxMensagemRepository _outbox;
+    private readonly IRelogio _relogio;
+
+    public ReativarProdutoHandler(
+        IProdutoRepository produtoRepository,
+        ICategoriaRepository categoriaRepository,
+        IApplicationDbContext context,
+        IOutboxMensagemRepository outbox,
+        IRelogio relogio)
+    {
+        _produtoRepository = produtoRepository;
+        _categoriaRepository = categoriaRepository;
+        _context = context;
+        _outbox = outbox;
+        _relogio = relogio;
+    }
+
+    public async Task Handle(ReativarProdutoCommand request, CancellationToken cancellationToken)
+    {
+        var produto = await _produtoRepository.ObterExcluidoPorIdAsync(request.Id, cancellationToken)
+            ?? throw new NaoEncontradoException($"Produto excluído com Id '{request.Id}' não encontrado.");
+
+        var categoria = await _categoriaRepository.ObterPorIdAsync(produto.CategoriaId, cancellationToken);
+        if (categoria is null)
+            throw new GestaoRestaurante.Core.Domain.DomainException("A categoria desse produto está excluída. Reative a categoria antes.");
+
+        produto.Reativar();
+
+        _produtoRepository.Atualizar(produto);
+        _outbox.Adicionar(CatalogoProdutosMensagens.Alterado(produto, _relogio.AgoraUtc));
+        await _context.SaveChangesAsync(cancellationToken);
+    }
+}
+
+public class ListarProdutosExcluidosHandler : IRequestHandler<ListarProdutosExcluidosQuery, IReadOnlyList<ItemExcluidoDto>>
+{
+    private readonly IProdutoRepository _produtoRepository;
+
+    public ListarProdutosExcluidosHandler(IProdutoRepository produtoRepository) => _produtoRepository = produtoRepository;
+
+    public async Task<IReadOnlyList<ItemExcluidoDto>> Handle(ListarProdutosExcluidosQuery request, CancellationToken cancellationToken)
+    {
+        var produtos = await _produtoRepository.ListarExcluidosAsync(cancellationToken);
+        return produtos.Select(produto => new ItemExcluidoDto(produto.Id, produto.Nome, produto.ExcluidoEm!.Value)).ToList();
     }
 }
 

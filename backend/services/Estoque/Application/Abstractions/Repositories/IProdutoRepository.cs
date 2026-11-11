@@ -21,7 +21,8 @@ public interface IProdutoRepository
 
     void Atualizar(Produto produto);
 
-    void Remover(Produto produto);
+    Task<Produto?> ObterExcluidoPorIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Produto>> ListarExcluidosAsync(CancellationToken cancellationToken);
 
     Task<bool> ExisteParaCategoriaAsync(Guid categoriaId, CancellationToken cancellationToken);
 

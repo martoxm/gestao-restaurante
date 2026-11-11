@@ -201,23 +201,45 @@ public class ProdutoTests
             Produto.Criar(Guid.Empty, "Arroz", null, Dinheiro.Criar(10m), DadosTeste.CriarCategoria(), CriadoEm));
     }
 
+    private static readonly DateTime ExcluidoEm = new(2026, 2, 1, 12, 0, 0, DateTimeKind.Utc);
+
     [Fact]
-    public void GarantirQuePodeSerExcluido_ComMovimentacoes_DeveLancarDomainException()
+    public void Excluir_DevePreencherExcluidoEm()
     {
         var produto = CriarProdutoComEstoque(5);
 
-        var excecao = Assert.Throws<DomainException>(() => produto.GarantirQuePodeSerExcluido(possuiMovimentacoes: true));
+        produto.Excluir(ExcluidoEm);
 
-        Assert.Equal("Não é possível excluir um produto que possui movimentações de estoque vinculadas.", excecao.Message);
+        Assert.True(produto.EstaExcluido);
+        Assert.Equal(ExcluidoEm, produto.ExcluidoEm);
     }
 
     [Fact]
-    public void GarantirQuePodeSerExcluido_SemMovimentacoes_NaoDeveLancarExcecao()
+    public void Excluir_JaExcluido_DeveLancarDomainException()
+    {
+        var produto = CriarProdutoComEstoque(5);
+        produto.Excluir(ExcluidoEm);
+
+        Assert.Throws<DomainException>(() => produto.Excluir(ExcluidoEm));
+    }
+
+    [Fact]
+    public void Reativar_Excluido_DeveLimparExcluidoEm()
+    {
+        var produto = CriarProdutoComEstoque(5);
+        produto.Excluir(ExcluidoEm);
+
+        produto.Reativar();
+
+        Assert.False(produto.EstaExcluido);
+        Assert.Null(produto.ExcluidoEm);
+    }
+
+    [Fact]
+    public void Reativar_NaoExcluido_DeveLancarDomainException()
     {
         var produto = CriarProdutoComEstoque(5);
 
-        var excecao = Record.Exception(() => produto.GarantirQuePodeSerExcluido(possuiMovimentacoes: false));
-
-        Assert.Null(excecao);
+        Assert.Throws<DomainException>(() => produto.Reativar());
     }
 }

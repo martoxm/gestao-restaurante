@@ -1,3 +1,4 @@
+using GestaoRestaurante.Contracts.Common;
 using GestaoRestaurante.Core.Api;
 using Asp.Versioning;
 using MediatR;
@@ -60,6 +61,24 @@ public class CategoriaEndpointsModule : IEndpointModule
             .Produces(StatusCodes.Status400BadRequest)
             .Produces(StatusCodes.Status403Forbidden)
             .Produces(StatusCodes.Status404NotFound);
+
+        group.MapGet("/excluidos", ListarCategoriasExcluidos)
+            .WithName("ListarCategoriasExcluidos")
+            .WithSummary("Lista os registros excluídos")
+            .WithDescription("Lista até 100 registros excluídos (exclusão lógica), do mais recente pro mais antigo. Requer a role Admin.")
+            .RequireAuthorization(policy => policy.RequireRole(RoleNames.Admin))
+            .Produces<IReadOnlyList<ItemExcluidoDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapPut("/{id:guid}/reativar", ReativarCategoria)
+            .WithName("ReativarCategoria")
+            .WithSummary("Reativa um registro excluído")
+            .WithDescription("Desfaz a exclusão lógica. Requer a role Admin. Retorna 404 se não houver registro excluído com esse Id.")
+            .RequireAuthorization(policy => policy.RequireRole(RoleNames.Admin))
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status404NotFound);
     }
 
     private static async Task<IResult> CriarCategoria(CriarCategoriaCommand command, ISender sender, CancellationToken cancellationToken)
@@ -90,6 +109,17 @@ public class CategoriaEndpointsModule : IEndpointModule
     private static async Task<IResult> ExcluirCategoria(Guid id, ISender sender, CancellationToken cancellationToken)
     {
         await sender.Send(new ExcluirCategoriaCommand(id), cancellationToken);
+        return Results.NoContent();
+    }
+
+    private static async Task<IResult> ListarCategoriasExcluidos(ISender sender, CancellationToken cancellationToken)
+    {
+        return Results.Ok(await sender.Send(new ListarCategoriasExcluidosQuery(), cancellationToken));
+    }
+
+    private static async Task<IResult> ReativarCategoria(Guid id, ISender sender, CancellationToken cancellationToken)
+    {
+        await sender.Send(new ReativarCategoriaCommand(id), cancellationToken);
         return Results.NoContent();
     }
 }

@@ -18,5 +18,6 @@ public interface IFornecedorRepository
 
     void Atualizar(Fornecedor fornecedor);
 
-    void Remover(Fornecedor fornecedor);
+    Task<Fornecedor?> ObterExcluidoPorIdAsync(Guid id, CancellationToken cancellationToken);
+    Task<IReadOnlyList<Fornecedor>> ListarExcluidosAsync(CancellationToken cancellationToken);
 }

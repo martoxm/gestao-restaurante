@@ -14,3 +14,5 @@ public record AtualizarFornecedorCommand(
     string Nome,
     string? Telefone,
     string? Email) : IRequest;
+
+public record ReativarFornecedorCommand(Guid Id) : IRequest;

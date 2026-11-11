@@ -1,3 +1,4 @@
+using GestaoRestaurante.Domain.Common;
 using Microsoft.EntityFrameworkCore;
 using GestaoRestaurante.Application.Abstractions.Repositories;
 using GestaoRestaurante.Domain.Entities;
@@ -33,6 +34,7 @@ public class MovimentacaoEstoqueRepository : IMovimentacaoEstoqueRepository
         CancellationToken cancellationToken)
     {
         var query = _context.MovimentacoesEstoque
+            .IgnoreQueryFilters([FiltrosConsulta.NaoExcluido])
             .Include(movimentacao => movimentacao.Produto)
             .AsQueryable();
 

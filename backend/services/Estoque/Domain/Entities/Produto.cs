@@ -77,10 +77,24 @@ public class Produto : Entity
             RegistrarEvento(new EstoqueFicouBaixoEvent(Id, Nome, QuantidadeEmEstoque.Valor, RestauranteId));
     }
 
-    public void GarantirQuePodeSerExcluido(bool possuiMovimentacoes)
+    public DateTime? ExcluidoEm { get; private set; }
+
+    public bool EstaExcluido => ExcluidoEm.HasValue;
+
+    public void Excluir(DateTime agora)
     {
-        if (possuiMovimentacoes)
-            throw new DomainException("Não é possível excluir um produto que possui movimentações de estoque vinculadas.");
+        if (EstaExcluido)
+            throw new DomainException("Esse registro já está excluído.");
+
+        ExcluidoEm = agora;
+    }
+
+    public void Reativar()
+    {
+        if (!EstaExcluido)
+            throw new DomainException("Esse registro não está excluído.");
+
+        ExcluidoEm = null;
     }
 
     private static void ValidarRestauranteId(Guid restauranteId)

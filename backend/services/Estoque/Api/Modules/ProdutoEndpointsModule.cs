@@ -1,3 +1,4 @@
+using GestaoRestaurante.Contracts.Common;
 using GestaoRestaurante.Core.Api;
 using Asp.Versioning;
 using MediatR;
@@ -54,7 +55,25 @@ public class ProdutoEndpointsModule : IEndpointModule
         group.MapDelete("/{id:guid}", ExcluirProduto)
             .WithName("ExcluirProduto")
             .WithSummary("Exclui um produto")
-            .WithDescription("Exclui um produto, desde que ele não tenha movimentações de estoque vinculadas. Requer a role Admin. Retorna 404 se ele não existir, e 400 se ainda houver movimentações vinculadas.")
+            .WithDescription("Exclui um produto (exclusão lógica: some das listagens, mas o histórico continua). Requer a role Admin. Retorna 404 se ele não existir.")
+            .RequireAuthorization(policy => policy.RequireRole(RoleNames.Admin))
+            .Produces(StatusCodes.Status204NoContent)
+            .Produces(StatusCodes.Status400BadRequest)
+            .Produces(StatusCodes.Status403Forbidden)
+            .Produces(StatusCodes.Status404NotFound);
+
+        group.MapGet("/excluidos", ListarProdutosExcluidos)
+            .WithName("ListarProdutosExcluidos")
+            .WithSummary("Lista os registros excluídos")
+            .WithDescription("Lista até 100 registros excluídos (exclusão lógica), do mais recente pro mais antigo. Requer a role Admin.")
+            .RequireAuthorization(policy => policy.RequireRole(RoleNames.Admin))
+            .Produces<IReadOnlyList<ItemExcluidoDto>>(StatusCodes.Status200OK)
+            .Produces(StatusCodes.Status403Forbidden);
+
+        group.MapPut("/{id:guid}/reativar", ReativarProduto)
+            .WithName("ReativarProduto")
+            .WithSummary("Reativa um registro excluído")
+            .WithDescription("Desfaz a exclusão lógica. Requer a role Admin. Retorna 404 se não houver registro excluído com esse Id.")
             .RequireAuthorization(policy => policy.RequireRole(RoleNames.Admin))
             .Produces(StatusCodes.Status204NoContent)
             .Produces(StatusCodes.Status400BadRequest)
@@ -97,6 +116,17 @@ public class ProdutoEndpointsModule : IEndpointModule
     private static async Task<IResult> ExcluirProduto(Guid id, ISender sender, CancellationToken cancellationToken)
     {
         await sender.Send(new ExcluirProdutoCommand(id), cancellationToken);
+        return Results.NoContent();
+    }
+
+    private static async Task<IResult> ListarProdutosExcluidos(ISender sender, CancellationToken cancellationToken)
+    {
+        return Results.Ok(await sender.Send(new ListarProdutosExcluidosQuery(), cancellationToken));
+    }
+
+    private static async Task<IResult> ReativarProduto(Guid id, ISender sender, CancellationToken cancellationToken)
+    {
+        await sender.Send(new ReativarProdutoCommand(id), cancellationToken);
         return Results.NoContent();
     }
 }
