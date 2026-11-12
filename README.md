@@ -2,6 +2,8 @@
 
 Sistema de gestão para restaurantes — estoque, vendas, pagamentos e assinatura da plataforma — feito em **microserviços .NET** (CQRS + DDD) com front-end em **Next.js**. Vários restaurantes usam as mesmas APIs e o mesmo banco, e cada um só enxerga os próprios dados (multi-tenant). Projeto de estudo full stack, construído do zero em etapas.
 
+**No ar:** https://gestao.martodev.online (front na Vercel; APIs no Azure App Service, banco no Azure SQL e RabbitMQ no CloudAMQP).
+
 ## Stack
 
 **Backend** — C# / .NET 10, Minimal API, CQRS com MediatR, DDD (entidades ricas, Value Objects, Domain Services, Domain Events), Entity Framework Core sobre SQL Server (Azure SQL), FluentValidation, ASP.NET Core Identity + JWT com refresh token, RabbitMQ (Outbox, idempotência e dead-letter), API Gateway com YARP, Stripe em modo teste, OpenTelemetry + .NET Aspire, testes com xUnit e Testcontainers.
@@ -16,6 +18,7 @@ Sistema de gestão para restaurantes — estoque, vendas, pagamentos e assinatur
 - Tela de usuários (só Admin): trocar papel, desativar e reativar acesso
 - Esqueci a senha, confirmação de e-mail e sessão renovada sozinha (refresh token)
 - Produtos, Categorias e Fornecedores com busca, filtro, ordenação e paginação
+- Exclusão lógica (soft delete): o item excluído some das listas, mas o histórico é preservado e o Admin pode reativá-lo
 - Movimentação de estoque (entrada/saída) direto da linha do produto, com histórico filtrável
 - Aviso por e-mail aos Admins quando um produto fica com estoque baixo
 - Vendas numeradas por restaurante (#1, #2...), com baixa de estoque e cobrança automáticas; se faltar estoque ou o pagamento for recusado, a venda é cancelada e o estoque volta
@@ -54,6 +57,8 @@ Alguns detalhes:
 - **Multi-tenant**: o `restauranteId` vem do JWT e vira Global Query Filter do EF Core; testes de isolamento (inclusive em SQL Server real) garantem que um restaurante não lê dados de outro.
 - **Banco**: um banco só, com um schema por API (`identidade`, `estoque`, `vendas`, `pagamentos`, `email`) e sem FK nem JOIN entre APIs. As tabelas de negócio são criadas por script SQL; só as do Identity usam Migration.
 - **Concorrência otimista** (`rowversion`) em produtos e vendas, e retry automático em falhas passageiras do SQL.
+
+- **Decisões de arquitetura** registradas como ADRs em [`docs/adr/`](docs/adr/README.md) (RabbitMQ, schema por API, Outbox, gateway, sem AutoMapper...).
 
 O frontend fica em `frontend/src`, organizado por funcionalidade (`features/produtos`, `features/vendas`, `features/plataforma`, ...).
 
@@ -144,4 +149,12 @@ O app sobe em `http://localhost:3000`. Crie a conta da empresa em `/registrar`.
 dotnet test backend/GestaoRestaurante.slnx
 ```
 
-Cobrem regras de domínio, Handlers, isolamento entre restaurantes e, com o Docker aberto, testes de integração num SQL Server em container (Testcontainers) — sem Docker, eles são pulados.
+Cobrem regras de domínio, Handlers, isolamento entre restaurantes, **regras de arquitetura** (NetArchTest: o Domain não depende de EF/MediatR/ASP.NET, o Application não enxerga o Infrastructure...), **contratos das mensagens** das filas (o JSON não muda de nome e mensagens antigas continuam sendo lidas) e, com o Docker aberto, testes de integração num SQL Server em container (Testcontainers) — sem Docker, eles são pulados.
+
+## Deploy
+
+- **Front**: Vercel (plano Hobby), lendo a pasta `frontend` da branch `prod`, com `NEXT_PUBLIC_API_URL` apontando para o gateway.
+- **APIs**: 6 Web Apps Linux no Azure App Service (Identidade, Estoque, Vendas, Pagamentos, Email e Gateway), publicadas pelo Visual Studio. Segredos e URLs vêm das App Settings (`Jwt__Secret`, `ConnectionStrings__DefaultConnection`, `RabbitMq__Url`, `ApiInterna__Chave`, clusters do YARP...), nunca do repositório.
+- **Banco**: Azure SQL com a oferta gratuita (pausa sozinho quando fica parado).
+- **Mensageria**: RabbitMQ gerenciado no CloudAMQP (`RabbitMq__Url` com `amqps://`).
+- **Saúde**: `/alive` (não toca no banco, usado pelo health check do App Service) e `/health` (banco e RabbitMQ).
