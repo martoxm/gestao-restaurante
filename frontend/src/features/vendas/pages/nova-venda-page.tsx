@@ -6,7 +6,7 @@ import { useFieldArray, useForm, useWatch } from "react-hook-form";
 import { Trash2 } from "lucide-react";
 import { useProdutos } from "@/features/produtos/hooks/useProdutos";
 import { useCriarVenda } from "@/features/vendas/hooks/useCriarVenda";
-import { CARTOES_TESTE, formatarMoeda } from "@/features/vendas/types/venda";
+import { CARTOES_DISPONIVEIS, formatarMoeda } from "@/features/vendas/types/venda";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -38,7 +38,7 @@ export function NovaVendaPage() {
   const form = useForm<VendaFormValues>({
     defaultValues: {
       itens: [{ produtoId: "", quantidade: "1" }],
-      tokenCartao: "tok_aprovado",
+      tokenCartao: CARTOES_DISPONIVEIS[0].token,
     },
   });
 
@@ -184,7 +184,7 @@ export function NovaVendaPage() {
                         </SelectTrigger>
                       </FormControl>
                       <SelectContent>
-                        {CARTOES_TESTE.map((cartao) => (
+                        {CARTOES_DISPONIVEIS.map((cartao) => (
                           <SelectItem key={cartao.token} value={cartao.token}>
                             {cartao.rotulo}
                           </SelectItem>

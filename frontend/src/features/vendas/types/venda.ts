@@ -53,15 +53,21 @@ export const ROTULO_STATUS: Record<StatusVenda, string> = {
 };
 
 export const CARTOES_TESTE = [
-  { token: "tok_aprovado", rotulo: "Falso — aprovado" },
-  { token: "tok_saldo_insuficiente", rotulo: "Falso — recusado: saldo insuficiente" },
-  { token: "tok_fraude", rotulo: "Falso — recusado: suspeita de fraude" },
-  { token: "tok_gateway_fora", rotulo: "Falso — gateway fora do ar" },
-  { token: "pm_card_visa", rotulo: "Stripe — Visa aprovado" },
-  { token: "pm_card_mastercard", rotulo: "Stripe — Mastercard aprovado" },
-  { token: "pm_card_chargeDeclined", rotulo: "Stripe — recusado (genérico)" },
-  { token: "pm_card_chargeDeclinedInsufficientFunds", rotulo: "Stripe — recusado: saldo insuficiente" },
+  { gateway: "Falso", token: "tok_aprovado", rotulo: "Falso — aprovado" },
+  { gateway: "Falso", token: "tok_saldo_insuficiente", rotulo: "Falso — recusado: saldo insuficiente" },
+  { gateway: "Falso", token: "tok_fraude", rotulo: "Falso — recusado: suspeita de fraude" },
+  { gateway: "Falso", token: "tok_gateway_fora", rotulo: "Falso — gateway fora do ar" },
+  { gateway: "Stripe", token: "pm_card_visa", rotulo: "Stripe — Visa aprovado" },
+  { gateway: "Stripe", token: "pm_card_mastercard", rotulo: "Stripe — Mastercard aprovado" },
+  { gateway: "Stripe", token: "pm_card_chargeDeclined", rotulo: "Stripe — recusado (genérico)" },
+  { gateway: "Stripe", token: "pm_card_chargeDeclinedInsufficientFunds", rotulo: "Stripe — recusado: saldo insuficiente" },
 ];
+
+const gatewayLigado = process.env.NEXT_PUBLIC_GATEWAY_PAGAMENTO;
+
+export const CARTOES_DISPONIVEIS = gatewayLigado
+  ? CARTOES_TESTE.filter((cartao) => cartao.gateway.toLowerCase() === gatewayLigado.toLowerCase())
+  : CARTOES_TESTE;
 
 export function formatarMoeda(valor: number) {
   return valor.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
