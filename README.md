@@ -1,8 +1,20 @@
 # Gestão Restaurante
 
+![.NET 10](https://img.shields.io/badge/.NET-10-512BD4?logo=dotnet&logoColor=white)
+![Next.js](https://img.shields.io/badge/Next.js-16-000000?logo=nextdotjs&logoColor=white)
+![Azure](https://img.shields.io/badge/Azure-App%20Service%20%2B%20SQL-0078D4?logo=microsoftazure&logoColor=white)
+![RabbitMQ](https://img.shields.io/badge/RabbitMQ-filas-FF6600?logo=rabbitmq&logoColor=white)
+
+### 🌐 [Testar agora: gestao.martodev.online](https://gestao.martodev.online)
+
+Crie a conta da sua empresa em **Criar conta**, cadastre uma categoria e um produto e faça uma venda. Os pagamentos são **só de teste**: use o cartão `4242 4242 4242 4242` (data futura e CVC qualquer), nunca um cartão de verdade. É um projeto de estudo: os dados podem ser apagados a qualquer momento.
+
+<!-- GIF do sistema: grave a tela (ScreenToGif/ShareX), salve em docs/demo.gif e descomente a linha abaixo -->
+<!-- ![Demonstração](docs/demo.gif) -->
+
 Sistema de gestão para restaurantes — estoque, vendas, pagamentos e assinatura da plataforma — feito em **microserviços .NET** (CQRS + DDD) com front-end em **Next.js**. Vários restaurantes usam as mesmas APIs e o mesmo banco, e cada um só enxerga os próprios dados (multi-tenant). Projeto de estudo full stack, construído do zero em etapas.
 
-**No ar:** https://gestao.martodev.online (front na Vercel; APIs no Azure App Service, banco no Azure SQL e RabbitMQ no CloudAMQP).
+**Hospedagem:** front na Vercel; APIs no Azure App Service, banco no Azure SQL e RabbitMQ no CloudAMQP.
 
 ## Stack
 
@@ -33,10 +45,34 @@ Sistema de gestão para restaurantes — estoque, vendas, pagamentos e assinatur
 
 ## Arquitetura
 
+```mermaid
+flowchart LR
+    U([Navegador]) --> F[Front Next.js<br/>Vercel]
+    F --> G[API Gateway<br/>YARP + JWT]
+    G --> I[Identidade]
+    G --> E[Estoque]
+    G --> V[Vendas]
+    G --> P[Pagamentos<br/>/assinaturas]
+    I & E & V & P --> DB[(Azure SQL<br/>1 schema por API)]
+    I & E & V & P <-->|Outbox| MQ{{RabbitMQ}}
+    MQ --> M[Email] --> SMTP[Gmail]
+    P <-->|webhook HMAC| S[Stripe teste]
 ```
-frontend (Next.js) ──► Gateway (YARP) ──► Identidade · Estoque · Vendas · Pagamentos (/assinaturas)
-                                             │          │         │          │
-                                             └──── RabbitMQ (filas + Outbox) ┴──► Email
+
+**Saga da venda (por filas):**
+
+```mermaid
+sequenceDiagram
+    participant V as Vendas
+    participant E as Estoque
+    participant P as Pagamentos
+    V->>E: baixar-estoque
+    E-->>V: baixado / sem saldo
+    V->>P: processar-pagamento
+    P-->>V: aprovado / recusado
+    alt recusado
+        V->>E: devolver-estoque (compensação)
+    end
 ```
 
 - `backend/services/Gateway` — porta única do front: repassa `/identidade`, `/estoque`, `/vendas` e `/pagamentos/api/v1/assinaturas`, confere o JWT na entrada, concentra o CORS, limita requisições por IP e esconde os endpoints internos
