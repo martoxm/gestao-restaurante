@@ -120,6 +120,13 @@ public class ProcessarPagamentoHandler : IRequestHandler<ProcessarPagamentoComma
             return;
         }
 
+        var atual = await _repository.ObterPorIdAsync(pagamento.Id, cancellationToken);
+        if (atual is null || atual.Status != StatusPagamento.Pendente)
+        {
+            _logger.LogInformation("Pagamento {PagamentoId} já foi resolvido pelo webhook; nada a gravar.", pagamento.Id);
+            return;
+        }
+
         pagamento.MarcarComoProcessando(cobranca.IdTransacao);
         _repository.Atualizar(pagamento);
         await _context.SaveChangesAsync(cancellationToken);
@@ -166,6 +173,9 @@ public class ProcessarWebhookGatewayHandler : IRequestHandler<ProcessarWebhookGa
             _logger.LogWarning("Webhook de um pagamento que não existe: {PagamentoId}.", request.PagamentoId);
             return;
         }
+
+        if (pagamento.Status == StatusPagamento.Pendente)
+            pagamento.MarcarComoProcessando(request.IdTransacao);
 
         if (pagamento.Status != StatusPagamento.Processando)
         {
